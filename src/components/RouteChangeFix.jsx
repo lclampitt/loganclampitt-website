@@ -5,17 +5,19 @@ export default function RouteChangeFix() {
   const { pathname } = useLocation();
 
   useEffect(() => {
+    // Blur anything that was clicked
     if (document.activeElement && typeof document.activeElement.blur === "function") {
       document.activeElement.blur();
     }
 
+    // Temporarily disable interactions during route swap
     document.documentElement.classList.add("route-changing");
 
-    const t = setTimeout(() => {
+    const timeout = setTimeout(() => {
       document.documentElement.classList.remove("route-changing");
-    }, 180);
+    }, 200);
 
-    return () => clearTimeout(t);
+    return () => clearTimeout(timeout);
   }, [pathname]);
 
   return null;

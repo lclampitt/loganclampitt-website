@@ -115,7 +115,7 @@ export default function Connect4AI() {
               target="_blank"
               rel="noreferrer"
             >
-              View Demo / Writeup
+              View Demo
             </a>
 
             <a

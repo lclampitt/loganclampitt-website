@@ -1,0 +1,32 @@
+/* ===========================
+   ROUTE CHANGE SMOOTHING
+   =========================== */
+
+/* Disable all hover/click reactions during route change */
+.route-changing #root {
+  pointer-events: none;
+}
+
+/* Optional: subtle fade to avoid "teleport" feel */
+#root {
+  opacity: 1;
+  transition: opacity 120ms ease;
+}
+
+.route-changing #root {
+  opacity: 0;
+}
+
+/* ===========================
+   BADGE SAFETY (THIS IS THE FIX)
+   =========================== */
+
+/* Badges are visual only — never interact with cursor */
+.badges,
+.badge,
+.badge * {
+  pointer-events: none;
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+}
