@@ -19,7 +19,7 @@ export default function About() {
             <h1 className="sub-title">About Me</h1>
 
             <p>
-              Hi, I’m Logan Clampitt, a Computer Science graduate from California State
+              Hi, my name is Logan Clampitt, a Computer Science graduate from California State
               University Fullerton. I’ve been passionate about computers and programming
               from a young age, and I enjoy building clean, functional software while
               continuously improving my skills as a developer.
