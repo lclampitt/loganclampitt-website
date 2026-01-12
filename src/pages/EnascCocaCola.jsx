@@ -4,90 +4,33 @@ import { Link } from "react-router-dom";
 export default function EnascCocaCola() {
   return (
     <>
+      {/* Page-specific CSS */}
       <link rel="stylesheet" href="/css/enasc-coca-cola.css" />
 
       <main className="page">
+        {/* Back */}
         <Link className="back-link" to="/">
-          <svg className="icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path
-              d="M10.5 19.5 3 12l7.5-7.5M3 12h18"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
           Back to Home
         </Link>
 
+        {/* Hero */}
         <section className="hero">
           <h1>ENASCAR Coca-Cola iRacing Series</h1>
           <p>
             The ENASCAR Coca-Cola iRacing Series represents the highest level of
-            NASCAR-sanctioned sim racing. I competed in the series since I was 15
-            years old for 8 years.
+            NASCAR-sanctioned sim racing. I competed in the series since I was
+            15 years old for 8 years.
           </p>
 
-          <div className="badges">
-            <span className="badge">
-              <svg className="icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  d="M12 3 1.5 8.25 12 13.5l10.5-5.25L12 3Z"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M4.5 10.25V16c0 1.5 3.3 3.5 7.5 3.5s7.5-2 7.5-3.5v-5.75"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
-              Top-Level Competition
-            </span>
-
-            <span className="badge">
-              <svg className="icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  d="M5 21V4m0 0c3-2 6 2 9 0s6 2 9 0v10c-3 2-6-2-9 0s-6-2-9 0"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              National Broadcasts
-            </span>
-
-            <span className="badge">
-              <svg className="icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  d="M12 8v4l2.5 2.5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <circle
-                  cx="12"
-                  cy="13"
-                  r="8"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                />
-              </svg>
-              Elite Pace &amp; Strategy
-            </span>
+          {/* Chips (no icons = no pop) */}
+          <div className="chips">
+            <span className="chip">Top-Level Competition</span>
+            <span className="chip">National Broadcasts</span>
+            <span className="chip">Pace &amp; Strategy</span>
           </div>
         </section>
 
+        {/* Videos */}
         <section className="section">
           <h2>Featured Broadcast Clips</h2>
 
@@ -102,10 +45,10 @@ export default function EnascCocaCola() {
               <div className="video-meta">
                 <h3>2021 Atlanta Motor Speedway Win</h3>
                 <p>
-                  Features the last lap of my victory at Atlanta Motor Speedway in
-                  the 2021 ENASCAR Coca-Cola iRacing Series. This will end up being
-                  my biggest career win to date eventually transferring me into the
-                  Championship 4 to compete for $100,000.
+                  Features the last lap of my victory at Atlanta Motor Speedway
+                  in the 2021 ENASCAR Coca-Cola iRacing Series. This will end up
+                  being my biggest career win to date eventually transferring me
+                  into the Championship 4 to compete for $100,000.
                 </p>
               </div>
             </article>
@@ -128,6 +71,7 @@ export default function EnascCocaCola() {
           </div>
         </section>
 
+        {/* Image */}
         <section className="section">
           <div className="media">
             <img
