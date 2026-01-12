@@ -1,4 +1,7 @@
-:root {
+/* =========================
+   THEME VARIABLES
+   ========================= */
+ :root {
   --bg: #07080c;
   --text: #ffffff;
   --muted: rgba(255, 255, 255, 0.72);
@@ -9,6 +12,9 @@
   --radius: 18px;
 }
 
+/* =========================
+   GLOBAL RESET + TYPOGRAPHY
+   ========================= */
 /* ✅ Force consistent font everywhere */
 *,
 *::before,
@@ -17,6 +23,9 @@
   font-family: "Poppins", sans-serif;
 }
 
+/* =========================
+   BODY / PAGE BACKGROUND
+   ========================= */
 body {
   margin: 0;
   color: var(--text);
@@ -28,12 +37,18 @@ body {
       var(--bg);
 }
 
+/* =========================
+   LAYOUT WRAPPER
+   ========================= */
 .page {
   width: min(1180px, 92vw);
   margin: 0 auto;
   padding: 44px 0 70px;
 }
 
+/* =========================
+   ICON BASE (SVG)
+   ========================= */
 /* ✅ SVG icon base */
 .icon {
   width: 16px;
@@ -42,6 +57,9 @@ body {
   color: rgba(255, 255, 255, 0.9);
 }
 
+/* =========================
+   BACK LINK (TOP NAV)
+   ========================= */
 .back-link {
   display: inline-flex;
   align-items: center;
@@ -64,6 +82,9 @@ body {
     border-color 0.18s ease, box-shadow 0.18s ease, color 0.18s ease;
 }
 
+/* =========================
+   BACK LINK HOVER + ACTIVE
+   ========================= */
 .back-link:hover {
   color: #ffffff;
   background: rgba(255, 255, 255, 0.12);
@@ -83,6 +104,9 @@ body {
   transition: transform 0.18s ease;
 }
 
+/* =========================
+   HERO CARD
+   ========================= */
 .hero {
   margin-top: 18px;
   border: 1px solid var(--border);
@@ -96,6 +120,9 @@ body {
   box-shadow: var(--shadow);
 }
 
+/* =========================
+   HERO TYPOGRAPHY
+   ========================= */
 .hero h1 {
   font-size: clamp(28px, 4vw, 44px);
   margin: 0 0 12px;
@@ -109,6 +136,9 @@ body {
   margin: 0;
 }
 
+/* =========================
+   CHIPS (BADGE REPLACEMENT)
+   ========================= */
 .chips {
   display: flex;
   flex-wrap: wrap;
@@ -127,6 +157,9 @@ body {
   color: rgba(255, 255, 255, 0.88);
 }
 
+/* =========================
+   SECTION HEADERS
+   ========================= */
 .section {
   margin-top: 32px;
 }
@@ -137,6 +170,9 @@ body {
   letter-spacing: -0.01em;
 }
 
+/* =========================
+   VIDEO GRID + VIDEO CARDS
+   ========================= */
 .video-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -163,6 +199,9 @@ body {
   display: block;
 }
 
+/* =========================
+   VIDEO TEXT / META
+   ========================= */
 .video-meta {
   padding: 14px 16px;
 }
@@ -179,6 +218,9 @@ body {
   line-height: 1.45;
 }
 
+/* =========================
+   MEDIA / IMAGE
+   ========================= */
 .media {
   margin-top: 28px;
   border-radius: var(--radius);
@@ -191,6 +233,9 @@ body {
   display: block;
 }
 
+/* =========================
+   RESPONSIVE
+   ========================= */
 @media (max-width: 700px) {
   .hero {
     padding: 22px;
@@ -199,4 +244,3 @@ body {
     height: 190px;
   }
 }
-
