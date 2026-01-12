@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../styles/projects.css";
 
 export default function Projects() {
@@ -20,6 +21,7 @@ export default function Projects() {
               <h3>Gainlytics (AI Fitness Platform)</h3>
 
               <div className="layer-actions">
+                {/* External live site */}
                 <a
                   href="https://gainlytics.org"
                   target="_blank"
@@ -29,6 +31,7 @@ export default function Projects() {
                   <i className="fa-solid fa-up-right-from-square"></i>
                 </a>
 
+                {/* External GitHub */}
                 <a
                   href="https://github.com/lclampitt/gainlytics"
                   target="_blank"
@@ -38,18 +41,19 @@ export default function Projects() {
                   <i className="fa-brands fa-github"></i>
                 </a>
 
-                <a
-                  href="/gainlytics.html"
+                {/* Internal React route */}
+                <Link
+                  to="/gainlytics"
                   aria-label="Read more about Gainlytics"
                 >
                   <i className="fa-solid fa-circle-info"></i>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
           {/* ---------------- End Gainlytics ---------------- */}
 
-          {/* ---------------- CPSC 481 AI Project ---------------- */}
+          {/* ---------------- Connect 4 AI ---------------- */}
           <div className="racing">
             <img src="/images/connect4ai.png" alt="Connect 4 AI" />
 
@@ -57,6 +61,7 @@ export default function Projects() {
               <h3>Connect 4 AI</h3>
 
               <div className="layer-actions">
+                {/* External demo */}
                 <a
                   href="https://drive.google.com/file/d/1OjClzCEPo4WdMD-YScglCydnQWiWCVHe/view"
                   target="_blank"
@@ -66,6 +71,7 @@ export default function Projects() {
                   <i className="fa-solid fa-up-right-from-square"></i>
                 </a>
 
+                {/* External GitHub */}
                 <a
                   href="https://github.com/lclampitt/connect4-ai-pygame"
                   target="_blank"
@@ -75,12 +81,13 @@ export default function Projects() {
                   <i className="fa-brands fa-github"></i>
                 </a>
 
-                <a
-                  href="/connect4ai.html"
+                {/* Internal React route */}
+                <Link
+                  to="/connect4ai"
                   aria-label="Read more about Connect 4 AI"
                 >
                   <i className="fa-solid fa-circle-info"></i>
-                </a>
+                </Link>
               </div>
             </div>
           </div>

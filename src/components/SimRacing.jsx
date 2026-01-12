@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function SimRacing() {
   const bubbleStyle = {
@@ -10,11 +11,11 @@ export default function SimRacing() {
     justifyContent: "center",
     background: "#fff",
     textDecoration: "none",
-    color: "#000", // ✅ prevents purple visited styling
+    color: "#000",
   };
 
   const iconStyle = {
-    color: "#000", // ✅ also forces the icon color
+    color: "#000",
     fontSize: 18,
     lineHeight: 1,
   };
@@ -34,9 +35,16 @@ export default function SimRacing() {
             <div className="layer layer-orange">
               <h3>ENASCAR College iRacing Series</h3>
 
-              <a href="/enasc-college.html" style={bubbleStyle} aria-label="Open ENASCAR College page">
-                <i className="fa-solid fa-up-right-from-square" style={iconStyle}></i>
-              </a>
+              <Link
+                to="/enasc-college"
+                style={bubbleStyle}
+                aria-label="Open ENASCAR College page"
+              >
+                <i
+                  className="fa-solid fa-up-right-from-square"
+                  style={iconStyle}
+                ></i>
+              </Link>
             </div>
           </div>
 
@@ -49,9 +57,16 @@ export default function SimRacing() {
             <div className="layer layer-red">
               <h3>ENASCAR Coca-Cola iRacing Series</h3>
 
-              <a href="/enasc-coca-cola.html" style={bubbleStyle} aria-label="Open ENASCAR Coca-Cola page">
-                <i className="fa-solid fa-up-right-from-square" style={iconStyle}></i>
-              </a>
+              <Link
+                to="/enasc-coca-cola"
+                style={bubbleStyle}
+                aria-label="Open ENASCAR Coca-Cola page"
+              >
+                <i
+                  className="fa-solid fa-up-right-from-square"
+                  style={iconStyle}
+                ></i>
+              </Link>
             </div>
           </div>
 
@@ -61,9 +76,16 @@ export default function SimRacing() {
             <div className="layer layer-green">
               <h3>Other Experience</h3>
 
-              <a href="/other-experience.html" style={bubbleStyle} aria-label="Open Other Experience page">
-                <i className="fa-solid fa-up-right-from-square" style={iconStyle}></i>
-              </a>
+              <Link
+                to="/other-experience"
+                style={bubbleStyle}
+                aria-label="Open Other Experience page"
+              >
+                <i
+                  className="fa-solid fa-up-right-from-square"
+                  style={iconStyle}
+                ></i>
+              </Link>
             </div>
           </div>
         </div>
