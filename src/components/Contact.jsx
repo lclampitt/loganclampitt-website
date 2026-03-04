@@ -45,7 +45,7 @@ export default function Contact() {
               </a>
             </div>
             <a
-              href="/images/Logan Clampitt Resume - 2024 (1).pdf"
+              href="/images/Resume - Logan Clampitt March 2026.pdf"
               download
               className="btn btn2"
             >

@@ -18,7 +18,7 @@ export default function Services() {
           </div>
           <div>
             <i className="fa-solid fa-crop-simple"></i>
-            <h2>IU/UX Design</h2>
+            <h2>UI/UX Design</h2>
             <p>
               Designing intuitive, user-centered interfaces and wireframes using
               tools like Figma. Focused on usability, accessibility, and
