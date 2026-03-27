@@ -1,0 +1,186 @@
+/* ================================
+   Projects Section (Projects.css)
+   ================================ */
+
+#projects {
+  padding: 50px 0;
+}
+
+/* Grid layout for cards */
+.racing-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+  margin-top: 50px;
+}
+
+/* Card container */
+.racing {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #0e0f1a; /* fallback if image is missing */
+}
+
+/* Default card image */
+.racing img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+/* ================================
+   Overlay (Layer)
+   ================================ */
+
+.layer {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 18px;
+  text-align: center;
+
+  color: #fff;
+  opacity: 0;
+
+  transition: opacity 0.25s ease;
+}
+
+/* Overlay title */
+.layer h3 {
+  margin: 0 0 14px;
+  padding: 0 10px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* Overlay color variants */
+.layer.layer-orange {
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.65),
+    rgba(255, 102, 0, 0.35)
+  );
+}
+
+.layer.layer-red {
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.65),
+    rgba(255, 0, 0, 0.35)
+  );
+}
+
+.layer.layer-green {
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.65),
+    rgba(0, 255, 0, 0.25)
+  );
+}
+
+.layer.layer-cyan {
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.72),
+    rgba(0, 207, 255, 0.35)
+  );
+}
+
+/* ================================
+   Bubble Icon Buttons
+   (fixes purple visited icons)
+   ================================ */
+
+.layer-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+/* Make every action link a bubble */
+.layer-actions a {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ffffff;
+  text-decoration: none;
+
+  /* IMPORTANT: locks link color so it doesn't become purple */
+  color: #000000;
+
+  font-size: 18px;
+
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+
+/* IMPORTANT: locks FontAwesome icon color */
+.layer-actions a i {
+  color: #000000;
+}
+
+/* Hover effect */
+.layer-actions a:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+
+/* Cyan variant hover */
+.layer.layer-cyan .layer-actions a:hover {
+  background: #00cfff;
+}
+
+/* ================================
+   Hover Behavior
+   ================================ */
+
+.racing:hover .layer {
+  opacity: 1;
+}
+
+/* Slight zoom (like Sim Racing tiles) */
+.racing:hover img {
+  transform: scale(1.05);
+}
+
+/* ================================
+   Gainlytics (Logo Card)
+   ================================ */
+
+/* Adds special behavior so logo doesn't fill the tile */
+.racing.is-logo-card {
+  background: #0e0f1a;
+}
+
+/* Force the Gainlytics logo to stay small */
+.racing.is-logo-card .gainlytics-thumb {
+  width: min(78%, 340px);
+  height: auto;
+  max-height: 110px; /* MAIN limiter */
+  object-fit: contain;
+
+  display: block;
+  margin: auto;
+
+  border-radius: 0;
+  background: transparent;
+
+  transition: transform 0.25s ease;
+}
+
+/* Slight logo zoom on hover */
+.racing.is-logo-card:hover .gainlytics-thumb {
+  transform: scale(1.03);
+}

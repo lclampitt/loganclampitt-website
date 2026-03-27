@@ -1,0 +1,74 @@
+/* Global reset + typography */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: black;
+  color: #fff;
+}
+
+/* Layout helpers */
+.container {
+  padding: 10px 10%;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+/* Section titles */
+.sub-title {
+  font-size: 60px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Buttons */
+.btn {
+  display: block;
+  margin: 50px auto;
+  width: fit-content;
+  border: 1px solid #000cff;
+  padding: 14px 50px;
+  border-radius: 5px;
+  text-decoration: none;
+  color: white;
+  transition: background 0.5s;
+}
+
+.btn:hover {
+  background: #000cff;
+}
+
+.btn.btn2 {
+  display: inline-block;
+  background: #000cff;
+}
+
+/* Contact form status text */
+#msg {
+  color: #61b752;
+  margin-top: -30px;
+  display: block;
+}
+
+/* Small screens – shared things */
+@media only screen and (max-width: 600px) {
+  .sub-title {
+    font-size: 40px;
+  }
+
+  .row {
+    flex-direction: column;
+  }
+}
