@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create:*)",
+      "Bash(npx --yes create-vite@latest clampitt-site --template react)",
+      "Bash(cp -r clampitt-site/. .)",
+      "Bash(rm -rf clampitt-site)",
+      "Bash(npm install:*)",
+      "Bash(find '/c/Users/nasca/OneDrive/Documents/Logan Clampitt Portfolio Website V2' -name *.jpg -o -name *.png -o -name *.jpeg)",
+      "Bash(npm run:*)",
+      "Read(//c/Users/nasca/OneDrive/Documents/**)",
+      "Read(//c/Users/nasca/**)",
+      "Read(//c/Users/nasca/Downloads/**)"
+    ]
+  }
+}
