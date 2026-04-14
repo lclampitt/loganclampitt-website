@@ -3,21 +3,21 @@ import { Link } from 'react-router-dom'
 
 const PROJECTS = [
   {
+    slug: 'gainlytics',
+    title: 'MacroVault',
+    tag: 'Web App',
+    desc: 'A fitness tracking and analytics platform designed to help users log workouts, track progress over time, and visualize performance data.',
+    tech: ['React', 'Python', 'Data Viz'],
+    accent: '#5DCAA5',
+    favorite: true,
+  },
+  {
     slug: 'socaldiecasts',
     title: 'SoCalDiecasts.com',
     tag: 'E-Commerce',
     desc: 'An e-commerce website for a diecast collectibles business, built with a focus on product presentation and seamless UX.',
     tech: ['HTML/CSS', 'JavaScript', 'E-Commerce'],
     accent: '#EF4444',
-    favorite: true,
-  },
-  {
-    slug: 'gainlytics',
-    title: 'Gainlytics',
-    tag: 'Web App',
-    desc: 'A fitness tracking and analytics platform designed to help users log workouts, track progress over time, and visualize performance data.',
-    tech: ['React', 'Python', 'Data Viz'],
-    accent: '#22D3EE',
   },
   {
     slug: 'connect-4-ai',

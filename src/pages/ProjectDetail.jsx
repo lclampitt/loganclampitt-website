@@ -3,10 +3,10 @@ import { motion } from 'framer-motion'
 
 const PROJECT_DATA = {
   gainlytics: {
-    title: 'Gainlytics – AI Fitness Analytics',
+    title: 'MacroVault – AI Fitness Analytics',
     tag: 'Web App',
     description:
-      "Gainlytics is a full-stack fitness analytics platform I built to track body metrics, training, and nutrition using clean dashboards and AI-driven insights. It's designed to be simple, fast, and useful for everyday lifters. This was my senior capstone project that I worked solo on.",
+      "MacroVault is a full-stack fitness analytics platform I built to track body metrics, training, and nutrition using clean dashboards and AI-driven insights. It's designed to be simple, fast, and useful for everyday lifters. This was my senior capstone project that I worked solo on.",
     tags: ['Dashboards & Tracking', 'Workouts & PRs', 'AI Insights'],
     whatItDoes: [
       'Log workouts, sets, and PRs with a streamlined UI.',
@@ -16,7 +16,7 @@ const PROJECT_DATA = {
     ],
     tech: ['React', 'Python', 'Chart.js', 'REST API', 'CSS'],
     externalUrl: 'https://www.gainlytics.org/',
-    repoUrl: 'https://github.com/lclampitt/gainlytics',
+    repoUrl: 'https://github.com/lclampitt/gainlytics-v2',
     previewUrl: 'https://www.gainlytics.org/',
   },
   'connect-4-ai': {

@@ -15,9 +15,9 @@ export default function Gainlytics() {
 
         {/* Hero */}
         <section className="hero">
-          <h1>Gainlytics – AI Fitness Analytics</h1>
+          <h1>MacroVault – AI Fitness Analytics</h1>
           <p>
-            Gainlytics is a full-stack fitness analytics platform I built to
+            MacroVault is a full-stack fitness analytics platform I built to
             track body metrics, training, and nutrition using clean dashboards
             and AI-driven insights. It’s designed to be simple, fast, and useful
             for everyday lifters. This was my senior capstone project that I
@@ -55,7 +55,7 @@ export default function Gainlytics() {
 
             <a
               className="btn"
-              href="https://github.com/lclampitt/gainlytics"
+              href="https://github.com/lclampitt/gainlytics-v2"
               target="_blank"
               rel="noreferrer"
             >

@@ -234,7 +234,7 @@ export default function Contact() {
                 My Resume
               </p>
               <a
-                href="/Resume - Logan Clampitt March 2026 (1).pdf"
+                href="/Resume - Logan Clampitt 2026.pdf"
                 download
                 className="group flex items-center gap-4 p-4 bg-[#0e0e0e] border border-white/5
                            rounded-xl transition-all duration-200 hover:border-[#4F46E5]/30

@@ -55,6 +55,7 @@ export default function SimRacing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, ease: 'easeOut', delay: i * 0.1 }}
+              whileHover={{ scale: 1.02 }}
             >
               <Link to={`/sim-racing/${card.slug}`} className="block group">
                 <div
