@@ -201,7 +201,7 @@ export default function ContactBar() {
             onClick={toggleContact}
             aria-expanded={open}
             aria-controls={panelId}
-            className="pointer-events-auto w-full max-w-xl rounded-full border border-line bg-raised pl-6 pr-2 py-2 flex items-center justify-between gap-4 text-left shadow-[0_8px_30px_rgba(0,0,0,0.45)]"
+            className="contact-bar-toggle pointer-events-auto w-full max-w-xl rounded-full border border-line bg-raised pl-6 pr-2 py-2 flex items-center justify-between gap-4 text-left shadow-[0_8px_30px_rgba(0,0,0,0.45)]"
           >
             <span>
               <span className="block font-display text-[15px] md:text-base font-medium text-ink">
@@ -209,7 +209,7 @@ export default function ContactBar() {
               </span>
               <span className="block text-xs text-dim mt-0.5">Roles · freelance · say hi</span>
             </span>
-            <span className="w-11 h-11 rounded-full border border-line bg-surface text-ink flex items-center justify-center shrink-0">
+            <span className="contact-bar-toggle-icon w-11 h-11 rounded-full border border-line bg-surface text-ink flex items-center justify-center shrink-0">
               {open ? <ArrowDownIcon className="w-4 h-4" /> : <ArrowUpIcon className="w-4 h-4" />}
             </span>
           </motion.button>

@@ -61,7 +61,7 @@ function PreviewBlock({ project, className = '' }) {
 function FeaturedCard({ project }) {
   return (
     <article className="h-full flex flex-col rounded-3xl border border-line bg-surface overflow-hidden">
-      <PreviewBlock project={project} className="min-h-[220px] md:min-h-0 md:flex-1 aspect-[16/10] md:aspect-auto" />
+      <PreviewBlock project={project} className="min-h-[240px] flex-[1.4] aspect-[16/10] md:aspect-auto" />
       <div className="p-6 md:p-7 flex flex-col gap-3">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h3 className="font-display text-2xl font-semibold text-ink">{project.title}</h3>
@@ -79,8 +79,8 @@ function FeaturedCard({ project }) {
 
 function StackCard({ project }) {
   return (
-    <article className="flex flex-col rounded-3xl border border-line bg-surface overflow-hidden h-full">
-      <PreviewBlock project={project} className="aspect-[16/9] min-h-[120px]" />
+    <article className="flex flex-col rounded-3xl border border-line bg-surface h-full">
+      <PreviewBlock project={project} className="aspect-[16/9] min-h-[120px] rounded-t-3xl" />
       <div className="p-5 flex flex-col gap-2 flex-1">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h3 className="font-display text-lg font-semibold text-ink">{project.title}</h3>

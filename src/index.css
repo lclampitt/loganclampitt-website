@@ -51,6 +51,15 @@ body {
   outline-offset: 3px;
 }
 
+button.contact-bar-toggle:focus-visible {
+  outline: none;
+}
+
+button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
+  outline: 2px solid #d4a017;
+  outline-offset: 3px;
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }
