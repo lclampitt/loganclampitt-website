@@ -1,115 +1,169 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import { PROJECTS } from '../data/content'
+import { fadeUp } from '../lib/motion'
 
-const PROJECTS = [
-  {
-    slug: 'gainlytics',
-    title: 'MacroVault',
-    tag: 'Web App',
-    desc: 'A fitness tracking and analytics platform designed to help users log workouts, track progress over time, and visualize performance data.',
-    tech: ['React', 'Python', 'Data Viz'],
-    accent: '#5DCAA5',
-    favorite: true,
-  },
-  {
-    slug: 'socaldiecasts',
-    title: 'SoCalDiecasts.com',
-    tag: 'E-Commerce',
-    desc: 'An e-commerce website for a diecast collectibles business, built with a focus on product presentation and seamless UX.',
-    tech: ['HTML/CSS', 'JavaScript', 'E-Commerce'],
-    accent: '#EF4444',
-  },
-  {
-    slug: 'connect-4-ai',
-    title: 'Connect 4 AI',
-    tag: 'AI / Game',
-    desc: 'An intelligent Connect 4 game featuring a minimax algorithm with alpha-beta pruning, allowing the AI to play at a near-optimal level.',
-    tech: ['Python', 'Minimax', 'AI'],
-    accent: '#EAB308',
-  },
-]
+function StatusPills({ status, tone }) {
+  return (
+    <span className="inline-flex items-center gap-2.5 font-mono text-[11px] tracking-wide lowercase">
+      {status.map((item) => (
+        <span
+          key={item}
+          className={`inline-flex items-center gap-1.5 ${tone === 'amber' ? 'text-amber' : 'text-dim'}`}
+        >
+          <span className={`w-1.5 h-1.5 rounded-full ${tone === 'amber' ? 'bg-amber' : 'bg-dim'}`} />
+          {item}
+        </span>
+      ))}
+    </span>
+  )
+}
+
+function PillButton({ href, to, children }) {
+  const className =
+    'inline-flex items-center justify-center rounded-full border border-ink/18 px-4 py-1.5 text-sm text-ink/90 hover:border-ink/50 hover:text-ink transition-colors'
+  if (to) {
+    return (
+      <Link to={to} className={className}>
+        {children}
+      </Link>
+    )
+  }
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+      {children}
+    </a>
+  )
+}
+
+function PreviewBlock({ project, className = '' }) {
+  if (project.previewImage) {
+    return (
+      <div className={`relative overflow-hidden bg-raised ${className}`}>
+        <img
+          src={project.previewImage}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover object-top"
+        />
+      </div>
+    )
+  }
+
+  return (
+    <div className={`bg-raised flex items-center justify-center ${className}`}>
+      <span className="font-mono text-[11px] md:text-xs tracking-[0.22em] text-dim">
+        {project.previewLabel}
+      </span>
+    </div>
+  )
+}
+
+function FeaturedCard({ project }) {
+  return (
+    <article className="h-full flex flex-col rounded-3xl border border-line bg-surface overflow-hidden">
+      <PreviewBlock project={project} className="min-h-[220px] md:min-h-0 md:flex-1 aspect-[16/10] md:aspect-auto" />
+      <div className="p-6 md:p-7 flex flex-col gap-3">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h3 className="font-display text-2xl font-semibold text-ink">{project.title}</h3>
+          <StatusPills status={project.status} tone={project.statusTone} />
+        </div>
+        <p className="text-muted text-sm leading-relaxed">{project.desc}</p>
+        <div className="flex flex-wrap gap-2 pt-2">
+          {project.liveUrl && <PillButton href={project.liveUrl}>Live</PillButton>}
+          {project.caseStudy && <PillButton to={`/projects/${project.slug}`}>Case study</PillButton>}
+        </div>
+      </div>
+    </article>
+  )
+}
+
+function StackCard({ project }) {
+  return (
+    <article className="flex flex-col rounded-3xl border border-line bg-surface overflow-hidden h-full">
+      <PreviewBlock project={project} className="aspect-[16/9] min-h-[120px]" />
+      <div className="p-5 flex flex-col gap-2 flex-1">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h3 className="font-display text-lg font-semibold text-ink">{project.title}</h3>
+          <StatusPills status={project.status} tone={project.statusTone} />
+        </div>
+        <p className="text-muted text-sm leading-relaxed flex-1">{project.desc}</p>
+        <div className="flex flex-wrap gap-2 pt-2">
+          {project.liveUrl && <PillButton href={project.liveUrl}>Live</PillButton>}
+          {project.repoUrl && <PillButton href={project.repoUrl}>Code</PillButton>}
+        </div>
+      </div>
+    </article>
+  )
+}
+
+function CompactCard({ project }) {
+  return (
+    <article className="rounded-3xl border border-line bg-surface overflow-hidden">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 sm:p-5">
+        <PreviewBlock
+          project={project}
+          className="w-full sm:w-28 h-28 rounded-2xl shrink-0 overflow-hidden relative"
+        />
+        <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="flex-1">
+            <div className="flex flex-wrap items-baseline gap-3">
+              <h3 className="font-display text-lg font-semibold text-ink">{project.title}</h3>
+              <StatusPills status={project.status} tone={project.statusTone} />
+            </div>
+            <p className="text-muted text-sm leading-relaxed mt-1.5">{project.desc}</p>
+          </div>
+          {project.repoUrl && <PillButton href={project.repoUrl}>Code</PillButton>}
+        </div>
+      </div>
+    </article>
+  )
+}
 
 export default function Projects() {
+  const featured = PROJECTS.find((p) => p.layout === 'featured')
+  const stacked = PROJECTS.filter((p) => p.layout === 'stack')
+  const compact = PROJECTS.filter((p) => p.layout === 'compact')
+
   return (
-    <section id="projects" className="py-28 bg-[#080808]">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="text-[#4F46E5] text-xs font-semibold tracking-widest uppercase mb-3"
-        >
-          My Work
-        </motion.p>
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: 'easeOut', delay: 0.05 }}
-          className="text-3xl md:text-4xl font-black text-white mb-16"
-        >
-          Projects
-        </motion.h2>
+    <section id="projects" className="pb-20 md:pb-28">
+      <div className="mx-auto max-w-6xl px-5 md:px-8">
+        <motion.div {...fadeUp(0)} className="flex items-end justify-between mb-8">
+          <h2 className="font-display text-sm tracking-[0.22em] uppercase text-muted">Projects</h2>
+        </motion.div>
 
-        {/* Cards */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {PROJECTS.map((proj, i) => (
-            <motion.div
-              key={proj.slug}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, ease: 'easeOut', delay: i * 0.1 }}
-              whileHover={{ scale: 1.02 }}
-            >
-              <Link
-                to={`/projects/${proj.slug}`}
-                className="group block relative rounded-2xl overflow-hidden aspect-[4/3] bg-[#0e0e0e]
-                           border border-white/5 transition-all duration-300 flex flex-col justify-between p-6"
-                style={{ borderColor: `${proj.accent}22` }}
-              >
-                {/* Accent top bar */}
-                <div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl" style={{ background: proj.accent }} />
-
-                {/* Favorite star */}
-                {proj.favorite && (
-                  <div className="absolute top-4 right-4 z-20">
-                    <svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                    </svg>
-                  </div>
-                )}
-
-                {/* Top: dot + tag */}
-                <div className="relative z-10">
-                  <div className="w-3 h-3 rounded-full mb-4" style={{ background: proj.accent }} />
-                  <p className="text-white/40 text-xs font-medium uppercase tracking-widest">{proj.tag}</p>
-                </div>
-
-                {/* Bottom: title + desc + arrow */}
-                <div className="relative z-10">
-                  <p className="text-white font-bold text-base leading-snug mb-2">{proj.title}</p>
-                  <p className="text-white/40 text-xs leading-relaxed mb-3">{proj.desc}</p>
-                  <div
-                    className="inline-flex items-center gap-1 text-xs font-semibold opacity-0
-                               group-hover:opacity-100 transition-opacity duration-200"
-                    style={{ color: proj.accent }}
-                  >
-                    View Project <span>→</span>
-                  </div>
-                </div>
-
-                {/* Background glow */}
-                <div
-                  className="absolute bottom-0 left-0 right-0 h-48 opacity-10 pointer-events-none"
-                  style={{ background: `linear-gradient(to top, ${proj.accent}, transparent)` }}
-                />
-              </Link>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-5">
+          <motion.div {...fadeUp(0.05)} className="lg:col-span-2 lg:row-span-2 min-h-[420px] lg:min-h-[560px]">
+            <FeaturedCard project={featured} />
+          </motion.div>
+          {stacked.map((project, index) => (
+            <motion.div key={project.slug} {...fadeUp(0.1 + index * 0.06)} className="lg:col-span-1">
+              <StackCard project={project} />
+            </motion.div>
+          ))}
+          {compact.map((project) => (
+            <motion.div key={project.slug} {...fadeUp(0.22)} className="lg:col-span-3">
+              <CompactCard project={project} />
             </motion.div>
           ))}
         </div>
+
+        <motion.div
+          {...fadeUp(0.12)}
+          className="mt-10 pt-6 border-t border-dashed border-line flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-8"
+        >
+          <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-dim shrink-0">
+            Also · Sim racing
+          </p>
+          <p className="text-sm text-muted flex-1">
+            8+ years competing in ENASCAR series. Personality, not a second portfolio.
+          </p>
+          <Link
+            to="/sim-racing"
+            className="text-sm text-amber hover:text-ink transition-colors shrink-0"
+          >
+            More →
+          </Link>
+        </motion.div>
       </div>
     </section>
   )
