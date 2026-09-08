@@ -10,13 +10,13 @@ const ARROW_HOTSPOT = {
   x: (5 * ARROW_SIZE) / ARROW_VIEW,
   y: (3.2 * ARROW_SIZE) / ARROW_VIEW,
 }
-const HAND_W = 20
-const HAND_H = 24
-const HAND_VIEW_W = 26
-const HAND_VIEW_H = 30
+const HAND_W = 18
+const HAND_H = 25
+const HAND_VIEW_W = 21
+const HAND_VIEW_H = 29
 const HAND_HOTSPOT = {
-  x: (8.1 * HAND_W) / HAND_VIEW_W,
-  y: (1.5 * HAND_H) / HAND_VIEW_H,
+  x: (7.15 * HAND_W) / HAND_VIEW_W,
+  y: (1.15 * HAND_H) / HAND_VIEW_H,
 }
 
 function canUseArrowCursor() {
@@ -121,7 +121,7 @@ export default function ArrowCursor() {
         fill="none"
       >
         <path
-          d="M8.1 1.5c-.95 0-1.7.75-1.7 1.7v10.05L4.15 11.2c-.75-.65-1.95-.35-2.1.9-.15 1.15.55 1.95 1.55 2.75l2.8 2.2v2.35c0 2.95 2.35 5.3 5.3 5.3h4.85c2.8 0 5.05-2.3 5.05-5.1V12.15c0-.95-.75-1.7-1.7-1.7-.4 0-.75.12-1.05.35V9c0-.95-.75-1.7-1.7-1.7-.4 0-.75.12-1.05.35V7.55c0-.95-.75-1.7-1.7-1.7-.4 0-.75.12-1.05.35V3.2c0-.95-.75-1.7-1.7-1.7-.45 0-.85.18-1.15.48-.25-.3-.7-.48-1.15-.48Z"
+          d="M5.6 1.15h3.1v5h3.1v2.5h3.1v2.5h3.1V23.6c0 2.1-1.7 3.8-3.8 3.8H9.1c-2.1 0-3.8-1.7-3.8-3.8v-4.2L2 16.8l1.7-2.2 1.9 1.6V1.15Z"
           strokeLinejoin="round"
           strokeLinecap="round"
         />

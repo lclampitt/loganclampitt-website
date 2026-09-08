@@ -221,8 +221,8 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   top: 0;
   left: 0;
   z-index: 200;
-  width: 20px;
-  height: 24px;
+  width: 18px;
+  height: 25px;
   pointer-events: none;
   opacity: 0;
   mix-blend-mode: normal;
@@ -265,7 +265,7 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
 }
 
 .arrow-cursor-hand path {
-  stroke-width: 3.2;
+  stroke-width: 2.2;
 }
 
 :root[data-theme="dark"] .arrow-cursor-mark {
