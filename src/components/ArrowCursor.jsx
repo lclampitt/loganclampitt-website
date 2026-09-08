@@ -3,8 +3,11 @@ import { useEffect, useRef, useState } from 'react'
 const FINE = '(pointer: fine)'
 const HOVER = '(hover: hover)'
 const REDUCE = '(prefers-reduced-motion: reduce)'
-const HOTSPOT_X = 5
-const HOTSPOT_Y = 3
+const HOT = 'a, button, input, textarea, select, label, summary, [role="button"], [role="link"]'
+const SIZE = 18
+const VIEW = 28
+const HOTSPOT_X = (5 * SIZE) / VIEW
+const HOTSPOT_Y = (3.2 * SIZE) / VIEW
 
 function canUseArrowCursor() {
   if (typeof window === 'undefined') return false
@@ -17,6 +20,7 @@ export default function ArrowCursor() {
   const rootRef = useRef(null)
   const rafRef = useRef(0)
   const posRef = useRef({ x: 0, y: 0 })
+  const pointRef = useRef(false)
   const [enabled, setEnabled] = useState(false)
 
   useEffect(() => {
@@ -58,11 +62,24 @@ export default function ArrowCursor() {
       if (!rafRef.current) rafRef.current = window.requestAnimationFrame(flush)
     }
 
+    const setPoint = (next) => {
+      if (pointRef.current === next) return
+      pointRef.current = next
+      node?.classList.toggle('is-point', next)
+    }
+
+    const onOver = (event) => {
+      const target = event.target
+      setPoint(Boolean(target instanceof Element && target.closest(HOT)))
+    }
+
     window.addEventListener('pointermove', onMove, { passive: true })
+    document.addEventListener('pointerover', onOver, { passive: true })
 
     return () => {
       delete root.dataset.cursor
       window.removeEventListener('pointermove', onMove)
+      document.removeEventListener('pointerover', onOver)
       if (rafRef.current) window.cancelAnimationFrame(rafRef.current)
     }
   }, [enabled])
@@ -73,9 +90,9 @@ export default function ArrowCursor() {
     <div ref={rootRef} className="arrow-cursor" aria-hidden="true">
       <svg
         className="arrow-cursor-mark"
-        width="28"
-        height="28"
-        viewBox="0 0 28 28"
+        width={SIZE}
+        height={SIZE}
+        viewBox={`0 0 ${VIEW} ${VIEW}`}
         fill="none"
       >
         <path
