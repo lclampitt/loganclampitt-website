@@ -60,7 +60,7 @@ export function IntroProvider({ children }) {
 
   useEffect(() => {
     if (phase !== 'morph') return undefined
-    const id = window.setTimeout(() => finish(), 800)
+    const id = window.setTimeout(() => finish(), 1400)
     return () => window.clearTimeout(id)
   }, [finish, phase])
 

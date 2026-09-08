@@ -1,16 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { motion } from 'framer-motion'
 import { LINKS } from '../data/content'
 import { useIntro } from '../context/useIntro'
 import {
   HANDLE_GLYPH_CLASS,
   LOGAN_GLYPH_CLASS,
-  WORDMARK_ROW_CLASS,
+  WORDMARK_STACK_CLASS,
 } from '../lib/wordmark'
 
 const LOGAN_TEXT = 'LOGAN'
 const HANDLE_TEXT = `/@${LINKS.githubHandle}`
 const EASE = [0.22, 1, 0.36, 1]
+const MORPH_MS = 700
 
 function wait(ms, signal) {
   return new Promise((resolve) => {
@@ -26,6 +28,19 @@ function wait(ms, signal) {
   })
 }
 
+function frames(count = 2) {
+  return new Promise((resolve) => {
+    const step = (left) => {
+      if (left <= 0) {
+        resolve()
+        return
+      }
+      requestAnimationFrame(() => step(left - 1))
+    }
+    step(count)
+  })
+}
+
 function typeDelay(min, max) {
   return min + Math.random() * (max - min)
 }
@@ -34,12 +49,27 @@ async function typeInto(text, onChar, minDelay, maxDelay, signal) {
   for (let i = 0; i < text.length; i += 1) {
     await wait(typeDelay(minDelay, maxDelay), signal)
     if (signal.aborted) return
-    onChar(text[i], i + 1)
+    onChar(text[i])
   }
 }
 
 function Caret() {
   return <span className="intro-caret" aria-hidden="true" />
+}
+
+function WordmarkStack({ logan, handle, loganCaret, handleCaret, sizer }) {
+  return (
+    <div className={`${WORDMARK_STACK_CLASS}${sizer ? ' invisible' : ''}`} aria-hidden={sizer ? true : undefined}>
+      <span className={LOGAN_GLYPH_CLASS}>
+        {logan}
+        {loganCaret ? <Caret /> : null}
+      </span>
+      <span className={HANDLE_GLYPH_CLASS}>
+        {handle}
+        {handleCaret ? <Caret /> : null}
+      </span>
+    </div>
+  )
 }
 
 function IntroSequence() {
@@ -49,7 +79,7 @@ function IntroSequence() {
   const [handleTyped, setHandleTyped] = useState('')
   const [caretAt, setCaretAt] = useState('logan')
   const [showCaret, setShowCaret] = useState(true)
-  const [fly, setFly] = useState(null)
+  const [pin, setPin] = useState(null)
 
   useEffect(() => {
     const ctrl = new AbortController()
@@ -99,32 +129,74 @@ function IntroSequence() {
       )
       if (signal.aborted || handle !== HANDLE_TEXT) return
 
-      await wait(280, signal)
+      await wait(260, signal)
       if (signal.aborted) return
 
       setShowCaret(false)
       await wait(80, signal)
       if (signal.aborted) return
-
-      await new Promise((resolve) => {
-        requestAnimationFrame(() => requestAnimationFrame(resolve))
-      })
+      await frames(2)
       if (signal.aborted) return
 
-      const source = blockRef.current?.getBoundingClientRect()
-      const target = document.getElementById('hero-wordmark')?.getBoundingClientRect()
-      if (!source || !target || source.width < 1 || target.width < 1) {
+      const node = blockRef.current
+      const targetEl = document.getElementById('hero-wordmark')
+      if (!node || !targetEl) {
         finish()
         return
       }
 
-      startMorph()
-      setFly({
-        x: target.left - source.left,
-        y: target.top - source.top,
-        scaleX: target.width / source.width,
-        scaleY: target.height / source.height,
+      const first = node.getBoundingClientRect()
+      const last = targetEl.getBoundingClientRect()
+      if (first.width < 1 || last.width < 1) {
+        finish()
+        return
+      }
+
+      flushSync(() => {
+        setPin({
+          left: first.left,
+          top: first.top,
+          width: first.width,
+          height: first.height,
+        })
       })
+      startMorph()
+      await frames(2)
+      if (signal.aborted) return
+
+      const latest = targetEl.getBoundingClientRect()
+      const end = latest.width > 1 ? latest : last
+      const dx = end.left - first.left
+      const dy = end.top - first.top
+      const sx = end.width / first.width
+      const sy = end.height / first.height
+
+      const flying = blockRef.current
+      if (!flying || typeof flying.animate !== 'function') {
+        finish()
+        return
+      }
+
+      flying.style.transformOrigin = '0 0'
+      const animation = flying.animate(
+        [
+          { transform: 'translate(0px, 0px) scale(1, 1)' },
+          { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})` },
+        ],
+        {
+          duration: MORPH_MS,
+          easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+          fill: 'forwards',
+        },
+      )
+
+      try {
+        await animation.finished
+      } catch {
+        // Animation was cancelled (skip / unmount).
+      }
+      if (signal.aborted) return
+      finish()
     }
 
     run()
@@ -132,12 +204,15 @@ function IntroSequence() {
   }, [finish, startMorph])
 
   useEffect(() => {
+    if (phase === 'morph') return undefined
     const onKey = (event) => {
       if (event.key === 'Escape') skip()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [skip])
+  }, [phase, skip])
+
+  const pinned = Boolean(pin)
 
   return (
     <div className="fixed inset-0 z-[80]">
@@ -145,49 +220,54 @@ function IntroSequence() {
         className="absolute inset-0 bg-page"
         initial={false}
         animate={{ opacity: phase === 'morph' ? 0 : 1 }}
-        transition={phase === 'morph' ? { duration: 0.42, ease: EASE } : { duration: 0 }}
+        transition={phase === 'morph' ? { duration: 0.65, ease: EASE } : { duration: 0 }}
       />
 
-      <button
-        type="button"
-        className="absolute inset-0 z-10 cursor-pointer"
-        aria-label="Skip introduction"
-        onClick={skip}
-      />
+      {phase === 'morph' ? null : (
+        <button
+          type="button"
+          className="absolute inset-0 z-10 cursor-pointer"
+          aria-label="Skip introduction"
+          onClick={skip}
+        />
+      )}
 
-      <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center px-5">
-        <motion.div
+      <div
+        className={
+          pinned
+            ? 'absolute inset-0 z-20 pointer-events-none'
+            : 'absolute inset-0 z-20 pointer-events-none flex items-center justify-center px-5'
+        }
+      >
+        <div
           ref={blockRef}
           className="relative"
-          style={{ originX: 0, originY: 0 }}
-          initial={false}
-          animate={fly ?? false}
-          transition={fly ? { duration: 0.52, ease: EASE } : { duration: 0 }}
-          onAnimationComplete={() => {
-            if (fly) finish()
-          }}
+          style={
+            pin
+              ? {
+                  position: 'fixed',
+                  left: pin.left,
+                  top: pin.top,
+                  width: pin.width,
+                  height: pin.height,
+                  margin: 0,
+                  transformOrigin: '0 0',
+                  zIndex: 21,
+                  willChange: 'transform',
+                }
+              : undefined
+          }
         >
-          <div className={`${WORDMARK_ROW_CLASS} invisible`} aria-hidden="true">
-            <span className={LOGAN_GLYPH_CLASS}>{LOGAN_TEXT}</span>
-            <span className={HANDLE_GLYPH_CLASS}>{HANDLE_TEXT}</span>
+          <WordmarkStack logan={LOGAN_TEXT} handle={HANDLE_TEXT} sizer />
+          <div className="absolute left-0 top-0">
+            <WordmarkStack
+              logan={loganTyped}
+              handle={handleTyped}
+              loganCaret={showCaret && caretAt === 'logan'}
+              handleCaret={showCaret && caretAt === 'handle'}
+            />
           </div>
-          <div className={`${WORDMARK_ROW_CLASS} absolute left-0 top-0`}>
-            <span className={LOGAN_GLYPH_CLASS}>
-              {loganTyped.split('').map((char, index) => (
-                <span key={`logan-${index}`}>{char}</span>
-              ))}
-              {showCaret && caretAt === 'logan' ? <Caret /> : null}
-            </span>
-            {caretAt === 'handle' || handleTyped.length > 0 ? (
-              <span className={HANDLE_GLYPH_CLASS}>
-                {handleTyped.split('').map((char, index) => (
-                  <span key={`handle-${index}`}>{char}</span>
-                ))}
-                {showCaret && caretAt === 'handle' ? <Caret /> : null}
-              </span>
-            ) : null}
-          </div>
-        </motion.div>
+        </div>
       </div>
 
       {phase !== 'morph' ? (
