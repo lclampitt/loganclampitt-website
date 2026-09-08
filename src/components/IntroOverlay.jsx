@@ -54,10 +54,9 @@ async function typeInto(text, onChar, minDelay, maxDelay, signal) {
 }
 
 function Caret({ variant }) {
-  const typeClass = variant === 'handle' ? HANDLE_GLYPH_CLASS : LOGAN_GLYPH_CLASS
   return (
     <span
-      className={`intro-caret intro-caret--${variant} ${typeClass}`}
+      className={`intro-caret intro-caret--${variant}`}
       aria-hidden="true"
     />
   )
@@ -66,17 +65,17 @@ function Caret({ variant }) {
 function WordmarkStack({ logan, handle, loganCaret, handleCaret, sizer }) {
   return (
     <div
-      className={`${WORDMARK_STACK_CLASS} whitespace-nowrap${sizer ? ' invisible' : ''}`}
+      className={`${WORDMARK_STACK_CLASS}${sizer ? ' invisible' : ''}`}
       aria-hidden={sizer ? true : undefined}
     >
-      <span className={`${LOGAN_GLYPH_CLASS} inline-flex items-baseline whitespace-nowrap`}>
-        {logan}
+      <div className="intro-type-line intro-type-line--logan">
+        <span className={LOGAN_GLYPH_CLASS}>{logan || '\u200b'}</span>
         {loganCaret ? <Caret key="logan" variant="logan" /> : null}
-      </span>
-      <span className={`${HANDLE_GLYPH_CLASS} inline-flex items-baseline whitespace-nowrap`}>
-        {handle}
+      </div>
+      <div className="intro-type-line intro-type-line--handle">
+        <span className={HANDLE_GLYPH_CLASS}>{handle || '\u200b'}</span>
         {handleCaret ? <Caret key="handle" variant="handle" /> : null}
-      </span>
+      </div>
     </div>
   )
 }
