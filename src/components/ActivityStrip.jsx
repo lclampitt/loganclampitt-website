@@ -142,7 +142,7 @@ export default function ActivityStrip() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Open Logan Clampitt on GitHub. Decorative activity pattern, not live totals."
-      className="block w-full min-w-0 rounded-2xl border border-line bg-surface p-4 md:p-5 hover:border-ink/35 transition-colors"
+      className="block w-full min-w-0"
     >
       <div className="mb-3 flex items-center justify-between gap-3">
         <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-dim">GitHub</p>
