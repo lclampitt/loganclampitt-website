@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { scrollToId } from '../lib/scroll'
 
 export default function ScrollToTop() {
   const { pathname, hash } = useLocation()
@@ -8,10 +9,7 @@ export default function ScrollToTop() {
     if (hash) {
       const id = hash.replace('#', '')
       const frame = window.requestAnimationFrame(() => {
-        const el = document.getElementById(id)
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' })
-        }
+        scrollToId(id)
       })
       return () => window.cancelAnimationFrame(frame)
     }

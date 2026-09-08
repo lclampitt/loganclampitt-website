@@ -12,7 +12,7 @@ import {
 const LOGAN_TEXT = 'LOGAN'
 const HANDLE_TEXT = `/@${LINKS.githubHandle}`
 const EASE = [0.22, 1, 0.36, 1]
-const MORPH_MS = 700
+const MORPH_MS = 640
 
 function wait(ms, signal) {
   return new Promise((resolve) => {
@@ -220,7 +220,7 @@ function IntroSequence() {
         className="absolute inset-0 bg-page"
         initial={false}
         animate={{ opacity: phase === 'morph' ? 0 : 1 }}
-        transition={phase === 'morph' ? { duration: 0.65, ease: EASE } : { duration: 0 }}
+        transition={phase === 'morph' ? { duration: 0.52, ease: EASE } : { duration: 0 }}
       />
 
       {phase === 'morph' ? null : (

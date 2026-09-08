@@ -149,7 +149,7 @@ export default function ActivityStrip() {
         <p className="font-mono text-[10px] text-dim">pattern only</p>
       </div>
 
-      <div ref={graphRef} className="git-graph w-full min-w-0">
+      <div ref={graphRef} className="relative git-graph w-full min-w-0 overflow-hidden">
         {graphWidth > 0 && (
           <svg
             width={graphWidth}
@@ -179,6 +179,7 @@ export default function ActivityStrip() {
             ))}
           </svg>
         )}
+        <span className="git-caustics" aria-hidden="true" />
       </div>
 
       <div className="mt-3 flex w-full flex-wrap items-center justify-between gap-3">

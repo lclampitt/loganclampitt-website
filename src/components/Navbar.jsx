@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import { LINKS } from '../data/content'
 import { GitHubIcon } from './icons'
+import { scrollToId } from '../lib/scroll'
 
 const NAV = [
   { label: 'Projects', href: '/#projects' },
@@ -14,8 +15,7 @@ export default function Navbar() {
   const handleNavClick = (event, href) => {
     if (isHome && href.startsWith('/#')) {
       event.preventDefault()
-      const el = document.getElementById(href.slice(2))
-      if (el) el.scrollIntoView({ behavior: 'smooth' })
+      scrollToId(href.slice(2))
     }
   }
 

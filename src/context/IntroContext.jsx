@@ -64,7 +64,7 @@ export function IntroProvider({ children }) {
     return () => window.clearTimeout(id)
   }, [finish, phase])
 
-  const contentReady = !playing || phase === 'morph'
+  const contentReady = !playing
   const wordmarkReady = !playing
 
   const value = useMemo(
