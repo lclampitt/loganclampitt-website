@@ -1,9 +1,8 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { LINKS } from '../data/content'
 import { useIntro } from '../context/useIntro'
-import { DAYS, LEVEL_COLORS, WEEKS, buildStylizedCells } from '../lib/contributions'
-
-const EMPTY = LEVEL_COLORS[0]
+import { useTheme } from '../context/useTheme'
+import { DAYS, WEEKS, buildStylizedCells, getGitPopColors, getLevelColors } from '../lib/contributions'
 
 function prefersReducedMotion() {
   return typeof window !== 'undefined'
@@ -12,7 +11,9 @@ function prefersReducedMotion() {
 
 export default function ActivityStrip() {
   const { contentReady } = useIntro()
+  const { theme } = useTheme()
   const cells = useMemo(() => buildStylizedCells(), [])
+  const colors = getLevelColors()
   const [innerWidth, setInnerWidth] = useState(0)
   const [started, setStarted] = useState(() => prefersReducedMotion())
   const cardRef = useRef(null)
@@ -72,7 +73,7 @@ export default function ActivityStrip() {
     }
 
     nodes.forEach((node) => {
-      node.setAttribute('fill', reduced ? LEVEL_COLORS[Number(node.dataset.level) || 0] : EMPTY)
+      node.setAttribute('fill', reduced ? colors[Number(node.dataset.level) || 0] : colors[0])
     })
 
     if (!reduced) {
@@ -82,7 +83,7 @@ export default function ActivityStrip() {
         const level = Number(node.dataset.level) || 0
         later(() => {
           if (stopped) return
-          node.setAttribute('fill', LEVEL_COLORS[level])
+          node.setAttribute('fill', getLevelColors()[level])
         }, 140 + week * 32 + day * 12)
       })
     }
@@ -91,8 +92,10 @@ export default function ActivityStrip() {
       if (stopped) return
       const level = Number(node.dataset.level) || 0
       if (level === 0) return
-      const base = LEVEL_COLORS[level]
-      node.setAttribute('fill', level >= 3 ? '#e4e4e7' : '#d4a017')
+      const palette = getLevelColors()
+      const pops = getGitPopColors()
+      const base = palette[level]
+      node.setAttribute('fill', level >= 3 ? pops.high : pops.low)
       if (typeof node.animate === 'function') {
         node.animate(
           [
@@ -128,7 +131,7 @@ export default function ActivityStrip() {
       timers.forEach((id) => window.clearTimeout(id))
       timers.clear()
     }
-  }, [started, graphWidth])
+  }, [colors, graphWidth, started, theme])
 
   const reducedMotion = prefersReducedMotion()
 
@@ -170,7 +173,7 @@ export default function ActivityStrip() {
                 data-level={cell.level}
                 data-week={cell.week}
                 data-day={cell.day}
-                fill={started && reducedMotion ? LEVEL_COLORS[cell.level] : EMPTY}
+                fill={started && reducedMotion ? colors[cell.level] : colors[0]}
                 className="git-cell"
               />
             ))}
@@ -184,7 +187,7 @@ export default function ActivityStrip() {
         </p>
         <div className="flex items-center gap-1.5 font-mono text-[10px] text-dim">
           <span>Less</span>
-          {LEVEL_COLORS.map((color) => (
+          {colors.map((color) => (
             <span key={color} className="w-2.5 h-2.5 rounded-[2px]" style={{ backgroundColor: color }} />
           ))}
           <span>More</span>

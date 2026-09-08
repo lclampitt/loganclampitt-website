@@ -21,7 +21,7 @@ export default function Experience() {
             <article className="p-5 md:p-6">
               <div className="flex gap-4">
                 <div
-                  className="w-12 h-12 rounded-2xl bg-raised border border-line flex items-center justify-center font-display text-amber text-sm font-semibold shrink-0"
+                  className="w-12 h-12 rounded-2xl bg-raised border border-line flex items-center justify-center font-display text-accent text-sm font-semibold shrink-0"
                   aria-hidden="true"
                 >
                   {item.initials}

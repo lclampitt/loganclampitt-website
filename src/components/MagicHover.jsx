@@ -24,7 +24,7 @@ export default function MagicHover({ children, className = '' }) {
     >
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute z-0 h-40 w-40 rounded-full bg-amber/12"
+        className="pointer-events-none absolute z-0 h-40 w-40 rounded-full bg-accent/12"
         style={{
           left: pos.x,
           top: pos.y,

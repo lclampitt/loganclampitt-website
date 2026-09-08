@@ -101,7 +101,7 @@ export default function Projects() {
           </p>
           <Link
             to="/sim-racing"
-            className="text-sm text-amber hover:text-ink transition-colors shrink-0"
+            className="text-sm text-accent hover:text-ink transition-colors shrink-0"
           >
             More →
           </Link>

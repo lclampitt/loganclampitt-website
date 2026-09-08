@@ -165,7 +165,7 @@ export default function ContactBar() {
                           {sending ? 'Sending...' : 'Send message'}
                         </button>
                         {error && (
-                          <p className="text-sm text-amber" role="alert">
+                          <p className="text-sm text-accent" role="alert">
                             Something went wrong. Please try again.
                           </p>
                         )}
@@ -209,11 +209,11 @@ export default function ContactBar() {
             onClick={toggleContact}
             aria-expanded={open}
             aria-controls={panelId}
-            className={`contact-bar-toggle pointer-events-auto w-full max-w-xl rounded-full border border-line bg-raised pl-6 pr-2 py-2 flex items-center justify-between gap-4 text-left shadow-[0_8px_30px_rgba(0,0,0,0.45)]${contentReady ? '' : ' pointer-events-none'}`}
+            className={`contact-bar-toggle pointer-events-auto w-full max-w-xl rounded-full border border-line bg-raised pl-6 pr-2 py-2 flex items-center justify-between gap-4 text-left shadow-bar${contentReady ? '' : ' pointer-events-none'}`}
           >
             <span>
               <span className="block font-display text-[15px] md:text-base font-medium text-ink">
-                Get in contact with me<span className="text-amber">!</span>
+                Get in contact with me<span className="text-accent">!</span>
               </span>
               <span className="block text-xs text-dim mt-0.5">Roles · freelance · say hi</span>
             </span>

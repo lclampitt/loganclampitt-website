@@ -6,15 +6,55 @@
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
   --font-script: "Instrument Serif", ui-serif, Georgia, serif;
 
-  --color-page: #09090b;
-  --color-surface: #111113;
-  --color-raised: #18181b;
-  --color-line: #27272a;
-  --color-ink: #e4e4e7;
-  --color-muted: #a1a1aa;
-  --color-dim: #71717a;
-  --color-amber: #d4a017;
-  --color-amber-dim: #8a6b12;
+  --color-page: #eef4f8;
+  --color-surface: #f5f9fb;
+  --color-raised: #ffffff;
+  --color-line: #d3dee6;
+  --color-ink: #0b1c2c;
+  --color-muted: #4d6270;
+  --color-dim: #6e8491;
+  --color-accent: #1f6f7a;
+  --color-accent-fg: #ffffff;
+  --color-navy: #0e3a52;
+  --color-foam: #8fd6e0;
+  --color-amber: #1f6f7a;
+  --color-amber-dim: #0e3a52;
+}
+
+:root {
+  --git-0: #d7e4ec;
+  --git-1: #a9d0d6;
+  --git-2: #5fa8b1;
+  --git-3: #1f6f7a;
+  --git-4: #0e3a52;
+  --git-pop-low: #8fd6e0;
+  --git-pop-high: #0e3a52;
+  --shadow-bar: 0 8px 30px rgba(11, 28, 44, 0.12);
+}
+
+:root[data-theme="dark"] {
+  --color-page: #060d14;
+  --color-surface: #0b1520;
+  --color-raised: #101c28;
+  --color-line: #1c3140;
+  --color-ink: #f3f6f8;
+  --color-muted: #b5c4cc;
+  --color-dim: #8a9eaa;
+  --color-accent: #8fd6e0;
+  --color-accent-fg: #060d14;
+  --color-navy: #0e3a52;
+  --color-foam: #8fd6e0;
+  --color-amber: #8fd6e0;
+  --color-amber-dim: #1f6f7a;
+
+  --git-0: #0e3a52;
+  --git-1: #16485c;
+  --git-2: #1f6f7a;
+  --git-3: #4db8c4;
+  --git-4: #8fd6e0;
+  --git-pop-low: #8fd6e0;
+  --git-pop-high: #f3f6f8;
+  --shadow-bar: 0 8px 30px rgba(0, 0, 0, 0.45);
 }
 
 * {
@@ -23,14 +63,19 @@
 
 html {
   scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 body {
   margin: 0;
   padding: 0;
   font-family: var(--font-sans);
-  background-color: #09090b;
-  color: #e4e4e7;
+  background-color: var(--color-page);
+  color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -43,12 +88,12 @@ body {
 }
 
 ::selection {
-  background: #d4a017;
-  color: #09090b;
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
 }
 
 :focus-visible {
-  outline: 2px solid #d4a017;
+  outline: 2px solid var(--color-accent);
   outline-offset: 3px;
 }
 
@@ -57,7 +102,7 @@ button.contact-bar-toggle:focus-visible {
 }
 
 button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
-  outline: 2px solid #d4a017;
+  outline: 2px solid var(--color-accent);
   outline-offset: 3px;
 }
 
@@ -66,11 +111,11 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
 }
 
 ::-webkit-scrollbar-track {
-  background: #09090b;
+  background: var(--color-page);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #27272a;
+  background: var(--color-line);
   border-radius: 3px;
 }
 
@@ -81,6 +126,10 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
 
 .font-script {
   font-family: var(--font-script);
+}
+
+.shadow-bar {
+  box-shadow: var(--shadow-bar);
 }
 
 .git-graph {
@@ -129,7 +178,7 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   width: 3px;
   height: 0.92em;
   margin-left: 0.18em;
-  background: #d4a017;
+  background: var(--color-accent);
   vertical-align: -0.08em;
   animation: intro-caret 0.53s steps(1, end) infinite;
 }

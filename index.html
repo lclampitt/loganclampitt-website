@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -9,7 +9,18 @@
       name="description"
       content="Portfolio of Logan Clampitt, software developer and full stack builder. Open to roles and freelance. Work includes CT Realty Trust, MacroVault, and SoCalDiecasts."
     />
-    <meta name="theme-color" content="#09090b" />
+    <meta name="theme-color" content="#eef4f8" />
+    <script>
+      (function () {
+        var theme = 'light'
+        try {
+          var stored = localStorage.getItem('logan-theme')
+          if (stored === 'dark' || stored === 'light') theme = stored
+        } catch (error) {}
+        document.documentElement.setAttribute('data-theme', theme)
+        document.documentElement.style.colorScheme = theme
+      })()
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

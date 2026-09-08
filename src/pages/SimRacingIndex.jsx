@@ -31,7 +31,7 @@ export default function SimRacingIndex() {
               >
                 <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-dim">{item.subtitle}</p>
                 <h2 className="font-display text-xl font-semibold mt-2">{item.title}</h2>
-                <p className="text-sm text-amber mt-4">Read more →</p>
+                <p className="text-sm text-accent mt-4">Read more →</p>
               </Link>
             </motion.div>
           ))}

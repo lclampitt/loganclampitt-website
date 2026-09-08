@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import ScrollToTop from './components/ScrollToTop'
 import ContactBar from './components/ContactBar'
 import IntroOverlay from './components/IntroOverlay'
+import ThemeToggle from './components/ThemeToggle'
 import { ContactProvider } from './context/ContactContext'
 import { IntroProvider } from './context/IntroContext'
 import Home from './pages/Home'
@@ -18,6 +19,7 @@ function App() {
     <ContactProvider>
       <IntroProvider>
         <ScrollToTop />
+        <ThemeToggle />
         <Navbar />
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>

@@ -16,9 +16,11 @@ const fade = (delay) => ({
 })
 
 const ghostBtn =
-  'inline-flex items-center justify-center rounded-xl border border-ink/25 px-4 py-2 text-sm text-ink hover:border-ink/60 hover:text-ink transition-colors'
-const amberBtn =
-  'inline-flex items-center justify-center rounded-xl border border-amber px-4 py-2 text-sm text-amber hover:bg-amber hover:text-page transition-colors'
+  'inline-flex items-center justify-center rounded-xl border border-ink/30 bg-raised px-4 py-2 text-sm text-ink hover:border-ink/70 hover:text-ink transition-colors'
+const accentBtn =
+  'inline-flex items-center justify-center rounded-xl bg-accent text-accent-fg px-4 py-2 text-sm hover:opacity-90 transition-opacity'
+const solidBtn =
+  'inline-flex items-center justify-center rounded-xl bg-navy text-white px-4 py-2 text-sm hover:opacity-90 transition-opacity'
 const pill =
   'inline-flex items-center justify-center rounded-full border border-line bg-raised px-4 py-1.5 text-sm text-ink hover:border-ink/40 transition-colors'
 
@@ -45,7 +47,7 @@ export default function Hero() {
   return (
     <section id="hero" className="relative pt-8 md:pt-10 pb-8 md:pb-10">
       <div className="mx-auto max-w-6xl px-5 md:px-8 w-full">
-        <motion.div {...rest(0)} className="flex items-baseline justify-between gap-4">
+        <motion.div {...rest(0)} className="flex items-baseline justify-between gap-4 pr-24 sm:pr-32">
           <p className="font-script italic text-[1.35rem] md:text-[1.65rem] text-ink">
             Hey it&apos;s me
           </p>
@@ -97,11 +99,11 @@ export default function Hero() {
             href={LINKS.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className={ghostBtn}
+            className={accentBtn}
           >
             LinkedIn
           </a>
-          <button type="button" onClick={scrollToProjects} className={amberBtn}>
+          <button type="button" onClick={scrollToProjects} className={solidBtn}>
             See projects
           </button>
         </motion.div>

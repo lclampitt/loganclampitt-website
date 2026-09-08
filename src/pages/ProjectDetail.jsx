@@ -33,7 +33,7 @@ export default function ProjectDetail() {
 
         <div className="mt-8 rounded-3xl border border-line bg-surface p-6 md:p-8">
           {data.tag && (
-            <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-amber mb-3">{data.tag}</p>
+            <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-accent mb-3">{data.tag}</p>
           )}
           <h1 className="font-display text-3xl md:text-4xl font-semibold text-ink">{data.title}</h1>
           <p className="mt-5 text-muted leading-relaxed">{data.description}</p>
@@ -55,7 +55,7 @@ export default function ProjectDetail() {
               <ul className="flex flex-col gap-2.5">
                 {data.whatItDoes.map((item) => (
                   <li key={item} className="flex items-start gap-2.5 text-sm text-muted">
-                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-amber shrink-0" />
+                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
                     {item}
                   </li>
                 ))}

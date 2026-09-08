@@ -22,7 +22,7 @@ export default function Navbar() {
   if (isHome) return null
 
   return (
-    <header className="fixed top-0 inset-x-0 z-40 bg-page">
+    <header className="fixed top-0 inset-x-0 z-40 bg-page pr-28 md:pr-36">
       <nav className="mx-auto max-w-6xl px-5 md:px-8 h-16 flex items-center justify-between">
         <Link
           to="/"
