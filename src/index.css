@@ -78,6 +78,18 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   letter-spacing: -0.035em;
 }
 
+.git-graph {
+  width: 100%;
+  min-width: 0;
+}
+
+.git-graph svg {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
 .git-graph .git-cell {
   transform-origin: center;
   transform-box: fill-box;

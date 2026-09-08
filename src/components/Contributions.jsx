@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { LINKS } from '../data/content'
 import { fadeUp } from '../lib/motion'
@@ -62,15 +62,23 @@ export default function Contributions() {
     }
   }, [])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = wrapRef.current
     if (!el) return undefined
-    const observer = new ResizeObserver(([entry]) => {
-      setInnerWidth(entry.contentRect.width)
-    })
+
+    const measure = () => {
+      const next = el.getBoundingClientRect().width
+      setInnerWidth((current) => (Math.abs(current - next) < 0.5 ? current : next))
+    }
+
+    measure()
+    const observer = new ResizeObserver(measure)
     observer.observe(el)
-    setInnerWidth(el.clientWidth)
-    return () => observer.disconnect()
+    window.addEventListener('resize', measure)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', measure)
+    }
   }, [])
 
   useEffect(() => {
@@ -95,9 +103,20 @@ export default function Contributions() {
     }
   }, [started])
 
+  const weekCount = useMemo(
+    () => cells.reduce((max, cell) => Math.max(max, cell.week + 1), 0) || WEEKS,
+    [cells],
+  )
+  const gap = innerWidth > 0 && innerWidth < 540 ? 2 : 3
+  const block = innerWidth > 0
+    ? Math.max(4, (innerWidth - (weekCount - 1) * gap) / weekCount)
+    : 0
+  const graphWidth = block > 0 ? weekCount * (block + gap) - gap : 0
+  const height = block > 0 ? LABEL_H + DAYS * (block + gap) - gap : 0
+
   useEffect(() => {
     const root = graphRef.current
-    if (!root || !started) return undefined
+    if (!root || !started || graphWidth <= 0) return undefined
 
     const nodes = Array.from(root.querySelectorAll('rect[data-level]'))
     const reduced = prefersReducedMotion()
@@ -160,7 +179,7 @@ export default function Contributions() {
     }
 
     if (!reduced) {
-      later(tick, 280 + WEEKS * 42 + 180)
+      later(tick, 280 + weekCount * 42 + 180)
     }
 
     return () => {
@@ -168,14 +187,8 @@ export default function Contributions() {
       timers.forEach((id) => window.clearTimeout(id))
       timers.clear()
     }
-  }, [started, cells, innerWidth])
+  }, [started, cells, graphWidth, weekCount])
 
-  const gap = innerWidth < 540 ? 2 : 3
-  const block = innerWidth > 0
-    ? Math.max(5, (innerWidth - (WEEKS - 1) * gap) / WEEKS)
-    : 11
-  const width = innerWidth > 0 ? innerWidth : WEEKS * (block + gap) - gap
-  const height = LABEL_H + DAYS * (block + gap) - gap
   const labels = useMemo(() => monthLabels(cells), [cells])
   const live = source === 'live'
   const reducedMotion = prefersReducedMotion()
@@ -194,63 +207,66 @@ export default function Contributions() {
 
         <motion.div
           {...fadeUp(0.06)}
-          className="rounded-3xl border border-line bg-surface p-5 md:p-7"
+          className="w-full min-w-0 rounded-3xl border border-line bg-surface p-5 md:p-7"
         >
-          <div ref={wrapRef} className="w-full">
-            <div ref={graphRef} className="git-graph w-full">
-              <svg
-                width="100%"
-                height={height}
-                viewBox={`0 0 ${width} ${height}`}
-                preserveAspectRatio="none"
-                className="block"
-                role="img"
-                aria-label={
-                  live
-                    ? 'Animated GitHub contribution heatmap for the last year'
-                    : 'Animated stylized GitHub style contribution heatmap'
-                }
-              >
-                {labels.map((item) => (
-                  <text
-                    key={`${item.label}-${item.week}`}
-                    x={item.week * (block + gap)}
-                    y="0"
-                    fill="#71717a"
-                    fontSize="10"
-                    fontFamily="IBM Plex Mono, ui-monospace, monospace"
-                    dominantBaseline="hanging"
-                  >
-                    {item.label}
-                  </text>
-                ))}
-                {cells.map((cell) => (
-                  <rect
-                    key={`${cell.week}-${cell.day}-${cell.date}`}
-                    x={cell.week * (block + gap)}
-                    y={LABEL_H + cell.day * (block + gap)}
-                    width={block}
-                    height={block}
-                    rx="2"
-                    ry="2"
-                    data-level={cell.level}
-                    data-week={cell.week}
-                    data-day={cell.day}
-                    data-date={cell.date}
-                    fill={started && reducedMotion ? LEVEL_COLORS[cell.level] : EMPTY}
-                    className="git-cell"
-                  >
-                    <title>
-                      {cell.date}
-                      {live && cell.count ? ` · ${cell.count} contributions` : ''}
-                    </title>
-                  </rect>
-                ))}
-              </svg>
+          <div ref={wrapRef} className="w-full min-w-0">
+            <div ref={graphRef} className="git-graph w-full min-w-0">
+              {graphWidth > 0 && (
+                <svg
+                  width={graphWidth}
+                  height={height}
+                  viewBox={`0 0 ${graphWidth} ${height}`}
+                  preserveAspectRatio="xMinYMin meet"
+                  className="block max-w-full"
+                  style={{ width: '100%', height: 'auto' }}
+                  role="img"
+                  aria-label={
+                    live
+                      ? 'Animated GitHub contribution heatmap for the last year'
+                      : 'Animated stylized GitHub style contribution heatmap'
+                  }
+                >
+                  {labels.map((item) => (
+                    <text
+                      key={`${item.label}-${item.week}`}
+                      x={item.week * (block + gap)}
+                      y="0"
+                      fill="#71717a"
+                      fontSize="10"
+                      fontFamily="IBM Plex Mono, ui-monospace, monospace"
+                      dominantBaseline="hanging"
+                    >
+                      {item.label}
+                    </text>
+                  ))}
+                  {cells.map((cell) => (
+                    <rect
+                      key={`${cell.week}-${cell.day}-${cell.date}`}
+                      x={cell.week * (block + gap)}
+                      y={LABEL_H + cell.day * (block + gap)}
+                      width={block}
+                      height={block}
+                      rx="2"
+                      ry="2"
+                      data-level={cell.level}
+                      data-week={cell.week}
+                      data-day={cell.day}
+                      data-date={cell.date}
+                      fill={started && reducedMotion ? LEVEL_COLORS[cell.level] : EMPTY}
+                      className="git-cell"
+                    >
+                      <title>
+                        {cell.date}
+                        {live && cell.count ? ` · ${cell.count} contributions` : ''}
+                      </title>
+                    </rect>
+                  ))}
+                </svg>
+              )}
             </div>
           </div>
 
-          <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
+          <div className="mt-5 flex w-full min-w-0 flex-wrap items-center justify-between gap-4">
             <a
               href={LINKS.github}
               target="_blank"
