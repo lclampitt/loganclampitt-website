@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { LINKS } from '../data/content'
 import { DAYS, LEVEL_COLORS, WEEKS, buildStylizedCells } from '../lib/contributions'
 
 const EMPTY = LEVEL_COLORS[0]
@@ -129,9 +130,13 @@ export default function ActivityStrip() {
   const reducedMotion = prefersReducedMotion()
 
   return (
-    <div
+    <a
       ref={cardRef}
-      className="w-full min-w-0 rounded-2xl border border-line bg-surface p-4 md:p-5"
+      href={LINKS.github}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Open Logan Clampitt on GitHub. Decorative activity pattern, not live totals."
+      className="block w-full min-w-0 rounded-2xl border border-line bg-surface p-4 md:p-5 hover:border-ink/35 transition-colors"
     >
       <div className="mb-3 flex items-center justify-between gap-3">
         <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-dim">GitHub</p>
@@ -148,7 +153,7 @@ export default function ActivityStrip() {
             className="block w-full"
             style={{ width: '100%', height }}
             role="img"
-            aria-label="Stylized activity map. Decorative pattern only, not live GitHub totals."
+            aria-hidden="true"
           >
             {cells.map((cell) => (
               <rect
@@ -182,6 +187,6 @@ export default function ActivityStrip() {
           <span>More</span>
         </div>
       </div>
-    </div>
+    </a>
   )
 }
