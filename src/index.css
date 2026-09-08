@@ -30,10 +30,6 @@
   --git-pop-low: #8fd6e0;
   --git-pop-high: #0e3a52;
   --shadow-bar: 0 8px 30px rgba(11, 28, 44, 0.12);
-  --wave-foam: #ffffff;
-  --wave-tail-0: rgba(14, 58, 82, 0.9);
-  --wave-tail-1: rgba(31, 111, 122, 0.42);
-  --wave-tail-2: rgba(31, 111, 122, 0);
 }
 
 :root[data-theme="dark"] {
@@ -59,10 +55,6 @@
   --git-pop-low: #8fd6e0;
   --git-pop-high: #f3f6f8;
   --shadow-bar: 0 8px 30px rgba(0, 0, 0, 0.55);
-  --wave-foam: #f7fdff;
-  --wave-tail-0: rgba(143, 214, 224, 0.82);
-  --wave-tail-1: rgba(31, 111, 122, 0.5);
-  --wave-tail-2: rgba(14, 58, 82, 0);
 }
 
 * {
@@ -144,26 +136,6 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   box-shadow: var(--shadow-bar);
 }
 
-.wave-cursor {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-html[data-wave-cursor='on'],
-html[data-wave-cursor='on'] * {
-  cursor: none !important;
-}
-
-html[data-wave-cursor='on'] input,
-html[data-wave-cursor='on'] textarea,
-html[data-wave-cursor='on'] [contenteditable='true'] {
-  cursor: text !important;
-}
-
 .git-graph {
   width: 100%;
   min-width: 0;
@@ -235,14 +207,5 @@ html[data-wave-cursor='on'] [contenteditable='true'] {
 
   .intro-caret {
     animation: none;
-  }
-
-  html[data-wave-cursor='on'],
-  html[data-wave-cursor='on'] * {
-    cursor: auto !important;
-  }
-
-  .wave-cursor {
-    display: none;
   }
 }
