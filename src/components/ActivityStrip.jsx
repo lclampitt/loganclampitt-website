@@ -142,7 +142,7 @@ export default function ActivityStrip() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Open Logan Clampitt on GitHub. Decorative activity pattern, not live totals."
-      className="block w-full min-w-0 rounded-2xl border border-line bg-surface p-4 md:p-5 hover:border-ink/35 transition-colors"
+      className="box-dotted block w-full min-w-0 p-4 md:p-5 hover:border-ink/35 transition-colors"
     >
       <div className="mb-3 flex items-center justify-between gap-3">
         <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-dim">GitHub</p>
@@ -168,8 +168,6 @@ export default function ActivityStrip() {
                 y={cell.day * (block + gap)}
                 width={block}
                 height={block}
-                rx="2"
-                ry="2"
                 data-level={cell.level}
                 data-week={cell.week}
                 data-day={cell.day}
@@ -189,7 +187,7 @@ export default function ActivityStrip() {
         <div className="flex items-center gap-1.5 font-mono text-[10px] text-dim">
           <span>Less</span>
           {colors.map((color) => (
-            <span key={color} className="w-2.5 h-2.5 rounded-[2px]" style={{ backgroundColor: color }} />
+            <span key={color} className="w-2.5 h-2.5" style={{ backgroundColor: color }} />
           ))}
           <span>More</span>
         </div>

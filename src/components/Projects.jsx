@@ -32,7 +32,7 @@ function PreviewBlock({ project }) {
   if (project.previewKind === 'text-first') {
     return (
       <div className="preview-hatch aspect-[16/10] flex items-center justify-center px-4">
-        <span className="inline-flex items-center rounded-full border border-line bg-surface px-3 py-1 font-mono text-[10px] tracking-[0.14em] uppercase text-muted">
+        <span className="inline-flex items-center box-dotted px-3 py-1 font-mono text-[10px] tracking-[0.14em] uppercase text-muted">
           No screenshot · text first
         </span>
       </div>

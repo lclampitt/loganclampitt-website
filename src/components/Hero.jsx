@@ -17,13 +17,13 @@ const fade = (delay) => ({
 })
 
 const ghostBtn =
-  'inline-flex items-center justify-center rounded-xl border border-ink/30 bg-raised px-4 py-2 text-sm text-ink hover:border-ink/70 hover:text-ink transition-colors'
+  'box-dotted inline-flex items-center justify-center px-4 py-2 text-sm text-ink hover:border-ink/70 transition-colors'
 const accentBtn =
-  'inline-flex items-center justify-center rounded-xl bg-accent text-accent-fg px-4 py-2 text-sm hover:opacity-90 transition-opacity'
+  'box-dotted-accent inline-flex items-center justify-center px-4 py-2 text-sm hover:opacity-90 transition-opacity'
 const solidBtn =
-  'inline-flex items-center justify-center rounded-xl bg-navy text-white px-4 py-2 text-sm hover:opacity-90 transition-opacity'
-const pill =
-  'inline-flex items-center justify-center rounded-full border border-line bg-raised px-4 py-1.5 text-sm text-ink hover:border-ink/40 transition-colors'
+  'box-dotted-navy inline-flex items-center justify-center px-4 py-2 text-sm hover:opacity-90 transition-opacity'
+const chip =
+  'box-dotted inline-flex items-center justify-center px-4 py-1.5 text-sm text-ink hover:border-ink/40 transition-colors'
 
 export default function Hero() {
   const { openContact } = useContact()
@@ -122,16 +122,16 @@ export default function Hero() {
               You can check these <span className="text-ink">links</span> if you wish to
             </p>
             <div className="flex flex-wrap gap-2">
-              <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className={pill}>
+              <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className={chip}>
                 GitHub
               </a>
-              <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer" className={pill}>
+              <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer" className={chip}>
                 LinkedIn
               </a>
-              <a href={LINKS.resume} download className={pill}>
+              <a href={LINKS.resume} download className={chip}>
                 Resume
               </a>
-              <button type="button" onClick={openContact} className={pill}>
+              <button type="button" onClick={openContact} className={chip}>
                 open to work
               </button>
             </div>

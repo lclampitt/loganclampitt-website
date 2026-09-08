@@ -21,7 +21,7 @@ export default function Experience() {
             <article className="p-5 md:p-6">
               <div className="flex gap-4">
                 <div
-                  className="w-12 h-12 rounded-2xl bg-raised border border-line flex items-center justify-center font-display text-accent text-sm font-semibold shrink-0"
+                  className="w-12 h-12 box-dotted flex items-center justify-center font-display text-accent text-sm font-semibold shrink-0"
                   aria-hidden="true"
                 >
                   {item.initials}
@@ -33,7 +33,7 @@ export default function Experience() {
                         {item.title}
                         <span className="text-muted font-normal"> · {item.role}</span>
                       </h3>
-                      <span className="font-mono text-[10px] uppercase tracking-wider text-dim border border-line rounded-full px-2 py-0.5">
+                      <span className="font-mono text-[10px] uppercase tracking-wider text-dim box-dotted px-2 py-0.5">
                         {item.badge}
                       </span>
                     </div>
@@ -44,7 +44,7 @@ export default function Experience() {
                     {item.chips.map((chip) => (
                       <span
                         key={chip}
-                        className="rounded-full border border-line bg-raised px-3 py-1 text-xs text-muted"
+                        className="box-dotted px-3 py-1 text-xs text-muted"
                       >
                         {chip}
                       </span>

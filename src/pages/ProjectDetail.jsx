@@ -41,7 +41,7 @@ export default function ProjectDetail() {
           {data.tags && (
             <div className="mt-6 flex flex-wrap gap-2">
               {data.tags.map((tag) => (
-                <span key={tag} className="rounded-full border border-line px-3 py-1 text-xs text-muted">
+                <span key={tag} className="box-dotted px-3 py-1 text-xs text-muted">
                   {tag}
                 </span>
               ))}
@@ -69,7 +69,7 @@ export default function ProjectDetail() {
                 href={data.externalUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full bg-ink text-page px-5 py-2.5 text-sm font-medium hover:bg-white transition-colors"
+                className="box-dotted-ink px-5 py-2.5 text-sm font-medium hover:opacity-90 transition-opacity"
               >
                 Visit live site
               </a>
@@ -79,7 +79,7 @@ export default function ProjectDetail() {
                 href={data.demoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full border border-ink/20 px-5 py-2.5 text-sm hover:border-ink/50 transition-colors"
+                className="box-dotted px-5 py-2.5 text-sm hover:border-ink/50 transition-colors"
               >
                 Watch demo
               </a>
@@ -89,7 +89,7 @@ export default function ProjectDetail() {
                 href={data.repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-ink/20 px-5 py-2.5 text-sm hover:border-ink/50 transition-colors"
+                className="inline-flex items-center gap-2 box-dotted px-5 py-2.5 text-sm hover:border-ink/50 transition-colors"
               >
                 <GitHubIcon className="w-4 h-4" />
                 View repo

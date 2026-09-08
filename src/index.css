@@ -164,6 +164,27 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   border-color: #3a3a3a;
 }
 
+.box-dotted-accent {
+  border: 1px dotted color-mix(in srgb, var(--color-navy) 45%, var(--color-accent));
+  border-radius: 0;
+  background-color: var(--color-accent);
+  color: var(--color-accent-fg);
+}
+
+.box-dotted-navy {
+  border: 1px dotted color-mix(in srgb, var(--color-foam) 55%, var(--color-navy));
+  border-radius: 0;
+  background-color: var(--color-navy);
+  color: #ffffff;
+}
+
+.box-dotted-ink {
+  border: 1px dotted color-mix(in srgb, var(--color-page) 40%, var(--color-ink));
+  border-radius: 0;
+  background-color: var(--color-ink);
+  color: var(--color-page);
+}
+
 .preview-hatch {
   background-color: var(--color-raised);
   background-image: repeating-linear-gradient(
