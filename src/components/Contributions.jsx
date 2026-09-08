@@ -15,6 +15,7 @@ import {
 const BLOCK = 11
 const GAP = 3
 const LABEL_H = 18
+const EMPTY = LEVEL_COLORS[0]
 
 function prefersReducedMotion() {
   return typeof window !== 'undefined'
@@ -25,7 +26,8 @@ export default function Contributions() {
   const fallback = useMemo(() => buildStylizedCells(), [])
   const [cells, setCells] = useState(fallback)
   const [source, setSource] = useState('stylized')
-  const [phase, setPhase] = useState(() => (prefersReducedMotion() ? 'settled' : 'idle'))
+  const [started, setStarted] = useState(() => prefersReducedMotion())
+  const sectionRef = useRef(null)
   const graphRef = useRef(null)
 
   useEffect(() => {
@@ -52,28 +54,26 @@ export default function Contributions() {
   }, [])
 
   useEffect(() => {
-    const root = graphRef.current
-    if (!root) return undefined
+    const section = sectionRef.current
+    if (!section || started) return undefined
 
-    let inView = false
+    const reveal = () => setStarted(true)
     const observer = new IntersectionObserver(
       ([entry]) => {
-        const shown = entry.isIntersecting && entry.intersectionRatio >= 0.55
-        if (shown && !inView) {
-          setPhase('enter')
-        }
-        inView = shown
+        if (entry.isIntersecting) reveal()
       },
-      { threshold: [0.15, 0.55, 0.75, 1] },
+      { threshold: 0.2 },
     )
-    observer.observe(root)
+    observer.observe(section)
     return () => observer.disconnect()
-  }, [])
+  }, [started])
 
   useEffect(() => {
     const root = graphRef.current
-    if (!root || phase === 'idle' || prefersReducedMotion()) return undefined
+    if (!root || !started) return undefined
 
+    const nodes = Array.from(root.querySelectorAll('rect[data-level]'))
+    const reduced = prefersReducedMotion()
     let stopped = false
     const timers = new Set()
     const later = (fn, ms) => {
@@ -84,59 +84,73 @@ export default function Contributions() {
       timers.add(id)
     }
 
-    const nodes = () => Array.from(root.querySelectorAll('rect[data-level]'))
+    nodes.forEach((node) => {
+      node.setAttribute('fill', reduced ? LEVEL_COLORS[Number(node.dataset.level) || 0] : EMPTY)
+    })
+
+    if (!reduced) {
+      nodes.forEach((node) => {
+        const week = Number(node.dataset.week)
+        const day = Number(node.dataset.day)
+        const level = Number(node.dataset.level) || 0
+        later(() => {
+          if (stopped) return
+          node.setAttribute('fill', LEVEL_COLORS[level])
+        }, week * 26 + day * 8)
+      })
+    }
 
     const pop = (node) => {
-      if (typeof node.animate !== 'function') return
-      node.animate(
-        [
-          { transform: 'scale(1)', opacity: 1 },
-          { transform: 'scale(0.65)', opacity: 0.35, offset: 0.35 },
-          { transform: 'scale(1.55)', opacity: 1, offset: 0.7 },
-          { transform: 'scale(1)', opacity: 1 },
-        ],
-        { duration: 400, easing: 'ease-out' },
-      )
+      if (stopped) return
+      const level = Number(node.dataset.level) || 0
+      const base = LEVEL_COLORS[level]
+      node.setAttribute('fill', '#f0d36a')
+      if (typeof node.animate === 'function') {
+        node.animate(
+          [
+            { transform: 'scale(1)' },
+            { transform: 'scale(0.7)', offset: 0.35 },
+            { transform: 'scale(1.6)', offset: 0.7 },
+            { transform: 'scale(1)' },
+          ],
+          { duration: 380, easing: 'ease-out' },
+        )
+      }
+      later(() => {
+        if (!stopped) node.setAttribute('fill', base)
+      }, 180)
     }
 
     const tick = () => {
       if (stopped) return
-      const all = nodes()
-      if (all.length === 0) {
-        later(tick, 120)
-        return
-      }
-      const active = all.filter((node) => Number(node.dataset.level) > 0)
-      const n = 2 + Math.floor(Math.random() * 3)
+      const active = nodes.filter((node) => Number(node.dataset.level) > 0)
+      const pool = active.length ? active : nodes
+      const n = 3 + Math.floor(Math.random() * 4)
       for (let i = 0; i < n; i += 1) {
-        const pool = active.length > 0 && Math.random() < 0.85 ? active : all
         pop(pool[Math.floor(Math.random() * pool.length)])
       }
-      later(tick, 55 + Math.random() * 90)
+      later(tick, 60 + Math.random() * 90)
     }
 
-    if (phase === 'enter') {
-      later(() => {
-        if (!stopped) setPhase('settled')
-      }, WEEKS * 22 + 480)
+    if (!reduced) {
+      later(tick, WEEKS * 26 + 200)
     }
-
-    later(tick, phase === 'enter' ? 420 : 80)
 
     return () => {
       stopped = true
       timers.forEach((id) => window.clearTimeout(id))
       timers.clear()
     }
-  }, [phase])
+  }, [started, cells])
 
   const labels = useMemo(() => monthLabels(cells), [cells])
   const width = WEEKS * (BLOCK + GAP) - GAP
   const height = LABEL_H + DAYS * (BLOCK + GAP) - GAP
   const live = source === 'live'
+  const reducedMotion = prefersReducedMotion()
 
   return (
-    <section id="github" className="pb-20 md:pb-28">
+    <section id="github" ref={sectionRef} className="pb-20 md:pb-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <motion.div {...fadeUp(0)} className="flex flex-wrap items-end justify-between gap-3 mb-8">
           <h2 className="font-display text-sm tracking-[0.22em] uppercase text-muted">
@@ -151,11 +165,7 @@ export default function Contributions() {
           {...fadeUp(0.06)}
           className="rounded-3xl border border-line bg-surface p-5 md:p-7 overflow-x-auto"
         >
-          <div
-            ref={graphRef}
-            className="git-graph w-max min-w-full"
-            data-phase={phase}
-          >
+          <div ref={graphRef} className="git-graph w-max min-w-full">
             <svg
               width={width}
               height={height}
@@ -191,10 +201,11 @@ export default function Contributions() {
                   rx="2"
                   ry="2"
                   data-level={cell.level}
+                  data-week={cell.week}
+                  data-day={cell.day}
                   data-date={cell.date}
-                  fill={LEVEL_COLORS[cell.level]}
+                  fill={started && reducedMotion ? LEVEL_COLORS[cell.level] : EMPTY}
                   className="git-cell"
-                  style={{ '--git-delay': `${cell.week * 22 + cell.day * 6}ms` }}
                 >
                   <title>
                     {cell.date}
