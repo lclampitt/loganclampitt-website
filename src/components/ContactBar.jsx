@@ -106,7 +106,7 @@ export default function ContactBar() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 16 }}
                 transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-                className="pointer-events-auto w-full mb-3 box-dotted p-5 md:p-8 max-h-[min(78vh,720px)] overflow-y-auto"
+                className="pointer-events-auto w-full mb-3 rounded-[28px] border border-line bg-surface p-5 md:p-8 max-h-[min(78vh,720px)] overflow-y-auto"
                 data-lenis-prevent
               >
                 <div className="grid md:grid-cols-[1.2fr_0.8fr] gap-8">
@@ -134,7 +134,7 @@ export default function ContactBar() {
                           onChange={handleChange}
                           required
                           placeholder="Name"
-                          className="w-full box-dotted bg-raised px-4 py-3 text-sm text-ink placeholder:text-dim"
+                          className="w-full rounded-2xl bg-raised border border-line px-4 py-3 text-sm text-ink placeholder:text-dim"
                         />
                         <label className="sr-only" htmlFor="contact-email">Email</label>
                         <input
@@ -145,7 +145,7 @@ export default function ContactBar() {
                           onChange={handleChange}
                           required
                           placeholder="Email"
-                          className="w-full box-dotted bg-raised px-4 py-3 text-sm text-ink placeholder:text-dim"
+                          className="w-full rounded-2xl bg-raised border border-line px-4 py-3 text-sm text-ink placeholder:text-dim"
                         />
                         <label className="sr-only" htmlFor="contact-message">Message</label>
                         <textarea
@@ -156,12 +156,12 @@ export default function ContactBar() {
                           required
                           rows={5}
                           placeholder="Message"
-                          className="w-full box-dotted bg-raised px-4 py-3 text-sm text-ink placeholder:text-dim resize-none"
+                          className="w-full rounded-2xl bg-raised border border-line px-4 py-3 text-sm text-ink placeholder:text-dim resize-none"
                         />
                         <button
                           type="submit"
                           disabled={sending}
-                          className="box-dotted-ink py-3 text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+                          className="rounded-2xl bg-ink text-page py-3 text-sm font-medium hover:bg-white transition-colors disabled:opacity-50"
                         >
                           {sending ? 'Sending...' : 'Send message'}
                         </button>
@@ -210,7 +210,7 @@ export default function ContactBar() {
             onClick={toggleContact}
             aria-expanded={open}
             aria-controls={panelId}
-            className={`contact-bar-toggle pointer-events-auto w-full max-w-xl box-dotted pl-6 pr-2 py-2 flex items-center justify-between gap-4 text-left shadow-bar${contentReady ? '' : ' pointer-events-none'}`}
+            className={`contact-bar-toggle pointer-events-auto w-full max-w-xl rounded-full border border-line bg-raised pl-6 pr-2 py-2 flex items-center justify-between gap-4 text-left shadow-bar${contentReady ? '' : ' pointer-events-none'}`}
           >
             <span>
               <span className="block font-display text-[15px] md:text-base font-medium text-ink">
@@ -218,7 +218,7 @@ export default function ContactBar() {
               </span>
               <span className="block text-xs text-dim mt-0.5">Roles · freelance · say hi</span>
             </span>
-            <span className="contact-bar-toggle-icon w-11 h-11 box-dotted text-ink flex items-center justify-center shrink-0">
+            <span className="contact-bar-toggle-icon w-11 h-11 rounded-full border border-line bg-surface text-ink flex items-center justify-center shrink-0">
               {open ? <ArrowDownIcon className="w-4 h-4" /> : <ArrowUpIcon className="w-4 h-4" />}
             </span>
           </motion.button>

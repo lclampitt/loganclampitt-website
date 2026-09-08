@@ -31,7 +31,7 @@ export default function ProjectDetail() {
           ← Back to projects
         </Link>
 
-        <div className="mt-8 box-dotted p-6 md:p-8">
+        <div className="mt-8 rounded-3xl border border-line bg-surface p-6 md:p-8">
           {data.tag && (
             <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-accent mb-3">{data.tag}</p>
           )}
@@ -41,7 +41,7 @@ export default function ProjectDetail() {
           {data.tags && (
             <div className="mt-6 flex flex-wrap gap-2">
               {data.tags.map((tag) => (
-                <span key={tag} className="box-dotted px-3 py-1 text-xs text-muted">
+                <span key={tag} className="rounded-full border border-line px-3 py-1 text-xs text-muted">
                   {tag}
                 </span>
               ))}
@@ -69,7 +69,7 @@ export default function ProjectDetail() {
                 href={data.externalUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="box-dotted-ink px-5 py-2.5 text-sm font-medium hover:opacity-90 transition-opacity"
+                className="rounded-full bg-ink text-page px-5 py-2.5 text-sm font-medium hover:bg-white transition-colors"
               >
                 Visit live site
               </a>
@@ -79,7 +79,7 @@ export default function ProjectDetail() {
                 href={data.demoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="box-dotted px-5 py-2.5 text-sm hover:border-ink/50 transition-colors"
+                className="rounded-full border border-ink/20 px-5 py-2.5 text-sm hover:border-ink/50 transition-colors"
               >
                 Watch demo
               </a>
@@ -89,7 +89,7 @@ export default function ProjectDetail() {
                 href={data.repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 box-dotted px-5 py-2.5 text-sm hover:border-ink/50 transition-colors"
+                className="inline-flex items-center gap-2 rounded-full border border-ink/20 px-5 py-2.5 text-sm hover:border-ink/50 transition-colors"
               >
                 <GitHubIcon className="w-4 h-4" />
                 View repo
@@ -99,13 +99,13 @@ export default function ProjectDetail() {
         </div>
 
         {data.previewImage && (
-          <div className="mt-6 overflow-hidden box-dotted">
+          <div className="mt-6 rounded-3xl overflow-hidden border border-line">
             <img src={data.previewImage} alt={`${data.title} preview`} className="w-full h-auto" />
           </div>
         )}
 
         {data.previewUrl && (
-          <div className="mt-6 w-full h-[560px] overflow-hidden box-dotted bg-raised">
+          <div className="mt-6 w-full h-[560px] rounded-3xl overflow-hidden border border-line bg-raised">
             <iframe src={data.previewUrl} title={data.title} className="w-full h-full border-0" />
           </div>
         )}

@@ -27,7 +27,7 @@ export default function SimRacingIndex() {
             <motion.div key={item.slug} {...fadeUp(0.08 + index * 0.05)}>
               <Link
                 to={`/sim-racing/${item.slug}`}
-                className="block box-dotted p-6 hover:border-ink/25 transition-colors"
+                className="block rounded-3xl border border-line bg-surface p-6 hover:border-ink/25 transition-colors"
               >
                 <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-dim">{item.subtitle}</p>
                 <h2 className="font-display text-xl font-semibold mt-2">{item.title}</h2>

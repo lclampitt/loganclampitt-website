@@ -30,11 +30,6 @@
   --git-pop-low: #8fd6e0;
   --git-pop-high: #0e3a52;
   --shadow-bar: 0 8px 30px rgba(11, 28, 44, 0.12);
-  --box-stroke: #4d6270;
-  --box-stroke-w: 2px;
-  --box-dash: 8px;
-  --box-gap: 6px;
-  --box-fill: var(--color-surface);
 }
 
 :root[data-theme="dark"] {
@@ -60,7 +55,6 @@
   --git-pop-low: #8fd6e0;
   --git-pop-high: #f3f6f8;
   --shadow-bar: 0 8px 30px rgba(0, 0, 0, 0.55);
-  --box-stroke: #8a9eaa;
 }
 
 * {
@@ -160,68 +154,59 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   box-shadow: var(--shadow-bar);
 }
 
-.box-dotted,
-.box-dotted-accent,
-.box-dotted-navy,
-.box-dotted-ink {
-  --box-period: calc(var(--box-dash) + var(--box-gap));
+.project-card,
+.project-preview {
+  --project-stroke: #6b7d8a;
+  --project-stroke-w: 1.5px;
+  --project-dash: 5px;
+  --project-gap: 4px;
+  --project-fill: var(--color-surface);
+  --project-period: calc(var(--project-dash) + var(--project-gap));
   border: 0;
   border-radius: 0;
-  background-color: var(--box-fill);
+  background-color: var(--project-fill);
   background-image:
     repeating-linear-gradient(
       90deg,
-      var(--box-stroke) 0 var(--box-dash),
-      transparent var(--box-dash) var(--box-period)
+      var(--project-stroke) 0 var(--project-dash),
+      transparent var(--project-dash) var(--project-period)
     ),
     repeating-linear-gradient(
       90deg,
-      var(--box-stroke) 0 var(--box-dash),
-      transparent var(--box-dash) var(--box-period)
+      var(--project-stroke) 0 var(--project-dash),
+      transparent var(--project-dash) var(--project-period)
     ),
     repeating-linear-gradient(
       180deg,
-      var(--box-stroke) 0 var(--box-dash),
-      transparent var(--box-dash) var(--box-period)
+      var(--project-stroke) 0 var(--project-dash),
+      transparent var(--project-dash) var(--project-period)
     ),
     repeating-linear-gradient(
       180deg,
-      var(--box-stroke) 0 var(--box-dash),
-      transparent var(--box-dash) var(--box-period)
+      var(--project-stroke) 0 var(--project-dash),
+      transparent var(--project-dash) var(--project-period)
     );
   background-size:
-    100% var(--box-stroke-w),
-    100% var(--box-stroke-w),
-    var(--box-stroke-w) 100%,
-    var(--box-stroke-w) 100%;
+    100% var(--project-stroke-w),
+    100% var(--project-stroke-w),
+    var(--project-stroke-w) 100%,
+    var(--project-stroke-w) 100%;
   background-position: 0 0, 0 100%, 0 0, 100% 0;
   background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
 }
 
-.box-dotted:hover {
-  --box-stroke: var(--color-ink);
+:root[data-theme="dark"] .project-card,
+:root[data-theme="dark"] .project-preview {
+  --project-stroke: #8a9eaa;
 }
 
-.box-dotted-accent {
-  --box-fill: var(--color-accent);
-  --box-stroke: var(--color-navy);
-  color: var(--color-accent-fg);
+.project-card:hover {
+  --project-stroke: var(--color-ink);
 }
 
-.box-dotted-navy {
-  --box-fill: var(--color-navy);
-  --box-stroke: var(--color-foam);
-  color: #ffffff;
-}
-
-.box-dotted-ink {
-  --box-fill: var(--color-ink);
-  --box-stroke: var(--color-page);
-  color: var(--color-page);
-}
-
-.box-dotted.bg-raised {
-  --box-fill: var(--color-raised);
+.project-preview {
+  --project-fill: var(--color-raised);
+  padding: var(--project-stroke-w);
 }
 
 .preview-hatch {

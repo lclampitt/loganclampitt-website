@@ -32,7 +32,7 @@ function PreviewBlock({ project }) {
   if (project.previewKind === 'text-first') {
     return (
       <div className="preview-hatch aspect-[16/10] flex items-center justify-center px-4">
-        <span className="inline-flex items-center box-dotted px-3 py-1 font-mono text-[10px] tracking-[0.14em] uppercase text-muted">
+        <span className="inline-flex items-center rounded-full border border-line bg-surface px-3 py-1 font-mono text-[10px] tracking-[0.14em] uppercase text-muted">
           No screenshot · text first
         </span>
       </div>
@@ -73,11 +73,13 @@ function PreviewBlock({ project }) {
 
 function ProjectCard({ project }) {
   const target = cardTarget(project)
-  const className = 'box-dotted block h-full transition-colors hover:border-ink/40'
+  const className = 'project-card block h-full p-3 md:p-4 transition-colors'
   const inner = (
     <>
-      <PreviewBlock project={project} />
-      <div className="p-4 md:p-5">
+      <div className="project-preview overflow-hidden">
+        <PreviewBlock project={project} />
+      </div>
+      <div className="px-1 pt-4 pb-1">
         <div className="flex items-baseline justify-between gap-3">
           <h3 className="font-display text-lg md:text-xl font-semibold text-ink">
             {project.title}

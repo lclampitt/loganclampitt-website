@@ -16,7 +16,7 @@ export default function Skills() {
           {SKILLS.map((skill) => (
             <li
               key={skill}
-              className="box-dotted px-4 py-2.5 text-sm text-ink/90"
+              className="rounded-2xl border border-line bg-surface px-4 py-2.5 text-sm text-ink/90"
             >
               {skill}
             </li>

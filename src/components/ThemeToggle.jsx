@@ -10,7 +10,7 @@ export default function ThemeToggle() {
       onClick={toggleTheme}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       aria-pressed={isDark}
-      className="fixed top-3 right-3 md:top-4 md:right-5 z-[90] inline-flex h-10 w-10 items-center justify-center box-dotted text-ink"
+      className="fixed top-3 right-3 md:top-4 md:right-5 z-[90] inline-flex h-10 w-10 items-center justify-center rounded-full border border-line bg-raised text-ink shadow-bar"
     >
       {isDark ? <MoonIcon /> : <SunIcon />}
     </button>

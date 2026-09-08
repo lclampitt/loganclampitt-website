@@ -36,7 +36,7 @@ export default function SimRacingDetail() {
           <div className="grid sm:grid-cols-2 gap-5 mt-10">
             {data.videos.map((video, index) => (
               <div key={`${video.embedUrl}-${index}`}>
-                <div className="overflow-hidden box-dotted aspect-video bg-raised">
+                <div className="rounded-2xl overflow-hidden border border-line aspect-video bg-raised">
                   <iframe
                     src={video.embedUrl}
                     title={video.title}

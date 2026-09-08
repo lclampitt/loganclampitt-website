@@ -14,7 +14,7 @@ export default function About() {
         </motion.h2>
 
         <div className="grid lg:grid-cols-[1.4fr_0.8fr] gap-6 md:gap-8 items-start">
-          <motion.div {...fadeUp(0.05)} className="box-dotted p-6 md:p-8">
+          <motion.div {...fadeUp(0.05)} className="rounded-3xl border border-line bg-surface p-6 md:p-8">
             <p className="font-display text-2xl md:text-3xl font-semibold text-ink leading-snug">
               I build websites and apps that look and feel good to use.
             </p>
@@ -28,7 +28,7 @@ export default function About() {
 
           <motion.aside
             {...fadeUp(0.1)}
-            className="box-dotted p-6 md:p-7"
+            className="rounded-3xl border border-line bg-surface p-6 md:p-7"
           >
             <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-dim mb-4">
               Quick facts
