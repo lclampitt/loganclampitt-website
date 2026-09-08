@@ -3,9 +3,10 @@ import { useEffect, useRef, useState } from 'react'
 const FINE = '(pointer: fine)'
 const HOVER = '(hover: hover)'
 const REDUCE = '(prefers-reduced-motion: reduce)'
-const SIZE = 28
-const HOTSPOT_X = 5
-const HOTSPOT_Y = 3.2
+const VIEW = 28
+const SIZE = 18
+const HOTSPOT_X = (5 * SIZE) / VIEW
+const HOTSPOT_Y = (3.4 * SIZE) / VIEW
 
 function canUseArrowCursor() {
   if (typeof window === 'undefined') return false
@@ -76,7 +77,7 @@ export default function ArrowCursor() {
         className="arrow-cursor-mark"
         width={SIZE}
         height={SIZE}
-        viewBox={`0 0 ${SIZE} ${SIZE}`}
+        viewBox={`0 0 ${VIEW} ${VIEW}`}
         fill="none"
       >
         <path
