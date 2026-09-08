@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
-const INTERACTIVE = 'a, button, [role="button"], input, textarea, select, label, summary'
-const SIZE = 140
-const HALF = SIZE / 2
-const POINTS = 32
+const MAX_POINTS = 18
+const MIN_SPACING = 6
 
 function waveCursorAllowed() {
   if (typeof window === 'undefined') return false
@@ -14,54 +12,80 @@ function waveCursorAllowed() {
   )
 }
 
-function isInteractive(node) {
-  if (!node || node.nodeType !== 1) return false
-  return Boolean(node.closest(INTERACTIVE))
+function readColors() {
+  const styles = getComputedStyle(document.documentElement)
+  return {
+    foam: styles.getPropertyValue('--wave-foam').trim() || '#ffffff',
+    head: styles.getPropertyValue('--wave-tail-0').trim() || 'rgba(14, 58, 82, 0.88)',
+    mid: styles.getPropertyValue('--wave-tail-1').trim() || 'rgba(31, 111, 122, 0.4)',
+    tail: styles.getPropertyValue('--wave-tail-2').trim() || 'rgba(31, 111, 122, 0)',
+  }
 }
 
-function blobPath(time, hover) {
-  const radius = 13 + hover * 15
-  const amp = 1.5 + hover * 3.4
-  const squashX = 1 + hover * 0.78
-  const squashY = 1 - hover * 0.16
-  const pts = []
+function drawRibbon(ctx, points, time, colors) {
+  if (points.length < 2) return
 
-  for (let i = 0; i < POINTS; i += 1) {
-    const angle = (i / POINTS) * Math.PI * 2
-    const wave = Math.sin(angle * 3 + time) * amp
-      + Math.sin(angle * 5 + time * 1.37) * amp * 0.38
-    pts.push({
-      x: HALF + Math.cos(angle) * (radius + wave) * squashX,
-      y: HALF + Math.sin(angle) * (radius + wave) * squashY,
-    })
+  const left = []
+  const right = []
+  const last = points.length - 1
+
+  for (let i = 0; i <= last; i += 1) {
+    const prev = points[Math.max(i - 1, 0)]
+    const next = points[Math.min(i + 1, last)]
+    let tx = next.x - prev.x
+    let ty = next.y - prev.y
+    const len = Math.hypot(tx, ty) || 1
+    tx /= len
+    ty /= len
+    const nx = -ty
+    const ny = tx
+    const t = i / last
+    const width = (7.5 * (1 - t) + 0.6 * t)
+    const sway = Math.sin(time * 2.4 + i * 0.65) * (1.1 * (1 - t) + 0.2)
+    const point = points[i]
+    left.push(point.x + nx * (width + sway), point.y + ny * (width + sway))
+    right.push(point.x - nx * (width * 0.85 - sway * 0.35), point.y - ny * (width * 0.85 - sway * 0.35))
   }
 
-  const first = pts[0]
-  let d = `M ${first.x.toFixed(2)} ${first.y.toFixed(2)}`
-  for (let i = 0; i < POINTS; i += 1) {
-    const p0 = pts[(i - 1 + POINTS) % POINTS]
-    const p1 = pts[i]
-    const p2 = pts[(i + 1) % POINTS]
-    const p3 = pts[(i + 2) % POINTS]
-    const c1x = p1.x + (p2.x - p0.x) / 6
-    const c1y = p1.y + (p2.y - p0.y) / 6
-    const c2x = p2.x - (p3.x - p1.x) / 6
-    const c2y = p2.y - (p3.y - p1.y) / 6
-    d += ` C ${c1x.toFixed(2)} ${c1y.toFixed(2)}, ${c2x.toFixed(2)} ${c2y.toFixed(2)}, ${p2.x.toFixed(2)} ${p2.y.toFixed(2)}`
-  }
-  return `${d} Z`
+  const gradient = ctx.createLinearGradient(
+    points[0].x,
+    points[0].y,
+    points[last].x,
+    points[last].y,
+  )
+  gradient.addColorStop(0, colors.head)
+  gradient.addColorStop(0.4, colors.mid)
+  gradient.addColorStop(1, colors.tail)
+
+  ctx.beginPath()
+  ctx.moveTo(left[0], left[1])
+  for (let i = 2; i < left.length; i += 2) ctx.lineTo(left[i], left[i + 1])
+  for (let i = right.length - 2; i >= 0; i -= 2) ctx.lineTo(right[i], right[i + 1])
+  ctx.closePath()
+  ctx.fillStyle = gradient
+  ctx.fill()
+}
+
+function drawFoam(ctx, x, y, speed, foam) {
+  const radius = 4.2 + Math.min(2.2, speed * 0.12)
+  ctx.save()
+  ctx.fillStyle = foam
+  ctx.shadowColor = foam
+  ctx.shadowBlur = 10
+  ctx.beginPath()
+  ctx.arc(x, y, radius, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.shadowBlur = 0
+  ctx.globalAlpha = 0.95
+  ctx.beginPath()
+  ctx.arc(x - radius * 0.18, y - radius * 0.18, radius * 0.42, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.restore()
 }
 
 export default function WaveCursor() {
   const [enabled, setEnabled] = useState(waveCursorAllowed)
-  const svgRef = useRef(null)
-  const pathRef = useRef(null)
-  const pos = useRef({ x: 0, y: 0 })
-  const target = useRef({ x: 0, y: 0 })
-  const hover = useRef(0)
-  const hoverTarget = useRef(0)
-  const time = useRef(0)
-  const visible = useRef(false)
+  const canvasRef = useRef(null)
   const raf = useRef(0)
 
   useEffect(() => {
@@ -82,52 +106,97 @@ export default function WaveCursor() {
   useEffect(() => {
     if (!enabled) return undefined
 
+    const canvas = canvasRef.current
+    if (!canvas) return undefined
+
     document.documentElement.dataset.waveCursor = 'on'
-    const svg = svgRef.current
-    const path = pathRef.current
-    if (!svg || !path) {
-      document.documentElement.removeAttribute('data-wave-cursor')
-      return undefined
+    const ctx = canvas.getContext('2d', { alpha: true })
+    const history = []
+    const foam = { x: 0, y: 0 }
+    let visible = false
+    let speed = 0
+    let time = 0
+    let colors = readColors()
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      const width = window.innerWidth
+      const height = window.innerHeight
+      canvas.width = Math.floor(width * dpr)
+      canvas.height = Math.floor(height * dpr)
+      canvas.style.width = `${width}px`
+      canvas.style.height = `${height}px`
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
 
-    const tick = () => {
-      time.current += 0.045
-      hover.current += (hoverTarget.current - hover.current) * 0.16
-      pos.current.x += (target.current.x - pos.current.x) * 0.16
-      pos.current.y += (target.current.y - pos.current.y) * 0.16
+    const maxLen = () => 5 + Math.min(13, Math.round(speed * 0.55))
 
-      path.setAttribute('d', blobPath(time.current, hover.current))
-      svg.style.opacity = visible.current ? '1' : '0'
-      svg.style.transform = `translate3d(${pos.current.x - HALF}px, ${pos.current.y - HALF}px, 0)`
+    const tick = () => {
+      time += 0.05
+      speed *= 0.88
+      const cap = maxLen()
+      if (speed < 1.1 && history.length) {
+        history[0].x += (foam.x - history[0].x) * 0.16
+        history[0].y += (foam.y - history[0].y) * 0.16
+        for (let i = 1; i < history.length; i += 1) {
+          history[i].x += (history[i - 1].x - history[i].x) * 0.16
+          history[i].y += (history[i - 1].y - history[i].y) * 0.16
+        }
+      }
+      while (history.length > cap) history.pop()
+      if (speed < 0.35 && history.length > 3) history.pop()
+
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+      if (visible) {
+        const ribbon = [{ x: foam.x, y: foam.y }, ...history]
+        drawRibbon(ctx, ribbon, time, colors)
+        drawFoam(ctx, foam.x, foam.y, speed, colors.foam)
+      }
       raf.current = window.requestAnimationFrame(tick)
     }
 
     const onMove = (event) => {
-      target.current.x = event.clientX
-      target.current.y = event.clientY
-      if (!visible.current) {
-        pos.current.x = event.clientX
-        pos.current.y = event.clientY
-        visible.current = true
+      const x = event.clientX
+      const y = event.clientY
+      if (visible) {
+        const dist = Math.hypot(x - foam.x, y - foam.y)
+        speed = Math.max(speed, dist)
+        if (dist >= MIN_SPACING) {
+          history.unshift({ x: foam.x, y: foam.y })
+          if (history.length > MAX_POINTS) history.pop()
+        }
       }
-      hoverTarget.current = isInteractive(event.target) ? 1 : 0
+      foam.x = x
+      foam.y = y
+      visible = true
     }
 
     const onLeave = () => {
-      visible.current = false
-      hoverTarget.current = 0
+      visible = false
+      history.length = 0
+      speed = 0
     }
 
+    const onTheme = () => {
+      colors = readColors()
+    }
+
+    resize()
+    window.addEventListener('resize', resize)
     window.addEventListener('pointermove', onMove, { passive: true })
     window.addEventListener('pointerleave', onLeave)
     document.addEventListener('mouseleave', onLeave)
+    const themeWatch = new MutationObserver(onTheme)
+    themeWatch.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
     raf.current = window.requestAnimationFrame(tick)
 
     return () => {
       window.cancelAnimationFrame(raf.current)
+      window.removeEventListener('resize', resize)
       window.removeEventListener('pointermove', onMove)
       window.removeEventListener('pointerleave', onLeave)
       document.removeEventListener('mouseleave', onLeave)
+      themeWatch.disconnect()
       document.documentElement.removeAttribute('data-wave-cursor')
     }
   }, [enabled])
@@ -135,28 +204,10 @@ export default function WaveCursor() {
   if (!enabled) return null
 
   return (
-    <svg
-      ref={svgRef}
+    <canvas
+      ref={canvasRef}
       className="wave-cursor"
-      width={SIZE}
-      height={SIZE}
-      viewBox={`0 0 ${SIZE} ${SIZE}`}
       aria-hidden="true"
-    >
-      <defs>
-        <filter id="wave-cursor-soft" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="0.7" />
-        </filter>
-        <radialGradient id="wave-cursor-fill" cx="38%" cy="32%" r="72%">
-          <stop offset="0%" stopColor="var(--wave-cursor-inner)" />
-          <stop offset="100%" stopColor="var(--wave-cursor)" />
-        </radialGradient>
-      </defs>
-      <path
-        ref={pathRef}
-        fill="url(#wave-cursor-fill)"
-        filter="url(#wave-cursor-soft)"
-      />
-    </svg>
+    />
   )
 }
