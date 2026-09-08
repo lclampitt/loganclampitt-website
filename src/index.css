@@ -138,6 +138,69 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   font-family: var(--font-script);
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.pixel-wordmark {
+  color: var(--color-navy);
+  line-height: 0;
+  isolation: isolate;
+}
+
+:root[data-theme="dark"] .pixel-wordmark {
+  color: var(--color-ink);
+}
+
+.pixel-wordmark svg {
+  display: block;
+}
+
+.pixel-fill {
+  fill: currentColor;
+}
+
+.pixel-fringe {
+  fill: currentColor;
+}
+
+.pixel-fringe-red {
+  fill: #e23d3d;
+  opacity: 0.32;
+  transform: translate(-1px, 1px);
+}
+
+.pixel-fringe-cyan {
+  fill: #3ec6d8;
+  opacity: 0.32;
+  transform: translate(1px, -1px);
+}
+
+:root[data-theme="light"] .pixel-fringe-red,
+:root[data-theme="light"] .pixel-fringe-cyan {
+  mix-blend-mode: multiply;
+  opacity: 0.22;
+}
+
+:root[data-theme="dark"] .pixel-fringe-red,
+:root[data-theme="dark"] .pixel-fringe-cyan {
+  mix-blend-mode: screen;
+  opacity: 0.5;
+}
+
+.pixel-caret {
+  fill: currentColor;
+  animation: intro-caret 0.53s steps(1, end) infinite;
+}
+
 .shadow-bar {
   box-shadow: var(--shadow-bar);
 }
@@ -284,7 +347,12 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
     opacity: 0.16;
   }
 
-  .intro-caret {
+  .intro-caret,
+  .pixel-caret {
     animation: none;
+  }
+
+  .pixel-fringe {
+    display: none;
   }
 }
