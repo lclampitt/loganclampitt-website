@@ -126,10 +126,12 @@ export default function Projects() {
     <section id="projects" className="pt-6 md:pt-8 pb-20 md:pb-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="mx-auto w-full max-w-[52rem]">
-          <motion.p {...fadeUp(0)} className="text-muted text-sm md:text-base mb-6">
-            Still not sure? Check out my{' '}
-            <span className="font-display font-semibold text-ink">Projects</span>
-          </motion.p>
+          <motion.h2
+            {...fadeUp(0)}
+            className="font-display text-sm tracking-[0.22em] uppercase text-muted mb-6"
+          >
+            Projects
+          </motion.h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {PROJECTS.map((project, index) => (
