@@ -43,9 +43,9 @@
   --color-surface: #1a1a1a;
   --color-raised: #222222;
   --color-line: #2a2a2a;
-  --color-ink: #f3f6f8;
-  --color-muted: #b5c4cc;
-  --color-dim: #8a9eaa;
+  --color-ink: #faf7f2;
+  --color-muted: #c9c2b8;
+  --color-dim: #9a9388;
   --color-accent: #8fd6e0;
   --color-accent-fg: #000000;
   --color-navy: #0e3a52;
@@ -59,7 +59,7 @@
   --git-3: #4db8c4;
   --git-4: #8fd6e0;
   --git-pop-low: #8fd6e0;
-  --git-pop-high: #f3f6f8;
+  --git-pop-high: #faf7f2;
   --shadow-bar: 0 8px 30px rgba(0, 0, 0, 0.55);
   --pill-fill: #faf7f2;
   --pill-fg: #0b1c2c;
@@ -204,6 +204,10 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   filter: brightness(0.97);
 }
 
+:root[data-theme="dark"] .bg-ink:hover {
+  background-color: color-mix(in srgb, var(--color-ink) 88%, var(--color-page));
+}
+
 .soft-pill:active {
   transform: translateY(1px);
   box-shadow:
@@ -272,6 +276,10 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
 
 .preview-ocean {
   background: linear-gradient(145deg, var(--color-accent) 0%, var(--color-navy) 72%);
+}
+
+:root[data-theme="dark"] .preview-frame {
+  border-color: color-mix(in srgb, var(--color-ink) 40%, transparent);
 }
 
 .git-graph {

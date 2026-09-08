@@ -57,7 +57,7 @@ function PreviewBlock({ project }) {
 
   return (
     <div className="preview-ocean aspect-[16/9] p-3 md:p-4 flex items-end">
-      <div className="w-full border border-white/25 bg-page/90 p-2.5">
+      <div className="w-full border border-white/25 bg-page/90 p-2.5 preview-frame">
         <div className="flex gap-1 mb-2" aria-hidden="true">
           <span className="w-1.5 h-1.5 rounded-full bg-line" />
           <span className="w-1.5 h-1.5 rounded-full bg-line" />
