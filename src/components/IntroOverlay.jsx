@@ -104,8 +104,8 @@ function IntroSequence() {
           setCaretAt('logan')
           setLoganTyped(logan)
         },
-        88,
         110,
+        135,
         signal,
       )
       if (signal.aborted || logan !== LOGAN_TEXT) return
@@ -123,8 +123,8 @@ function IntroSequence() {
           setCaretAt('handle')
           setHandleTyped(handle)
         },
-        70,
-        110,
+        85,
+        132,
         signal,
       )
       if (signal.aborted || handle !== HANDLE_TEXT) return
