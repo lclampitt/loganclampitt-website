@@ -154,8 +154,7 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   box-shadow: var(--shadow-bar);
 }
 
-.project-card,
-.project-preview {
+.project-card {
   --project-stroke: #6b7d8a;
   --project-stroke-w: 1.5px;
   --project-dash: 5px;
@@ -195,18 +194,12 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
 }
 
-:root[data-theme="dark"] .project-card,
-:root[data-theme="dark"] .project-preview {
+:root[data-theme="dark"] .project-card {
   --project-stroke: #8a9eaa;
 }
 
 .project-card:hover {
   --project-stroke: var(--color-ink);
-}
-
-.project-preview {
-  --project-fill: var(--color-raised);
-  padding: var(--project-stroke-w);
 }
 
 .preview-hatch {
