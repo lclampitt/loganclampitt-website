@@ -57,15 +57,22 @@ export default function Contributions() {
     const section = sectionRef.current
     if (!section || started) return undefined
 
-    const reveal = () => setStarted(true)
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) reveal()
-      },
-      { threshold: 0.2 },
-    )
-    observer.observe(section)
-    return () => observer.disconnect()
+    const check = () => {
+      if (window.scrollY < 120) return
+      const rect = section.getBoundingClientRect()
+      const vh = window.innerHeight || 800
+      if (rect.top < vh * 0.7 && rect.bottom > vh * 0.22) {
+        setStarted(true)
+      }
+    }
+
+    check()
+    window.addEventListener('scroll', check, { passive: true })
+    window.addEventListener('resize', check)
+    return () => {
+      window.removeEventListener('scroll', check)
+      window.removeEventListener('resize', check)
+    }
   }, [started])
 
   useEffect(() => {
@@ -104,7 +111,7 @@ export default function Contributions() {
       if (stopped) return
       const level = Number(node.dataset.level) || 0
       const base = LEVEL_COLORS[level]
-      node.setAttribute('fill', '#f0d36a')
+      node.setAttribute('fill', '#e4e4e7')
       if (typeof node.animate === 'function') {
         node.animate(
           [
