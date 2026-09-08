@@ -30,6 +30,7 @@ export default function Contributions() {
   const sectionRef = useRef(null)
   const graphRef = useRef(null)
   const wrapRef = useRef(null)
+  const cardRef = useRef(null)
 
   useEffect(() => {
     let cancelled = false
@@ -63,11 +64,13 @@ export default function Contributions() {
   }, [])
 
   useLayoutEffect(() => {
-    const el = wrapRef.current
+    const el = cardRef.current
     if (!el) return undefined
 
     const measure = () => {
-      const next = el.getBoundingClientRect().width
+      const styles = window.getComputedStyle(el)
+      const padding = parseFloat(styles.paddingLeft) + parseFloat(styles.paddingRight)
+      const next = Math.max(0, el.clientWidth - padding)
       setInnerWidth((current) => (Math.abs(current - next) < 0.5 ? current : next))
     }
 
@@ -206,19 +209,20 @@ export default function Contributions() {
         </motion.div>
 
         <motion.div
+          ref={cardRef}
           {...fadeUp(0.06)}
           className="w-full min-w-0 rounded-3xl border border-line bg-surface p-5 md:p-7"
         >
-          <div ref={wrapRef} className="w-full min-w-0">
+          <div ref={wrapRef} className="w-full min-w-0 overflow-hidden">
             <div ref={graphRef} className="git-graph w-full min-w-0">
               {graphWidth > 0 && (
                 <svg
                   width={graphWidth}
                   height={height}
                   viewBox={`0 0 ${graphWidth} ${height}`}
-                  preserveAspectRatio="xMinYMin meet"
-                  className="block max-w-full"
-                  style={{ width: '100%', height: 'auto' }}
+                  preserveAspectRatio="none"
+                  className="block w-full"
+                  style={{ width: '100%', height }}
                   role="img"
                   aria-label={
                     live
