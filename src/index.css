@@ -35,7 +35,7 @@
   --pill-icon: #b4b4b4;
   --pill-border: rgba(255, 255, 255, 0.18);
   --pill-highlight: rgba(255, 255, 255, 0.22);
-  --pill-shadow: 0 8px 16px rgba(11, 28, 44, 0.16), 0 1px 2px rgba(11, 28, 44, 0.1);
+  --pill-shadow: 0 5px 10px rgba(11, 28, 44, 0.14), 0 1px 2px rgba(11, 28, 44, 0.08);
 }
 
 :root[data-theme="dark"] {
@@ -66,7 +66,7 @@
   --pill-icon: #b4b4b4;
   --pill-border: rgba(255, 255, 255, 0.16);
   --pill-highlight: rgba(255, 255, 255, 0.2);
-  --pill-shadow: 0 8px 18px rgba(0, 0, 0, 0.55), 0 1px 2px rgba(0, 0, 0, 0.4);
+  --pill-shadow: 0 5px 12px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
 * {
@@ -170,8 +170,8 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  border-radius: 9999px;
+  gap: 0.35rem;
+  border-radius: 7px;
   border: 1px solid var(--pill-border);
   background:
     linear-gradient(180deg, var(--pill-highlight) 0%, transparent 38%),
@@ -180,8 +180,8 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   box-shadow:
     inset 0 1px 0 var(--pill-highlight),
     var(--pill-shadow);
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
+  padding: 0.28rem 0.7rem;
+  font-size: 0.75rem;
   font-weight: 500;
   line-height: 1.2;
   text-decoration: none;
@@ -189,8 +189,8 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
 }
 
 .soft-pill svg {
-  width: 0.9rem;
-  height: 0.9rem;
+  width: 0.75rem;
+  height: 0.75rem;
   flex-shrink: 0;
   color: var(--pill-icon);
 }
