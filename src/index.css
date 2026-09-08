@@ -30,6 +30,11 @@
   --git-pop-low: #8fd6e0;
   --git-pop-high: #0e3a52;
   --shadow-bar: 0 8px 30px rgba(11, 28, 44, 0.12);
+  --box-stroke: #4d6270;
+  --box-stroke-w: 2px;
+  --box-dash: 8px;
+  --box-gap: 6px;
+  --box-fill: var(--color-surface);
 }
 
 :root[data-theme="dark"] {
@@ -55,6 +60,7 @@
   --git-pop-low: #8fd6e0;
   --git-pop-high: #f3f6f8;
   --shadow-bar: 0 8px 30px rgba(0, 0, 0, 0.55);
+  --box-stroke: #8a9eaa;
 }
 
 * {
@@ -154,35 +160,68 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   box-shadow: var(--shadow-bar);
 }
 
-.box-dotted {
-  border: 1px dotted var(--color-line);
+.box-dotted,
+.box-dotted-accent,
+.box-dotted-navy,
+.box-dotted-ink {
+  --box-period: calc(var(--box-dash) + var(--box-gap));
+  border: 0;
   border-radius: 0;
-  background-color: var(--color-surface);
+  background-color: var(--box-fill);
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      var(--box-stroke) 0 var(--box-dash),
+      transparent var(--box-dash) var(--box-period)
+    ),
+    repeating-linear-gradient(
+      90deg,
+      var(--box-stroke) 0 var(--box-dash),
+      transparent var(--box-dash) var(--box-period)
+    ),
+    repeating-linear-gradient(
+      180deg,
+      var(--box-stroke) 0 var(--box-dash),
+      transparent var(--box-dash) var(--box-period)
+    ),
+    repeating-linear-gradient(
+      180deg,
+      var(--box-stroke) 0 var(--box-dash),
+      transparent var(--box-dash) var(--box-period)
+    );
+  background-size:
+    100% var(--box-stroke-w),
+    100% var(--box-stroke-w),
+    var(--box-stroke-w) 100%,
+    var(--box-stroke-w) 100%;
+  background-position: 0 0, 0 100%, 0 0, 100% 0;
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
 }
 
-:root[data-theme="dark"] .box-dotted {
-  border-color: #3a3a3a;
+.box-dotted:hover {
+  --box-stroke: var(--color-ink);
 }
 
 .box-dotted-accent {
-  border: 1px dotted color-mix(in srgb, var(--color-navy) 45%, var(--color-accent));
-  border-radius: 0;
-  background-color: var(--color-accent);
+  --box-fill: var(--color-accent);
+  --box-stroke: var(--color-navy);
   color: var(--color-accent-fg);
 }
 
 .box-dotted-navy {
-  border: 1px dotted color-mix(in srgb, var(--color-foam) 55%, var(--color-navy));
-  border-radius: 0;
-  background-color: var(--color-navy);
+  --box-fill: var(--color-navy);
+  --box-stroke: var(--color-foam);
   color: #ffffff;
 }
 
 .box-dotted-ink {
-  border: 1px dotted color-mix(in srgb, var(--color-page) 40%, var(--color-ink));
-  border-radius: 0;
-  background-color: var(--color-ink);
+  --box-fill: var(--color-ink);
+  --box-stroke: var(--color-page);
   color: var(--color-page);
+}
+
+.box-dotted.bg-raised {
+  --box-fill: var(--color-raised);
 }
 
 .preview-hatch {
