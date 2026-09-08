@@ -114,3 +114,115 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
     transform: none;
   }
 }
+
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: #09090b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.intro-skip {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #71717a;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.intro-skip:hover {
+  color: #e4e4e7;
+}
+
+.intro-stage {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  height: 9rem;
+}
+
+.intro-caption {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #71717a;
+}
+
+.intro-reduced {
+  text-align: center;
+}
+
+.race-rig {
+  position: absolute;
+  left: 0;
+  top: 1.4rem;
+  display: flex;
+  align-items: flex-end;
+  animation: race-drive 1.65s cubic-bezier(0.22, 0.8, 0.36, 1) forwards;
+}
+
+.race-car {
+  width: 168px;
+  height: auto;
+  display: block;
+}
+
+.race-smoke {
+  position: absolute;
+  left: 8px;
+  bottom: 10px;
+  width: 20px;
+  height: 20px;
+}
+
+.smoke-puff {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #a1a1aa;
+  animation: smoke-trail 0.7s ease-out infinite;
+}
+
+@keyframes race-drive {
+  from {
+    transform: translateX(-22vw);
+  }
+  to {
+    transform: translateX(108vw);
+  }
+}
+
+@keyframes smoke-trail {
+  0% {
+    opacity: 0.5;
+    transform: translate(0, 0) scale(0.45);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-46px, -20px) scale(2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .race-rig,
+  .smoke-puff {
+    animation: none;
+  }
+}

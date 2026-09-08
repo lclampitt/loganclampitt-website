@@ -75,6 +75,19 @@ export function parseJoguber(payload) {
   }))
 }
 
+export function parseActivityList(list) {
+  if (!Array.isArray(list) || list.length === 0) return null
+  const last = list.slice(-WEEKS * DAYS)
+  if (last.every((item) => !item.count && !item.level)) return null
+  return last.map((item, index) => ({
+    week: Math.floor(index / DAYS),
+    day: index % DAYS,
+    date: item.date,
+    count: item.count || 0,
+    level: Math.max(0, Math.min(4, item.level ?? countToLevel(item.count || 0))),
+  }))
+}
+
 export function monthLabels(cells) {
   const labels = []
   let last = ''

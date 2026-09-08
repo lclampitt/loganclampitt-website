@@ -9,11 +9,10 @@ import {
   WEEKS,
   buildStylizedCells,
   monthLabels,
+  parseActivityList,
   parseJoguber,
 } from '../lib/contributions'
 
-const BLOCK = 11
-const GAP = 3
 const LABEL_H = 18
 const EMPTY = LEVEL_COLORS[0]
 
@@ -27,23 +26,33 @@ export default function Contributions() {
   const [cells, setCells] = useState(fallback)
   const [source, setSource] = useState('stylized')
   const [started, setStarted] = useState(() => prefersReducedMotion())
+  const [innerWidth, setInnerWidth] = useState(0)
   const sectionRef = useRef(null)
   const graphRef = useRef(null)
+  const wrapRef = useRef(null)
 
   useEffect(() => {
     let cancelled = false
 
     async function load() {
-      try {
-        const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${GITHUB_USER}`)
-        if (!res.ok) return
-        const parsed = parseJoguber(await res.json())
-        if (!cancelled && parsed) {
-          setCells(parsed)
-          setSource('live')
+      const endpoints = [
+        [`https://github-contributions-api.jogruber.de/v4/${GITHUB_USER}`, (data) => parseJoguber(data)],
+        [`https://github.vineet.pro/api/${GITHUB_USER}`, (data) => parseActivityList(data?.data || data)],
+      ]
+
+      for (const [url, parse] of endpoints) {
+        try {
+          const res = await fetch(url)
+          if (!res.ok) continue
+          const parsed = parse(await res.json())
+          if (!cancelled && parsed) {
+            setCells(parsed)
+            setSource('live')
+            return
+          }
+        } catch {
+          // Try the next public feed.
         }
-      } catch {
-        // Keep the labeled stylized map until a public calendar is available.
       }
     }
 
@@ -51,6 +60,17 @@ export default function Contributions() {
     return () => {
       cancelled = true
     }
+  }, [])
+
+  useEffect(() => {
+    const el = wrapRef.current
+    if (!el) return undefined
+    const observer = new ResizeObserver(([entry]) => {
+      setInnerWidth(entry.contentRect.width)
+    })
+    observer.observe(el)
+    setInnerWidth(el.clientWidth)
+    return () => observer.disconnect()
   }, [])
 
   useEffect(() => {
@@ -148,16 +168,20 @@ export default function Contributions() {
       timers.forEach((id) => window.clearTimeout(id))
       timers.clear()
     }
-  }, [started, cells])
+  }, [started, cells, innerWidth])
 
+  const gap = innerWidth < 540 ? 2 : 3
+  const block = innerWidth > 0
+    ? Math.max(5, (innerWidth - (WEEKS - 1) * gap) / WEEKS)
+    : 11
+  const width = innerWidth > 0 ? innerWidth : WEEKS * (block + gap) - gap
+  const height = LABEL_H + DAYS * (block + gap) - gap
   const labels = useMemo(() => monthLabels(cells), [cells])
-  const width = WEEKS * (BLOCK + GAP) - GAP
-  const height = LABEL_H + DAYS * (BLOCK + GAP) - GAP
   const live = source === 'live'
   const reducedMotion = prefersReducedMotion()
 
   return (
-    <section id="github" ref={sectionRef} className="pb-20 md:pb-28">
+    <section id="github" ref={sectionRef} className="pb-20 md:pb-28 max-sm:hidden">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <motion.div {...fadeUp(0)} className="flex flex-wrap items-end justify-between gap-3 mb-8">
           <h2 className="font-display text-sm tracking-[0.22em] uppercase text-muted">
@@ -170,57 +194,60 @@ export default function Contributions() {
 
         <motion.div
           {...fadeUp(0.06)}
-          className="rounded-3xl border border-line bg-surface p-5 md:p-7 overflow-x-auto"
+          className="rounded-3xl border border-line bg-surface p-5 md:p-7"
         >
-          <div ref={graphRef} className="git-graph w-max min-w-full">
-            <svg
-              width={width}
-              height={height}
-              viewBox={`0 0 ${width} ${height}`}
-              className="block overflow-visible max-w-none"
-              role="img"
-              aria-label={
-                live
-                  ? 'Animated GitHub contribution heatmap for the last year'
-                  : 'Animated stylized GitHub style contribution heatmap'
-              }
-            >
-              {labels.map((item) => (
-                <text
-                  key={`${item.label}-${item.week}`}
-                  x={item.week * (BLOCK + GAP)}
-                  y="0"
-                  fill="#71717a"
-                  fontSize="10"
-                  fontFamily="IBM Plex Mono, ui-monospace, monospace"
-                  dominantBaseline="hanging"
-                >
-                  {item.label}
-                </text>
-              ))}
-              {cells.map((cell) => (
-                <rect
-                  key={`${cell.week}-${cell.day}-${cell.date}`}
-                  x={cell.week * (BLOCK + GAP)}
-                  y={LABEL_H + cell.day * (BLOCK + GAP)}
-                  width={BLOCK}
-                  height={BLOCK}
-                  rx="2"
-                  ry="2"
-                  data-level={cell.level}
-                  data-week={cell.week}
-                  data-day={cell.day}
-                  data-date={cell.date}
-                  fill={started && reducedMotion ? LEVEL_COLORS[cell.level] : EMPTY}
-                  className="git-cell"
-                >
-                  <title>
-                    {cell.date}
-                    {live && cell.count ? ` · ${cell.count} contributions` : ''}
-                  </title>
-                </rect>
-              ))}
-            </svg>
+          <div ref={wrapRef} className="w-full">
+            <div ref={graphRef} className="git-graph w-full">
+              <svg
+                width="100%"
+                height={height}
+                viewBox={`0 0 ${width} ${height}`}
+                preserveAspectRatio="none"
+                className="block"
+                role="img"
+                aria-label={
+                  live
+                    ? 'Animated GitHub contribution heatmap for the last year'
+                    : 'Animated stylized GitHub style contribution heatmap'
+                }
+              >
+                {labels.map((item) => (
+                  <text
+                    key={`${item.label}-${item.week}`}
+                    x={item.week * (block + gap)}
+                    y="0"
+                    fill="#71717a"
+                    fontSize="10"
+                    fontFamily="IBM Plex Mono, ui-monospace, monospace"
+                    dominantBaseline="hanging"
+                  >
+                    {item.label}
+                  </text>
+                ))}
+                {cells.map((cell) => (
+                  <rect
+                    key={`${cell.week}-${cell.day}-${cell.date}`}
+                    x={cell.week * (block + gap)}
+                    y={LABEL_H + cell.day * (block + gap)}
+                    width={block}
+                    height={block}
+                    rx="2"
+                    ry="2"
+                    data-level={cell.level}
+                    data-week={cell.week}
+                    data-day={cell.day}
+                    data-date={cell.date}
+                    fill={started && reducedMotion ? LEVEL_COLORS[cell.level] : EMPTY}
+                    className="git-cell"
+                  >
+                    <title>
+                      {cell.date}
+                      {live && cell.count ? ` · ${cell.count} contributions` : ''}
+                    </title>
+                  </rect>
+                ))}
+              </svg>
+            </div>
           </div>
 
           <div className="mt-5 flex flex-wrap items-center justify-between gap-4">

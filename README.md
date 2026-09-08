@@ -14,7 +14,8 @@ npm run preview
 ## Notes
 
 - Homepage is a single page: hero, projects, experience, skills, GitHub graph, about.
-- The GitHub graph is a Fardeen-style animated heatmap (cascade fill, then random cell pops) in the zinc + amber palette. It first tries the public `github-contributions-api.jogruber.de` feed for `lclampitt`. That API currently 404s and GitHub’s public contribution calendar for this account is empty, so the section falls back to a labeled stylized map that can swap in live totals later. No API key is required.
+- First visit in a session shows a short racecar + tire smoke intro (sessionStorage `logan-intro-seen`). Skip is available. Reduced motion gets a brief static fade.
+- The GitHub graph is a Fardeen-style animated heatmap that fills the card width. It tries public contribution feeds for `lclampitt` and falls back to a labeled stylized map when those feeds are empty. No API key is required.
 - Sticky contact bar expands upward and posts to Formspree (`mdapkror`).
 - Project and sim racing routes stay available for deeper pages.
 - `vercel.json` rewrites keep SPA routes on Vercel. Domain is `loganclampitt.com`.

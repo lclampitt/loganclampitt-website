@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { EXPERIENCE } from '../data/content'
 import { fadeUp } from '../lib/motion'
+import MagicHover from './MagicHover'
 
 export default function Experience() {
   return (
@@ -15,11 +16,9 @@ export default function Experience() {
 
         <div className="flex flex-col gap-4">
           {EXPERIENCE.map((item, index) => (
-            <motion.article
-              key={item.title}
-              {...fadeUp(index * 0.06)}
-              className="rounded-3xl border border-line bg-surface p-5 md:p-6"
-            >
+            <motion.div key={item.title} {...fadeUp(index * 0.06)}>
+            <MagicHover className="rounded-3xl border border-line bg-surface">
+            <article className="p-5 md:p-6">
               <div className="flex gap-4">
                 <div
                   className="w-12 h-12 rounded-2xl bg-raised border border-line flex items-center justify-center font-display text-amber text-sm font-semibold shrink-0"
@@ -53,7 +52,9 @@ export default function Experience() {
                   </div>
                 </div>
               </div>
-            </motion.article>
+            </article>
+            </MagicHover>
+            </motion.div>
           ))}
         </div>
       </div>
