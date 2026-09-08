@@ -14,7 +14,7 @@ export default function ThemeToggle() {
       <span className="w-5 h-5 rounded-full bg-accent shrink-0" aria-hidden="true" />
       <span className="font-mono text-[11px] tracking-[0.08em]">
         <span className="sm:hidden">{isDark ? 'Dark' : 'Light'}</span>
-        <span className="hidden sm:inline">{isDark ? 'Dark' : 'Light · default'}</span>
+        <span className="hidden sm:inline">{isDark ? 'Dark · default' : 'Light'}</span>
       </span>
     </button>
   )

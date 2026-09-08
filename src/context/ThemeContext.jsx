@@ -3,8 +3,8 @@ import { THEME_STORAGE_KEY, ThemeContext, applyTheme, readStoredTheme } from './
 
 export function ThemeProvider({ children }) {
   const [theme, setThemeState] = useState(() => {
-    if (typeof document === 'undefined') return 'light'
-    if (document.documentElement.dataset.theme === 'dark') return 'dark'
+    if (typeof document === 'undefined') return 'dark'
+    if (document.documentElement.dataset.theme === 'light') return 'light'
     return readStoredTheme()
   })
 

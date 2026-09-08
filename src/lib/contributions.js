@@ -1,7 +1,7 @@
 export const WEEKS = 53
 export const DAYS = 7
 
-const LIGHT_FALLBACK = ['#d7e4ec', '#a9d0d6', '#5fa8b1', '#1f6f7a', '#0e3a52']
+const LIGHT_FALLBACK = ['#e8e2d8', '#a9d0d6', '#5fa8b1', '#1f6f7a', '#0e3a52']
 
 function readVar(name, fallback) {
   if (typeof window === 'undefined') return fallback
