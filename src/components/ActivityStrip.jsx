@@ -45,7 +45,7 @@ export default function ActivityStrip() {
 
   useEffect(() => {
     if (graphWidth > 0 && !started && !prefersReducedMotion()) {
-      const id = window.setTimeout(() => setStarted(true), 240)
+      const id = window.setTimeout(() => setStarted(true), 80)
       return () => window.clearTimeout(id)
     }
     return undefined
@@ -79,7 +79,7 @@ export default function ActivityStrip() {
         later(() => {
           if (stopped) return
           node.setAttribute('fill', LEVEL_COLORS[level])
-        }, 420 + week * 28 + day * 14)
+        }, 140 + week * 32 + day * 12)
       })
     }
 
@@ -88,31 +88,35 @@ export default function ActivityStrip() {
       const level = Number(node.dataset.level) || 0
       if (level === 0) return
       const base = LEVEL_COLORS[level]
-      node.setAttribute('fill', '#a1a1aa')
+      node.setAttribute('fill', level >= 3 ? '#e4e4e7' : '#d4a017')
       if (typeof node.animate === 'function') {
         node.animate(
           [
             { transform: 'scale(1)' },
-            { transform: 'scale(1.18)', offset: 0.45 },
+            { transform: 'scale(1.42)', offset: 0.4 },
             { transform: 'scale(1)' },
           ],
-          { duration: 520, easing: 'ease-out' },
+          { duration: 420, easing: 'ease-out' },
         )
       }
       later(() => {
         if (!stopped) node.setAttribute('fill', base)
-      }, 260)
+      }, 200)
     }
 
     const tick = () => {
       if (stopped) return
-      const active = nodes.filter((node) => Number(node.dataset.level) > 1)
-      if (active.length) pop(active[Math.floor(Math.random() * active.length)])
-      later(tick, 720 + Math.random() * 640)
+      const active = nodes.filter((node) => Number(node.dataset.level) > 0)
+      const pool = active.length ? active : nodes
+      const n = 2 + Math.floor(Math.random() * 2)
+      for (let i = 0; i < n; i += 1) {
+        pop(pool[Math.floor(Math.random() * pool.length)])
+      }
+      later(tick, 180 + Math.random() * 200)
     }
 
     if (!reduced) {
-      later(tick, 420 + WEEKS * 28 + 400)
+      later(tick, 140 + WEEKS * 18)
     }
 
     return () => {
