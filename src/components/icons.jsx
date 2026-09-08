@@ -6,6 +6,42 @@ export function GitHubIcon({ className = 'w-4 h-4' }) {
   )
 }
 
+export function LinkedInIcon({ className = 'w-4 h-4' }) {
+  return (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+    </svg>
+  )
+}
+
+export function ResumeIcon({ className = 'w-4 h-4' }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.8"
+        d="M7 3.5h7.2L19 8.2V20a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 6 20V5a1.5 1.5 0 0 1 1.5-1.5Z"
+      />
+      <path strokeLinecap="round" strokeWidth="1.8" d="M14 3.5V8h4.5M9 12.5h6M9 16h4" />
+    </svg>
+  )
+}
+
+export function WorkIcon({ className = 'w-4 h-4' }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.8"
+        d="M8 8V6.8A1.8 1.8 0 0 1 9.8 5h4.4A1.8 1.8 0 0 1 16 6.8V8M4.8 9.5h14.4A1.3 1.3 0 0 1 20.5 10.8v7.9A1.8 1.8 0 0 1 18.7 20.5H5.3A1.8 1.8 0 0 1 3.5 18.7v-7.9A1.3 1.3 0 0 1 4.8 9.5Z"
+      />
+      <path strokeLinecap="round" strokeWidth="1.8" d="M3.8 13.2h16.4" />
+    </svg>
+  )
+}
+
 export function ArrowUpIcon({ className = 'w-4 h-4' }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">

@@ -9,6 +9,7 @@ import {
   WORDMARK_STACK_CLASS,
 } from '../lib/wordmark'
 import ActivityStrip from './ActivityStrip'
+import { GitHubIcon, LinkedInIcon, ResumeIcon, WorkIcon } from './icons'
 
 const fade = (delay) => ({
   initial: { opacity: 0, y: 10 },
@@ -16,14 +17,7 @@ const fade = (delay) => ({
   transition: { duration: 0.45, delay, ease: [0.22, 1, 0.36, 1] },
 })
 
-const ghostBtn =
-  'inline-flex items-center justify-center rounded-xl border border-ink/30 bg-raised px-4 py-2 text-sm text-ink hover:border-ink/70 hover:text-ink transition-colors'
-const accentBtn =
-  'inline-flex items-center justify-center rounded-xl bg-accent text-accent-fg px-4 py-2 text-sm hover:opacity-90 transition-opacity'
-const solidBtn =
-  'inline-flex items-center justify-center rounded-xl bg-navy text-white px-4 py-2 text-sm hover:opacity-90 transition-opacity'
-const pill =
-  'inline-flex items-center justify-center rounded-full border border-line bg-raised px-4 py-1.5 text-sm text-ink hover:border-ink/40 transition-colors'
+const pill = 'soft-pill'
 
 export default function Hero() {
   const { openContact } = useContact()
@@ -93,18 +87,18 @@ export default function Hero() {
           </motion.p>
 
           <motion.div {...rest(0.14, 0.18)} className="mt-6 flex flex-wrap items-center gap-2.5">
-            <button type="button" onClick={openContact} className={ghostBtn}>
+            <button type="button" onClick={openContact} className={pill}>
               Email me
             </button>
             <a
               href={LINKS.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className={accentBtn}
+              className={pill}
             >
               LinkedIn
             </a>
-            <button type="button" onClick={scrollToProjects} className={solidBtn}>
+            <button type="button" onClick={scrollToProjects} className={pill}>
               See projects
             </button>
           </motion.div>
@@ -123,15 +117,19 @@ export default function Hero() {
             </p>
             <div className="flex flex-wrap gap-2">
               <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className={pill}>
+                <GitHubIcon />
                 GitHub
               </a>
               <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer" className={pill}>
+                <LinkedInIcon />
                 LinkedIn
               </a>
               <a href={LINKS.resume} download className={pill}>
+                <ResumeIcon />
                 Resume
               </a>
               <button type="button" onClick={openContact} className={pill}>
+                <WorkIcon />
                 open to work
               </button>
             </div>
