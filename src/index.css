@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-pixel: "Press Start 2P", ui-monospace, monospace;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
   --font-script: "Instrument Serif", ui-serif, Georgia, serif;
@@ -150,55 +150,55 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   border: 0;
 }
 
-.pixel-wordmark {
+.crt-wordmark {
+  display: inline-flex;
+  align-items: center;
   color: var(--color-navy);
-  line-height: 0;
-  isolation: isolate;
+  line-height: 1;
 }
 
-:root[data-theme="dark"] .pixel-wordmark {
+.crt-wordmark-text {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-pixel);
+  font-size: clamp(1.55rem, 4.8vw, 2.5rem);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: 0.04em;
+  text-shadow:
+    -1px 0 0 rgb(196 64 64 / 0.28),
+    1px 0 0 rgb(47 140 168 / 0.28);
+}
+
+.crt-wordmark-text::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0) 0 2px,
+    rgb(11 28 44 / 0.1) 2px 3px
+  );
+  mix-blend-mode: multiply;
+}
+
+:root[data-theme="dark"] .crt-wordmark {
   color: var(--color-ink);
 }
 
-.pixel-wordmark svg {
-  display: block;
+:root[data-theme="dark"] .crt-wordmark-text {
+  text-shadow:
+    -1px 0 0 rgb(226 90 90 / 0.38),
+    1px 0 0 rgb(143 214 224 / 0.42);
 }
 
-.pixel-fill {
-  fill: currentColor;
-}
-
-.pixel-fringe {
-  fill: currentColor;
-}
-
-.pixel-fringe-red {
-  fill: #e23d3d;
-  opacity: 0.32;
-  transform: translate(-1px, 1px);
-}
-
-.pixel-fringe-cyan {
-  fill: #3ec6d8;
-  opacity: 0.32;
-  transform: translate(1px, -1px);
-}
-
-:root[data-theme="light"] .pixel-fringe-red,
-:root[data-theme="light"] .pixel-fringe-cyan {
-  mix-blend-mode: multiply;
-  opacity: 0.22;
-}
-
-:root[data-theme="dark"] .pixel-fringe-red,
-:root[data-theme="dark"] .pixel-fringe-cyan {
-  mix-blend-mode: screen;
-  opacity: 0.5;
-}
-
-.pixel-caret {
-  fill: currentColor;
-  animation: intro-caret 0.53s steps(1, end) infinite;
+:root[data-theme="dark"] .crt-wordmark-text::after {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgb(0 0 0 / 0) 0 2px,
+    rgb(0 0 0 / 0.38) 2px 3px
+  );
 }
 
 .shadow-bar {
@@ -347,12 +347,15 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
     opacity: 0.16;
   }
 
-  .intro-caret,
-  .pixel-caret {
+  .intro-caret {
     animation: none;
   }
 
-  .pixel-fringe {
+  .crt-wordmark-text {
+    text-shadow: none;
+  }
+
+  .crt-wordmark-text::after {
     display: none;
   }
 }

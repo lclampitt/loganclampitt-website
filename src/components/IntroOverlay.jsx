@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { LINKS } from '../data/content'
 import { useIntro } from '../context/useIntro'
 import { HANDLE_GLYPH_CLASS, WORDMARK_STACK_CLASS } from '../lib/wordmark'
-import PixelWordmark from './PixelWordmark'
+import CrtWordmark from './CrtWordmark'
 
 const LOGAN_TEXT = 'LOGAN'
 const HANDLE_TEXT = `/@${LINKS.githubHandle}`
@@ -57,7 +57,7 @@ function Caret() {
 function WordmarkStack({ logan, handle, loganCaret, handleCaret, sizer }) {
   return (
     <div className={`${WORDMARK_STACK_CLASS}${sizer ? ' invisible' : ''}`} aria-hidden={sizer ? true : undefined}>
-      <PixelWordmark text={logan} caret={loganCaret} />
+      <CrtWordmark text={logan} caret={loganCaret} />
       <span className={HANDLE_GLYPH_CLASS}>
         {handle}
         {handleCaret ? <Caret /> : null}

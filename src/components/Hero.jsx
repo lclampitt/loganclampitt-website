@@ -5,7 +5,7 @@ import { useIntro } from '../context/useIntro'
 import { scrollToId } from '../lib/scroll'
 import { HANDLE_GLYPH_CLASS, WORDMARK_STACK_CLASS } from '../lib/wordmark'
 import ActivityStrip from './ActivityStrip'
-import PixelWordmark from './PixelWordmark'
+import CrtWordmark from './CrtWordmark'
 
 const fade = (delay) => ({
   initial: { opacity: 0, y: 10 },
@@ -64,8 +64,7 @@ export default function Hero() {
               className={WORDMARK_STACK_CLASS}
               style={{ visibility: wordmarkReady ? 'visible' : 'hidden' }}
             >
-              <span className="sr-only">LOGAN</span>
-              <PixelWordmark text="LOGAN" />
+              <CrtWordmark text="LOGAN" />
               <span className={HANDLE_GLYPH_CLASS}>/@{LINKS.githubHandle}</span>
             </span>
           </h1>
