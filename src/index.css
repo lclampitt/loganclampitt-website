@@ -66,11 +66,6 @@ html {
   color-scheme: light;
 }
 
-html[data-cursor="arrow"],
-html[data-cursor="arrow"] * {
-  cursor: none !important;
-}
-
 html[data-theme="light"] {
   color-scheme: light;
 }
@@ -87,6 +82,12 @@ body {
   color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+a[href],
+button:not(:disabled),
+[role="button"] {
+  cursor: pointer;
 }
 
 #root {
@@ -216,67 +217,6 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   scroll-margin-top: 12px;
 }
 
-.arrow-cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 200;
-  width: 24px;
-  height: 24px;
-  pointer-events: none;
-  opacity: 0;
-  mix-blend-mode: normal;
-  will-change: transform;
-}
-
-.arrow-cursor.is-on {
-  opacity: 1;
-}
-
-.arrow-cursor-mark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: block;
-  overflow: visible;
-  filter: drop-shadow(0.7px 1.3px 1px rgba(0, 0, 0, 0.22));
-}
-
-.arrow-cursor-hand {
-  opacity: 0;
-}
-
-.arrow-cursor.is-point .arrow-cursor-arrow {
-  opacity: 0;
-}
-
-.arrow-cursor.is-point .arrow-cursor-hand {
-  opacity: 1;
-}
-
-.arrow-cursor-mark path {
-  fill: #000000;
-  stroke: #ffffff;
-  paint-order: stroke fill;
-}
-
-.arrow-cursor-arrow path {
-  stroke-width: 4;
-}
-
-.arrow-cursor-hand path {
-  stroke-width: 1.15;
-}
-
-:root[data-theme="dark"] .arrow-cursor-mark {
-  filter: drop-shadow(0.7px 1.3px 1.3px rgba(0, 0, 0, 0.5));
-}
-
-:root[data-theme="dark"] .arrow-cursor-mark path {
-  fill: #f3f6f8;
-  stroke: #111111;
-}
-
 .git-graph[data-phase='idle'] .git-cell {
   opacity: 0;
 }
@@ -346,9 +286,5 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
 
   .intro-caret {
     animation: none;
-  }
-
-  .arrow-cursor-mark {
-    transition: none;
   }
 }
