@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 const STORAGE_KEY = 'logan-intro-seen'
-const DRIVE_MS = 1700
-const HOLD_MS = 280
+const DRIVE_MS = 2000
+const HOLD_MS = 320
 const REDUCED_MS = 700
 
 function RaceCar({ className = '', carRef }) {
@@ -85,18 +85,18 @@ function TireSmoke({ carRef, running }) {
 
     let emitClock = 0
     const emit = (x, y, now) => {
-      if (now - emitClock < 28) return
+      if (now - emitClock < 22) return
       emitClock = now
-      for (let i = 0; i < 2; i += 1) {
+      for (let i = 0; i < 3; i += 1) {
         particles.push({
-          x: x + Math.random() * 10,
-          y: y + (Math.random() - 0.4) * 7,
-          vx: -55 - Math.random() * 70,
-          vy: -12 - Math.random() * 28,
+          x: x + Math.random() * 12,
+          y: y + (Math.random() - 0.35) * 8,
+          vx: -48 - Math.random() * 64,
+          vy: -8 - Math.random() * 24,
           life: 1,
-          decay: 0.014 + Math.random() * 0.012,
-          r: 5 + Math.random() * 8,
-          warm: Math.random() > 0.72,
+          decay: 0.011 + Math.random() * 0.01,
+          r: 7 + Math.random() * 10,
+          warm: Math.random() > 0.82,
         })
       }
     }
@@ -127,8 +127,8 @@ function TireSmoke({ carRef, running }) {
         next.push(puff)
         ctx.beginPath()
         ctx.fillStyle = puff.warm
-          ? `rgba(212, 160, 23, ${puff.life * 0.22})`
-          : `rgba(161, 161, 170, ${puff.life * 0.38})`
+          ? `rgba(212, 160, 23, ${puff.life * 0.28})`
+          : `rgba(212, 212, 216, ${puff.life * 0.48})`
         ctx.arc(puff.x, puff.y, puff.r, 0, Math.PI * 2)
         ctx.fill()
       }

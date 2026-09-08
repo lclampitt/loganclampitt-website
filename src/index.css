@@ -211,7 +211,7 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   width: 0;
   background: #d4a017;
   box-shadow: 0 0 16px rgba(212, 160, 23, 0.35);
-  animation: intro-burn 1.7s cubic-bezier(0.22, 0.8, 0.36, 1) forwards;
+  animation: intro-burn 2s cubic-bezier(0.22, 0.8, 0.36, 1) forwards;
 }
 
 .intro-smoke-canvas {
@@ -225,22 +225,22 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
 .race-rig {
   position: absolute;
   left: 0;
-  top: calc(58% - 3.35rem);
-  animation: race-drive 1.7s cubic-bezier(0.22, 0.8, 0.36, 1) forwards;
+  top: calc(58% - 3.7rem);
+  animation: race-drive 2s cubic-bezier(0.22, 0.8, 0.36, 1) forwards;
 }
 
 .race-car {
-  width: min(200px, 42vw);
+  width: min(240px, 58vw);
   height: auto;
   display: block;
 }
 
 @keyframes race-drive {
   from {
-    transform: translateX(-24vw);
+    transform: translateX(-12vw);
   }
   to {
-    transform: translateX(108vw);
+    transform: translateX(104vw);
   }
 }
 
