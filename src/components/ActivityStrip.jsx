@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { LINKS } from '../data/content'
+import { useIntro } from '../context/useIntro'
 import { DAYS, LEVEL_COLORS, WEEKS, buildStylizedCells } from '../lib/contributions'
 
 const EMPTY = LEVEL_COLORS[0]
@@ -10,6 +11,7 @@ function prefersReducedMotion() {
 }
 
 export default function ActivityStrip() {
+  const { contentReady } = useIntro()
   const cells = useMemo(() => buildStylizedCells(), [])
   const [innerWidth, setInnerWidth] = useState(0)
   const [started, setStarted] = useState(() => prefersReducedMotion())
@@ -45,12 +47,13 @@ export default function ActivityStrip() {
   const height = block > 0 ? DAYS * (block + gap) - gap : 0
 
   useEffect(() => {
+    if (!contentReady) return undefined
     if (graphWidth > 0 && !started && !prefersReducedMotion()) {
       const id = window.setTimeout(() => setStarted(true), 80)
       return () => window.clearTimeout(id)
     }
     return undefined
-  }, [graphWidth, started])
+  }, [contentReady, graphWidth, started])
 
   useEffect(() => {
     const root = graphRef.current

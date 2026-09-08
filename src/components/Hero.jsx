@@ -1,6 +1,12 @@
 import { motion } from 'framer-motion'
 import { LINKS } from '../data/content'
 import { useContact } from '../context/useContact'
+import { useIntro } from '../context/useIntro'
+import {
+  HANDLE_GLYPH_CLASS,
+  LOGAN_GLYPH_CLASS,
+  WORDMARK_ROW_CLASS,
+} from '../lib/wordmark'
 import ActivityStrip from './ActivityStrip'
 
 const fade = (delay) => ({
@@ -18,16 +24,28 @@ const pill =
 
 export default function Hero() {
   const { openContact } = useContact()
+  const { contentReady, playRequested, wordmarkReady } = useIntro()
 
   const scrollToProjects = () => {
     const el = document.getElementById('projects')
     if (el) el.scrollIntoView({ behavior: 'smooth' })
   }
 
+  const rest = (delay) => {
+    if (!contentReady) {
+      return {
+        initial: { opacity: 0, y: 10 },
+        animate: { opacity: 0, y: 10 },
+        transition: { duration: 0 },
+      }
+    }
+    return fade(playRequested ? Math.min(delay, 0.14) : delay)
+  }
+
   return (
     <section id="hero" className="relative pt-8 md:pt-10 pb-8 md:pb-10">
       <div className="mx-auto max-w-6xl px-5 md:px-8 w-full">
-        <motion.div {...fade(0)} className="flex items-baseline justify-between gap-4">
+        <motion.div {...rest(0)} className="flex items-baseline justify-between gap-4">
           <p className="font-script italic text-[1.35rem] md:text-[1.65rem] text-ink">
             Hey it&apos;s me
           </p>
@@ -40,20 +58,19 @@ export default function Hero() {
           </button>
         </motion.div>
 
-        <motion.h1
-          {...fade(0.06)}
-          className="mt-6 md:mt-7 flex flex-wrap items-baseline gap-x-3 gap-y-1"
-        >
-          <span className="font-display font-semibold text-[clamp(2.75rem,9vw,5.25rem)] leading-[0.88] tracking-tight text-ink">
-            LOGAN
+        <h1 className="mt-6 md:mt-7">
+          <span
+            id="hero-wordmark"
+            className={WORDMARK_ROW_CLASS}
+            style={{ opacity: wordmarkReady ? 1 : 0 }}
+          >
+            <span className={LOGAN_GLYPH_CLASS}>LOGAN</span>
+            <span className={HANDLE_GLYPH_CLASS}>/@{LINKS.githubHandle}</span>
           </span>
-          <span className="font-mono text-sm md:text-base font-normal text-dim">
-            /@{LINKS.githubHandle}
-          </span>
-        </motion.h1>
+        </h1>
 
         <motion.p
-          {...fade(0.12)}
+          {...rest(0.12)}
           className="mt-5 max-w-2xl font-mono text-[13px] md:text-sm leading-relaxed text-muted"
         >
           <span className="text-ink font-medium">Software Developer</span>
@@ -72,7 +89,7 @@ export default function Hero() {
           . Quietly into sim racing on the side.
         </motion.p>
 
-        <motion.div {...fade(0.18)} className="mt-6 flex flex-wrap items-center gap-2.5">
+        <motion.div {...rest(0.18)} className="mt-6 flex flex-wrap items-center gap-2.5">
           <button type="button" onClick={openContact} className={ghostBtn}>
             Email me
           </button>
@@ -89,11 +106,11 @@ export default function Hero() {
           </button>
         </motion.div>
 
-        <motion.div {...fade(0.24)} className="mt-8">
+        <motion.div {...rest(0.24)} className="mt-8">
           <ActivityStrip />
         </motion.div>
 
-        <motion.div {...fade(0.3)} className="mt-6">
+        <motion.div {...rest(0.3)} className="mt-6">
           <p className="font-mono text-[13px] text-muted mb-3">
             You can check these <span className="text-ink">links</span> if you wish to
           </p>

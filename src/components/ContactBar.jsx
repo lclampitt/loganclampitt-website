@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { FORMSPREE_ID, LINKS } from '../data/content'
 import { useContact } from '../context/useContact'
+import { useIntro } from '../context/useIntro'
 import { ArrowDownIcon, ArrowUpIcon } from './icons'
 
 const QUICK_LINKS = [
@@ -12,6 +13,7 @@ const QUICK_LINKS = [
 
 export default function ContactBar() {
   const { open, toggleContact, closeContact } = useContact()
+  const { contentReady } = useIntro()
   const panelId = useId()
   const nameRef = useRef(null)
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
@@ -86,7 +88,13 @@ export default function ContactBar() {
         )}
       </AnimatePresence>
 
-      <div className="fixed inset-x-0 bottom-0 z-50 pointer-events-none">
+      <motion.div
+        className="fixed inset-x-0 bottom-0 z-50 pointer-events-none"
+        initial={false}
+        animate={{ opacity: contentReady ? 1 : 0 }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        aria-hidden={!contentReady}
+      >
         <div className="mx-auto max-w-4xl px-4 pb-4 md:pb-6 flex flex-col items-center">
           <AnimatePresence>
             {open && (
@@ -201,7 +209,7 @@ export default function ContactBar() {
             onClick={toggleContact}
             aria-expanded={open}
             aria-controls={panelId}
-            className="contact-bar-toggle pointer-events-auto w-full max-w-xl rounded-full border border-line bg-raised pl-6 pr-2 py-2 flex items-center justify-between gap-4 text-left shadow-[0_8px_30px_rgba(0,0,0,0.45)]"
+            className={`contact-bar-toggle pointer-events-auto w-full max-w-xl rounded-full border border-line bg-raised pl-6 pr-2 py-2 flex items-center justify-between gap-4 text-left shadow-[0_8px_30px_rgba(0,0,0,0.45)]${contentReady ? '' : ' pointer-events-none'}`}
           >
             <span>
               <span className="block font-display text-[15px] md:text-base font-medium text-ink">
@@ -214,7 +222,7 @@ export default function ContactBar() {
             </span>
           </motion.button>
         </div>
-      </div>
+      </motion.div>
     </>
   )
 }
