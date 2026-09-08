@@ -88,7 +88,7 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
 }
 
 .git-graph[data-phase='enter'] .git-cell {
-  animation: git-cell-enter 0.4s ease-out both;
+  animation: git-cell-enter 0.45s ease-out both;
   animation-delay: var(--git-delay, 0ms);
 }
 

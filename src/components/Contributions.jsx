@@ -53,20 +53,22 @@ export default function Contributions() {
 
   useEffect(() => {
     const root = graphRef.current
-    if (!root || phase !== 'idle') return undefined
+    if (!root) return undefined
 
+    let inView = false
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        const shown = entry.isIntersecting && entry.intersectionRatio >= 0.55
+        if (shown && !inView) {
           setPhase('enter')
-          observer.disconnect()
         }
+        inView = shown
       },
-      { threshold: 0.2, rootMargin: '0px 0px -10% 0px' },
+      { threshold: [0.15, 0.55, 0.75, 1] },
     )
     observer.observe(root)
     return () => observer.disconnect()
-  }, [phase])
+  }, [])
 
   useEffect(() => {
     const root = graphRef.current
@@ -90,7 +92,7 @@ export default function Contributions() {
         [
           { transform: 'scale(1)', opacity: 1 },
           { transform: 'scale(0.65)', opacity: 0.35, offset: 0.35 },
-          { transform: 'scale(1.35)', opacity: 1, offset: 0.7 },
+          { transform: 'scale(1.55)', opacity: 1, offset: 0.7 },
           { transform: 'scale(1)', opacity: 1 },
         ],
         { duration: 400, easing: 'ease-out' },
@@ -105,18 +107,18 @@ export default function Contributions() {
         return
       }
       const active = all.filter((node) => Number(node.dataset.level) > 0)
-      const n = 1 + Math.floor(Math.random() * 2)
+      const n = 2 + Math.floor(Math.random() * 3)
       for (let i = 0; i < n; i += 1) {
-        const pool = active.length > 0 && Math.random() < 0.8 ? active : all
+        const pool = active.length > 0 && Math.random() < 0.85 ? active : all
         pop(pool[Math.floor(Math.random() * pool.length)])
       }
-      later(tick, 70 + Math.random() * 130)
+      later(tick, 55 + Math.random() * 90)
     }
 
     if (phase === 'enter') {
       later(() => {
         if (!stopped) setPhase('settled')
-      }, WEEKS * 18 + 360)
+      }, WEEKS * 22 + 480)
     }
 
     later(tick, phase === 'enter' ? 420 : 80)
@@ -192,7 +194,7 @@ export default function Contributions() {
                   data-date={cell.date}
                   fill={LEVEL_COLORS[cell.level]}
                   className="git-cell"
-                  style={{ '--git-delay': `${cell.week * 18 + cell.day * 4}ms` }}
+                  style={{ '--git-delay': `${cell.week * 22 + cell.day * 6}ms` }}
                 >
                   <title>
                     {cell.date}
