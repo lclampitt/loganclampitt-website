@@ -14,6 +14,32 @@ export function ArrowUpIcon({ className = 'w-4 h-4' }) {
   )
 }
 
+export function SunIcon({ className = 'w-5 h-5' }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+      <circle cx="12" cy="12" r="3.6" strokeWidth="1.8" />
+      <path
+        strokeLinecap="round"
+        strokeWidth="1.8"
+        d="M12 3.2v1.8M12 19v1.8M3.2 12h1.8M19 12h1.8M5.7 5.7l1.3 1.3M17 17l1.3 1.3M5.7 18.3 7 17M17 7l1.3-1.3"
+      />
+    </svg>
+  )
+}
+
+export function MoonIcon({ className = 'w-5 h-5' }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.8"
+        d="M20 14.6A8.1 8.1 0 1 1 9.4 4 6.5 6.5 0 0 0 20 14.6Z"
+      />
+    </svg>
+  )
+}
+
 export function ArrowDownIcon({ className = 'w-4 h-4' }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
