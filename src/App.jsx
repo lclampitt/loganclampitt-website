@@ -3,7 +3,6 @@ import { AnimatePresence } from 'framer-motion'
 import Navbar from './components/Navbar'
 import ScrollToTop from './components/ScrollToTop'
 import ContactBar from './components/ContactBar'
-import IntroOverlay from './components/IntroOverlay'
 import { ContactProvider } from './context/ContactContext'
 import Home from './pages/Home'
 import SimRacingDetail from './pages/SimRacingDetail'
@@ -16,7 +15,6 @@ function App() {
   return (
     <ContactProvider>
       <ScrollToTop />
-      {location.pathname === '/' && <IntroOverlay />}
       <Navbar />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
