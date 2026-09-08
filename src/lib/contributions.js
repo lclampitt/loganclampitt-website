@@ -1,6 +1,6 @@
 export const WEEKS = 53
 export const DAYS = 7
-export const LEVEL_COLORS = ['#18181b', '#3f3110', '#6d5414', '#a37d14', '#d4a017']
+export const LEVEL_COLORS = ['#27272a', '#3f3110', '#6d5414', '#a37d14', '#d4a017']
 export const GITHUB_USER = 'lclampitt'
 
 function startOfSunday(date) {
