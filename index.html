@@ -19,6 +19,8 @@
         } catch (error) {}
         document.documentElement.setAttribute('data-theme', theme)
         document.documentElement.style.colorScheme = theme
+        var meta = document.querySelector('meta[name="theme-color"]')
+        if (meta) meta.content = theme === 'dark' ? '#121212' : '#faf7f2'
       })()
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />

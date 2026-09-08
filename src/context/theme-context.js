@@ -9,7 +9,7 @@ export function applyTheme(theme) {
   document.documentElement.dataset.theme = next
   document.documentElement.style.colorScheme = next
   const meta = document.querySelector('meta[name="theme-color"]')
-  if (meta) meta.content = next === 'dark' ? '#000000' : '#faf7f2'
+  if (meta) meta.content = next === 'dark' ? '#121212' : '#faf7f2'
 }
 
 export function readStoredTheme() {

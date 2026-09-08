@@ -39,10 +39,10 @@
 }
 
 :root[data-theme="dark"] {
-  --color-page: #000000;
-  --color-surface: #0a0a0a;
-  --color-raised: #111111;
-  --color-line: #222222;
+  --color-page: #121212;
+  --color-surface: #1a1a1a;
+  --color-raised: #222222;
+  --color-line: #2a2a2a;
   --color-ink: #f3f6f8;
   --color-muted: #b5c4cc;
   --color-dim: #8a9eaa;
@@ -53,7 +53,7 @@
   --color-amber: #8fd6e0;
   --color-amber-dim: #1f6f7a;
 
-  --git-0: #141414;
+  --git-0: #1c1c1c;
   --git-1: #0e3a52;
   --git-2: #1f6f7a;
   --git-3: #4db8c4;
@@ -61,12 +61,12 @@
   --git-pop-low: #8fd6e0;
   --git-pop-high: #f3f6f8;
   --shadow-bar: 0 8px 30px rgba(0, 0, 0, 0.55);
-  --pill-fill: #1c1c1c;
-  --pill-fg: #f4f4f4;
-  --pill-icon: #b4b4b4;
-  --pill-border: rgba(255, 255, 255, 0.16);
-  --pill-highlight: rgba(255, 255, 255, 0.2);
-  --pill-shadow: 0 5px 12px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.35);
+  --pill-fill: #faf7f2;
+  --pill-fg: #0b1c2c;
+  --pill-icon: #4d6270;
+  --pill-border: rgba(11, 28, 44, 0.16);
+  --pill-highlight: rgba(255, 255, 255, 0.62);
+  --pill-shadow: 0 5px 14px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
 * {
@@ -76,6 +76,7 @@
 html {
   scroll-behavior: auto;
   color-scheme: light;
+  background-color: var(--color-page);
 }
 
 html[data-theme="light"] {
@@ -197,6 +198,10 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
 
 .soft-pill:hover {
   filter: brightness(1.08);
+}
+
+:root[data-theme="dark"] .soft-pill:hover {
+  filter: brightness(0.97);
 }
 
 .soft-pill:active {
