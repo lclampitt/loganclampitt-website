@@ -53,20 +53,29 @@ async function typeInto(text, onChar, minDelay, maxDelay, signal) {
   }
 }
 
-function Caret() {
-  return <span className="intro-caret" aria-hidden="true" />
+function Caret({ variant }) {
+  const typeClass = variant === 'handle' ? HANDLE_GLYPH_CLASS : LOGAN_GLYPH_CLASS
+  return (
+    <span
+      className={`intro-caret intro-caret--${variant} ${typeClass}`}
+      aria-hidden="true"
+    />
+  )
 }
 
 function WordmarkStack({ logan, handle, loganCaret, handleCaret, sizer }) {
   return (
-    <div className={`${WORDMARK_STACK_CLASS}${sizer ? ' invisible' : ''}`} aria-hidden={sizer ? true : undefined}>
-      <span className={LOGAN_GLYPH_CLASS}>
+    <div
+      className={`${WORDMARK_STACK_CLASS} whitespace-nowrap${sizer ? ' invisible' : ''}`}
+      aria-hidden={sizer ? true : undefined}
+    >
+      <span className={`${LOGAN_GLYPH_CLASS} inline-flex items-baseline whitespace-nowrap`}>
         {logan}
-        {loganCaret ? <Caret /> : null}
+        {loganCaret ? <Caret key="logan" variant="logan" /> : null}
       </span>
-      <span className={HANDLE_GLYPH_CLASS}>
+      <span className={`${HANDLE_GLYPH_CLASS} inline-flex items-baseline whitespace-nowrap`}>
         {handle}
-        {handleCaret ? <Caret /> : null}
+        {handleCaret ? <Caret key="handle" variant="handle" /> : null}
       </span>
     </div>
   )
@@ -113,7 +122,9 @@ function IntroSequence() {
       await wait(360, signal)
       if (signal.aborted) return
 
-      setCaretAt('handle')
+      flushSync(() => {
+        setCaretAt('handle')
+      })
 
       let handle = ''
       await typeInto(
@@ -259,7 +270,7 @@ function IntroSequence() {
           }
         >
           <WordmarkStack logan={LOGAN_TEXT} handle={HANDLE_TEXT} sizer />
-          <div className="absolute left-0 top-0">
+          <div className="absolute left-0 top-0 w-max">
             <WordmarkStack
               logan={loganTyped}
               handle={handleTyped}
