@@ -209,6 +209,17 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   }
 }
 
+.scroll-progress-track {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 69;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--color-ink) 12%, transparent);
+}
+
 .scroll-progress {
   position: fixed;
   top: 0;
@@ -219,6 +230,48 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   pointer-events: none;
   transform-origin: 0% 50%;
   background: var(--color-accent);
+}
+
+.scroll-chapters {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 71;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  height: 12px;
+  padding: 0 22%;
+  pointer-events: none;
+}
+
+.scroll-chapters button {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 18px;
+  height: 12px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.scroll-chapters-dot {
+  width: 5px;
+  height: 5px;
+  margin-top: -1.5px;
+  border-radius: 50%;
+  background: var(--color-line);
+  box-shadow: 0 0 0 1px var(--color-page);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.scroll-chapters button.is-active .scroll-chapters-dot {
+  background: var(--color-accent);
+  transform: scale(1.35);
 }
 
 #hero,
@@ -333,6 +386,7 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
     animation: none;
   }
 
+  .scroll-chapters-dot,
   .dot-cursor-core {
     transition: none;
   }

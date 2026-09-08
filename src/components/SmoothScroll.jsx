@@ -7,8 +7,8 @@ import 'lenis/dist/lenis.css'
 
 const OPTIONS = {
   autoRaf: true,
-  lerp: 0.12,
-  wheelMultiplier: 0.9,
+  lerp: 0.1,
+  wheelMultiplier: 0.88,
   anchors: true,
   syncTouch: false,
   respectReducedMotion: true,
