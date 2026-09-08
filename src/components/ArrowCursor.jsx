@@ -4,10 +4,20 @@ const FINE = '(pointer: fine)'
 const HOVER = '(hover: hover)'
 const REDUCE = '(prefers-reduced-motion: reduce)'
 const HOT = 'a, button, input, textarea, select, label, summary, [role="button"], [role="link"]'
-const SIZE = 18
-const VIEW = 28
-const HOTSPOT_X = (5 * SIZE) / VIEW
-const HOTSPOT_Y = (3.2 * SIZE) / VIEW
+const ARROW_SIZE = 18
+const ARROW_VIEW = 28
+const ARROW_HOTSPOT = {
+  x: (5 * ARROW_SIZE) / ARROW_VIEW,
+  y: (3.2 * ARROW_SIZE) / ARROW_VIEW,
+}
+const HAND_W = 20
+const HAND_H = 24
+const HAND_VIEW_W = 26
+const HAND_VIEW_H = 30
+const HAND_HOTSPOT = {
+  x: (8.1 * HAND_W) / HAND_VIEW_W,
+  y: (1.5 * HAND_H) / HAND_VIEW_H,
+}
 
 function canUseArrowCursor() {
   if (typeof window === 'undefined') return false
@@ -53,7 +63,8 @@ export default function ArrowCursor() {
       rafRef.current = 0
       if (!node) return
       const { x, y } = posRef.current
-      node.style.transform = `translate3d(${x - HOTSPOT_X}px, ${y - HOTSPOT_Y}px, 0)`
+      const hot = pointRef.current ? HAND_HOTSPOT : ARROW_HOTSPOT
+      node.style.transform = `translate3d(${x - hot.x}px, ${y - hot.y}px, 0)`
       node.classList.add('is-on')
     }
 
@@ -66,6 +77,7 @@ export default function ArrowCursor() {
       if (pointRef.current === next) return
       pointRef.current = next
       node?.classList.toggle('is-point', next)
+      flush()
     }
 
     const onOver = (event) => {
@@ -89,14 +101,27 @@ export default function ArrowCursor() {
   return (
     <div ref={rootRef} className="arrow-cursor" aria-hidden="true">
       <svg
-        className="arrow-cursor-mark"
-        width={SIZE}
-        height={SIZE}
-        viewBox={`0 0 ${VIEW} ${VIEW}`}
+        className="arrow-cursor-mark arrow-cursor-arrow"
+        width={ARROW_SIZE}
+        height={ARROW_SIZE}
+        viewBox={`0 0 ${ARROW_VIEW} ${ARROW_VIEW}`}
         fill="none"
       >
         <path
           d="M5 3.2 5 23.4 10.2 18.1 14.4 26.8 18 25.3 13.7 16.5 21.6 16.5Z"
+          strokeLinejoin="round"
+          strokeLinecap="round"
+        />
+      </svg>
+      <svg
+        className="arrow-cursor-mark arrow-cursor-hand"
+        width={HAND_W}
+        height={HAND_H}
+        viewBox={`0 0 ${HAND_VIEW_W} ${HAND_VIEW_H}`}
+        fill="none"
+      >
+        <path
+          d="M8.1 1.5c-.95 0-1.7.75-1.7 1.7v10.05L4.15 11.2c-.75-.65-1.95-.35-2.1.9-.15 1.15.55 1.95 1.55 2.75l2.8 2.2v2.35c0 2.95 2.35 5.3 5.3 5.3h4.85c2.8 0 5.05-2.3 5.05-5.1V12.15c0-.95-.75-1.7-1.7-1.7-.4 0-.75.12-1.05.35V9c0-.95-.75-1.7-1.7-1.7-.4 0-.75.12-1.05.35V7.55c0-.95-.75-1.7-1.7-1.7-.4 0-.75.12-1.05.35V3.2c0-.95-.75-1.7-1.7-1.7-.45 0-.85.18-1.15.48-.25-.3-.7-.48-1.15-.48Z"
           strokeLinejoin="round"
           strokeLinecap="round"
         />

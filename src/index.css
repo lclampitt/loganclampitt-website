@@ -221,8 +221,8 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   top: 0;
   left: 0;
   z-index: 200;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 24px;
   pointer-events: none;
   opacity: 0;
   mix-blend-mode: normal;
@@ -234,22 +234,38 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
 }
 
 .arrow-cursor-mark {
+  position: absolute;
+  top: 0;
+  left: 0;
   display: block;
   overflow: visible;
-  transform-origin: 3.2px 2.1px;
-  transition: transform 0.12s ease;
   filter: drop-shadow(0.75px 1.25px 1px rgba(0, 0, 0, 0.28));
 }
 
-.arrow-cursor.is-point .arrow-cursor-mark {
-  transform: rotate(-16deg) scale(0.9);
+.arrow-cursor-hand {
+  opacity: 0;
+}
+
+.arrow-cursor.is-point .arrow-cursor-arrow {
+  opacity: 0;
+}
+
+.arrow-cursor.is-point .arrow-cursor-hand {
+  opacity: 1;
 }
 
 .arrow-cursor-mark path {
   fill: #000000;
   stroke: #ffffff;
-  stroke-width: 4;
   paint-order: stroke fill;
+}
+
+.arrow-cursor-arrow path {
+  stroke-width: 4;
+}
+
+.arrow-cursor-hand path {
+  stroke-width: 3.2;
 }
 
 :root[data-theme="dark"] .arrow-cursor-mark {
