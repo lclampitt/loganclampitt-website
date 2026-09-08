@@ -61,7 +61,7 @@ export default function Contributions() {
       if (window.scrollY < 120) return
       const rect = section.getBoundingClientRect()
       const vh = window.innerHeight || 800
-      if (rect.top < vh * 0.7 && rect.bottom > vh * 0.22) {
+      if (rect.top < vh * 0.55 && rect.bottom > vh * 0.3) {
         setStarted(true)
       }
     }
@@ -103,7 +103,7 @@ export default function Contributions() {
         later(() => {
           if (stopped) return
           node.setAttribute('fill', LEVEL_COLORS[level])
-        }, week * 26 + day * 8)
+        }, 280 + week * 42 + day * 10)
       })
     }
 
@@ -140,7 +140,7 @@ export default function Contributions() {
     }
 
     if (!reduced) {
-      later(tick, WEEKS * 26 + 200)
+      later(tick, 280 + WEEKS * 42 + 180)
     }
 
     return () => {
