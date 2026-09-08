@@ -125,36 +125,38 @@ export default function Projects() {
   return (
     <section id="projects" className="pt-6 md:pt-8 pb-20 md:pb-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
-        <motion.p {...fadeUp(0)} className="text-muted text-sm md:text-base mb-6">
-          Still not sure? Check out my{' '}
-          <span className="font-display font-semibold text-ink">Projects</span>
-        </motion.p>
+        <div className="mx-auto w-full max-w-[52rem]">
+          <motion.p {...fadeUp(0)} className="text-muted text-sm md:text-base mb-6">
+            Still not sure? Check out my{' '}
+            <span className="font-display font-semibold text-ink">Projects</span>
+          </motion.p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-[52rem]">
-          {PROJECTS.map((project, index) => (
-            <motion.div key={project.slug} {...fadeUp(0.05 + index * 0.06)}>
-              <ProjectCard project={project} />
-            </motion.div>
-          ))}
-        </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {PROJECTS.map((project, index) => (
+              <motion.div key={project.slug} {...fadeUp(0.05 + index * 0.06)}>
+                <ProjectCard project={project} />
+              </motion.div>
+            ))}
+          </div>
 
-        <motion.div
-          {...fadeUp(0.2)}
-          className="mt-10 pt-6 border-t border-dotted border-line flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-8 max-w-[52rem]"
-        >
-          <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-dim shrink-0">
-            Also · Sim racing
-          </p>
-          <p className="text-sm text-muted flex-1">
-            8+ years competing in ENASCAR series. Personality, not a second portfolio.
-          </p>
-          <Link
-            to="/sim-racing"
-            className="text-sm text-accent hover:text-ink transition-colors shrink-0"
+          <motion.div
+            {...fadeUp(0.2)}
+            className="mt-10 pt-6 border-t border-dotted border-line flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-8"
           >
-            More →
-          </Link>
-        </motion.div>
+            <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-dim shrink-0">
+              Also · Sim racing
+            </p>
+            <p className="text-sm text-muted flex-1">
+              8+ years competing in ENASCAR series. Personality, not a second portfolio.
+            </p>
+            <Link
+              to="/sim-racing"
+              className="text-sm text-accent hover:text-ink transition-colors shrink-0"
+            >
+              More →
+            </Link>
+          </motion.div>
+        </div>
       </div>
     </section>
   )
