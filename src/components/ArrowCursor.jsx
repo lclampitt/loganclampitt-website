@@ -3,10 +3,21 @@ import { useEffect, useRef, useState } from 'react'
 const FINE = '(pointer: fine)'
 const HOVER = '(hover: hover)'
 const REDUCE = '(prefers-reduced-motion: reduce)'
-const VIEW = 28
-const SIZE = 18
-const HOTSPOT_X = (5 * SIZE) / VIEW
-const HOTSPOT_Y = (3.4 * SIZE) / VIEW
+const HOT = 'a, button, input, textarea, select, label, summary, [role="button"], [role="link"]'
+const ARROW_VIEW = 28
+const ARROW_SIZE = 24
+const ARROW_HOTSPOT = {
+  x: (4.2 * ARROW_SIZE) / ARROW_VIEW,
+  y: (2.4 * ARROW_SIZE) / ARROW_VIEW,
+}
+const HAND_VIEW_W = 14
+const HAND_VIEW_H = 24
+const HAND_W = 13
+const HAND_H = 22
+const HAND_HOTSPOT = {
+  x: (4.35 * HAND_W) / HAND_VIEW_W,
+  y: (0.85 * HAND_H) / HAND_VIEW_H,
+}
 
 function canUseArrowCursor() {
   if (typeof window === 'undefined') return false
@@ -19,6 +30,7 @@ export default function ArrowCursor() {
   const rootRef = useRef(null)
   const rafRef = useRef(0)
   const posRef = useRef({ x: 0, y: 0 })
+  const pointRef = useRef(false)
   const [enabled, setEnabled] = useState(false)
 
   useEffect(() => {
@@ -51,7 +63,8 @@ export default function ArrowCursor() {
       rafRef.current = 0
       if (!node) return
       const { x, y } = posRef.current
-      node.style.transform = `translate3d(${x - HOTSPOT_X}px, ${y - HOTSPOT_Y}px, 0)`
+      const hot = pointRef.current ? HAND_HOTSPOT : ARROW_HOTSPOT
+      node.style.transform = `translate3d(${x - hot.x}px, ${y - hot.y}px, 0)`
       node.classList.add('is-on')
     }
 
@@ -60,11 +73,25 @@ export default function ArrowCursor() {
       if (!rafRef.current) rafRef.current = window.requestAnimationFrame(flush)
     }
 
+    const setPoint = (next) => {
+      if (pointRef.current === next) return
+      pointRef.current = next
+      node?.classList.toggle('is-point', next)
+      flush()
+    }
+
+    const onOver = (event) => {
+      const target = event.target
+      setPoint(Boolean(target instanceof Element && target.closest(HOT)))
+    }
+
     window.addEventListener('pointermove', onMove, { passive: true })
+    document.addEventListener('pointerover', onOver, { passive: true })
 
     return () => {
       delete root.dataset.cursor
       window.removeEventListener('pointermove', onMove)
+      document.removeEventListener('pointerover', onOver)
       if (rafRef.current) window.cancelAnimationFrame(rafRef.current)
     }
   }, [enabled])
@@ -74,15 +101,28 @@ export default function ArrowCursor() {
   return (
     <div ref={rootRef} className="arrow-cursor" aria-hidden="true">
       <svg
-        className="arrow-cursor-mark"
-        width={SIZE}
-        height={SIZE}
-        viewBox={`0 0 ${VIEW} ${VIEW}`}
+        className="arrow-cursor-mark arrow-cursor-arrow"
+        width={ARROW_SIZE}
+        height={ARROW_SIZE}
+        viewBox={`0 0 ${ARROW_VIEW} ${ARROW_VIEW}`}
         fill="none"
       >
         <path
-          d="M5 3.4 5 16.2 8.4 13.2 11 19.4 13.4 18.3 10.6 12 15.2 12Z"
+          d="M4.2 2.4 4.2 21.2 8.8 16.8 12.4 25.2 15.6 23.6 11.8 15 18 15Z"
           strokeLinejoin="round"
+          strokeLinecap="round"
+        />
+      </svg>
+      <svg
+        className="arrow-cursor-mark arrow-cursor-hand"
+        width={HAND_W}
+        height={HAND_H}
+        viewBox={`0 0 ${HAND_VIEW_W} ${HAND_VIEW_H}`}
+        fill="none"
+      >
+        <path
+          d="M3.55.85h1.45v5.55h1.4v2.15h1.4v2.15h1.35V20.1c0 1.05-.85 1.9-1.9 1.9H4.95c-1.05 0-1.9-.85-1.9-1.9v-2.35L1.55 16.1l.85-1.1L3.55 16.4V.85Z"
+          strokeLinejoin="miter"
           strokeLinecap="round"
         />
       </svg>
