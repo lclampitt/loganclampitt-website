@@ -5,7 +5,7 @@ import ScrollToTop from './components/ScrollToTop'
 import ContactBar from './components/ContactBar'
 import IntroOverlay from './components/IntroOverlay'
 import ThemeToggle from './components/ThemeToggle'
-import DotCursor from './components/DotCursor'
+import ArrowCursor from './components/ArrowCursor'
 import SmoothScroll from './components/SmoothScroll'
 import { ContactProvider } from './context/ContactContext'
 import { IntroProvider } from './context/IntroContext'
@@ -23,7 +23,7 @@ function App() {
         <SmoothScroll>
           <ScrollToTop />
           <ThemeToggle />
-          <DotCursor />
+          <ArrowCursor />
           <Navbar />
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>

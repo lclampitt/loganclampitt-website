@@ -66,8 +66,8 @@ html {
   color-scheme: light;
 }
 
-html[data-cursor="dot"],
-html[data-cursor="dot"] * {
+html[data-cursor="arrow"],
+html[data-cursor="arrow"] * {
   cursor: none !important;
 }
 
@@ -209,71 +209,6 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   }
 }
 
-.scroll-progress-track {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  z-index: 69;
-  pointer-events: none;
-  background: color-mix(in srgb, var(--color-ink) 12%, transparent);
-}
-
-.scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  z-index: 70;
-  pointer-events: none;
-  transform-origin: 0% 50%;
-  background: var(--color-accent);
-}
-
-.scroll-chapters {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 71;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: flex-start;
-  height: 12px;
-  padding: 0 22%;
-  pointer-events: none;
-}
-
-.scroll-chapters button {
-  pointer-events: auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  width: 18px;
-  height: 12px;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-}
-
-.scroll-chapters-dot {
-  width: 5px;
-  height: 5px;
-  margin-top: -1.5px;
-  border-radius: 50%;
-  background: var(--color-line);
-  box-shadow: 0 0 0 1px var(--color-page);
-  transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.scroll-chapters button.is-active .scroll-chapters-dot {
-  background: var(--color-accent);
-  transform: scale(1.35);
-}
-
 #hero,
 #proof,
 #projects,
@@ -281,38 +216,43 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   scroll-margin-top: 12px;
 }
 
-.dot-cursor {
+.arrow-cursor {
   position: fixed;
   top: 0;
   left: 0;
   z-index: 200;
-  width: 0;
-  height: 0;
+  width: 28px;
+  height: 28px;
   pointer-events: none;
   opacity: 0;
+  mix-blend-mode: normal;
+  will-change: transform;
 }
 
-.dot-cursor.is-on {
+.arrow-cursor.is-on {
   opacity: 1;
 }
 
-.dot-cursor-core {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  margin: -4px 0 0 -4px;
-  border-radius: 50%;
-  background: #000000;
-  transform: scale(1);
-  transition: transform 0.16s ease;
+.arrow-cursor-mark {
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(1px 2px 1.5px rgba(0, 0, 0, 0.28));
 }
 
-:root[data-theme="dark"] .dot-cursor-core {
-  background: #ffffff;
+.arrow-cursor-mark path {
+  fill: #000000;
+  stroke: #ffffff;
+  stroke-width: 4;
+  paint-order: stroke fill;
 }
 
-.dot-cursor-core.is-hot {
-  transform: scale(1.7);
+:root[data-theme="dark"] .arrow-cursor-mark {
+  filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.55));
+}
+
+:root[data-theme="dark"] .arrow-cursor-mark path {
+  fill: #f3f6f8;
+  stroke: #111111;
 }
 
 .git-graph[data-phase='idle'] .git-cell {
@@ -384,10 +324,5 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
 
   .intro-caret {
     animation: none;
-  }
-
-  .scroll-chapters-dot,
-  .dot-cursor-core {
-    transition: none;
   }
 }
