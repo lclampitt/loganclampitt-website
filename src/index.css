@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+@source "../index.html";
+@source "./**/*.{js,jsx}";
+
 @theme {
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -71,6 +74,20 @@
 
 * {
   box-sizing: border-box;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+.icon-glyph {
+  display: block;
+  flex-shrink: 0;
+  overflow: hidden;
+  max-width: 1.25rem;
+  max-height: 1.25rem;
 }
 
 html {
@@ -192,7 +209,10 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
 .soft-pill svg {
   width: 0.75rem;
   height: 0.75rem;
+  max-width: 0.75rem;
+  max-height: 0.75rem;
   flex-shrink: 0;
+  overflow: hidden;
   color: var(--pill-icon);
 }
 
@@ -285,7 +305,9 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
 .git-graph {
   width: 100%;
   min-width: 0;
+  max-width: 100%;
   isolation: isolate;
+  overflow: hidden;
 }
 
 .git-graph svg {
@@ -293,6 +315,7 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   width: 100%;
   max-width: 100%;
   height: auto;
+  overflow: hidden;
 }
 
 .git-graph .git-cell {

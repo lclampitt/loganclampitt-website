@@ -153,8 +153,8 @@ export default function ActivityStrip() {
             height={height}
             viewBox={`0 0 ${graphWidth} ${height}`}
             preserveAspectRatio="none"
-            className="block w-full"
-            style={{ width: '100%', height }}
+            className="block h-auto w-full max-w-full"
+            style={{ width: '100%', maxWidth: '100%', height }}
             role="img"
             aria-hidden="true"
           >
