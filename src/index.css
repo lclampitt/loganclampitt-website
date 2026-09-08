@@ -78,21 +78,22 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   letter-spacing: -0.035em;
 }
 
-.git-graph rect[data-level] {
+.git-graph .git-cell {
   transform-origin: center;
   transform-box: fill-box;
 }
 
-.git-graph rect.git-cell-hidden {
+.git-graph[data-phase='idle'] .git-cell {
   opacity: 0;
 }
 
-.git-graph rect.git-cell-enter {
-  animation: git-cell-enter 0.38s ease-out both;
+.git-graph[data-phase='enter'] .git-cell {
+  animation: git-cell-enter 0.4s ease-out both;
+  animation-delay: var(--git-delay, 0ms);
 }
 
-.git-graph rect.git-cell-pop {
-  animation: git-cell-pop 0.4s ease-out;
+.git-graph[data-phase='settled'] .git-cell {
+  opacity: 1;
 }
 
 @keyframes git-cell-enter {
@@ -106,30 +107,9 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   }
 }
 
-@keyframes git-cell-pop {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  35% {
-    opacity: 0.35;
-    transform: scale(0.65);
-  }
-  70% {
-    opacity: 1;
-    transform: scale(1.3);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .git-graph rect.git-cell-hidden,
-  .git-graph rect.git-cell-enter,
-  .git-graph rect.git-cell-pop {
-    animation: none;
+  .git-graph .git-cell {
+    animation: none !important;
     opacity: 1;
     transform: none;
   }

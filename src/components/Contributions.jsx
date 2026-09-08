@@ -16,14 +16,16 @@ const BLOCK = 11
 const GAP = 3
 const LABEL_H = 18
 
+function prefersReducedMotion() {
+  return typeof window !== 'undefined'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
 export default function Contributions() {
   const fallback = useMemo(() => buildStylizedCells(), [])
   const [cells, setCells] = useState(fallback)
   const [source, setSource] = useState('stylized')
-  const [ready, setReady] = useState(() => (
-    typeof window !== 'undefined'
-    && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  ))
+  const [phase, setPhase] = useState(() => (prefersReducedMotion() ? 'settled' : 'idle'))
   const graphRef = useRef(null)
 
   useEffect(() => {
@@ -51,29 +53,24 @@ export default function Contributions() {
 
   useEffect(() => {
     const root = graphRef.current
-    if (!root) return undefined
-
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return undefined
-    }
+    if (!root || phase !== 'idle') return undefined
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setReady(true)
+          setPhase('enter')
           observer.disconnect()
         }
       },
-      { threshold: 0.25 },
+      { threshold: 0.2, rootMargin: '0px 0px -10% 0px' },
     )
     observer.observe(root)
     return () => observer.disconnect()
-  }, [])
+  }, [phase])
 
   useEffect(() => {
     const root = graphRef.current
-    if (!root || !ready) return undefined
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+    if (!root || phase === 'idle' || prefersReducedMotion()) return undefined
 
     let stopped = false
     const timers = new Set()
@@ -85,21 +82,24 @@ export default function Contributions() {
       timers.add(id)
     }
 
-    const allCells = () => Array.from(root.querySelectorAll('rect[data-level]'))
+    const nodes = () => Array.from(root.querySelectorAll('rect[data-level]'))
+
     const pop = (node) => {
-      node.classList.remove('git-cell-pop')
-      node.getBoundingClientRect()
-      node.classList.add('git-cell-pop')
-      const done = () => {
-        node.classList.remove('git-cell-pop')
-        node.removeEventListener('animationend', done)
-      }
-      node.addEventListener('animationend', done)
+      if (typeof node.animate !== 'function') return
+      node.animate(
+        [
+          { transform: 'scale(1)', opacity: 1 },
+          { transform: 'scale(0.65)', opacity: 0.35, offset: 0.35 },
+          { transform: 'scale(1.35)', opacity: 1, offset: 0.7 },
+          { transform: 'scale(1)', opacity: 1 },
+        ],
+        { duration: 400, easing: 'ease-out' },
+      )
     }
 
     const tick = () => {
       if (stopped) return
-      const all = allCells()
+      const all = nodes()
       if (all.length === 0) {
         later(tick, 120)
         return
@@ -107,25 +107,26 @@ export default function Contributions() {
       const active = all.filter((node) => Number(node.dataset.level) > 0)
       const n = 1 + Math.floor(Math.random() * 2)
       for (let i = 0; i < n; i += 1) {
-        const pool = active.length > 0 && Math.random() < 0.75 ? active : all
+        const pool = active.length > 0 && Math.random() < 0.8 ? active : all
         pop(pool[Math.floor(Math.random() * pool.length)])
       }
-      later(tick, 70 + Math.random() * 140)
+      later(tick, 70 + Math.random() * 130)
     }
 
-    const cascadeMs = WEEKS * 18 + 280
-    later(() => {
-      allCells().forEach((node) => node.classList.remove('git-cell-enter'))
-      tick()
-    }, cascadeMs)
+    if (phase === 'enter') {
+      later(() => {
+        if (!stopped) setPhase('settled')
+      }, WEEKS * 18 + 360)
+    }
+
+    later(tick, phase === 'enter' ? 420 : 80)
 
     return () => {
       stopped = true
       timers.forEach((id) => window.clearTimeout(id))
       timers.clear()
-      allCells().forEach((node) => node.classList.remove('git-cell-pop'))
     }
-  }, [ready, cells])
+  }, [phase])
 
   const labels = useMemo(() => monthLabels(cells), [cells])
   const width = WEEKS * (BLOCK + GAP) - GAP
@@ -148,7 +149,11 @@ export default function Contributions() {
           {...fadeUp(0.06)}
           className="rounded-3xl border border-line bg-surface p-5 md:p-7 overflow-x-auto"
         >
-          <div ref={graphRef} className="git-graph w-max min-w-full">
+          <div
+            ref={graphRef}
+            className="git-graph w-max min-w-full"
+            data-phase={phase}
+          >
             <svg
               width={width}
               height={height}
@@ -186,8 +191,8 @@ export default function Contributions() {
                   data-level={cell.level}
                   data-date={cell.date}
                   fill={LEVEL_COLORS[cell.level]}
-                  className={ready ? 'git-cell-enter' : 'git-cell-hidden'}
-                  style={{ animationDelay: ready ? `${cell.week * 18 + cell.day * 4}ms` : '0ms' }}
+                  className="git-cell"
+                  style={{ '--git-delay': `${cell.week * 18 + cell.day * 4}ms` }}
                 >
                   <title>
                     {cell.date}
