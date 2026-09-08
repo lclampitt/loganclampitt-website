@@ -5,6 +5,7 @@ import ScrollToTop from './components/ScrollToTop'
 import ContactBar from './components/ContactBar'
 import IntroOverlay from './components/IntroOverlay'
 import ThemeToggle from './components/ThemeToggle'
+import WaveCursor from './components/WaveCursor'
 import { ContactProvider } from './context/ContactContext'
 import { IntroProvider } from './context/IntroContext'
 import Home from './pages/Home'
@@ -20,6 +21,7 @@ function App() {
       <IntroProvider>
         <ScrollToTop />
         <ThemeToggle />
+        <WaveCursor />
         <Navbar />
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>

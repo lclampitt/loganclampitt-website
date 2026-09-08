@@ -19,5 +19,5 @@ export function readStoredTheme() {
   } catch {
     // Private mode or blocked storage.
   }
-  return 'dark'
+  return 'light'
 }
