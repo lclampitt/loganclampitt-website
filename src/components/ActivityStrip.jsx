@@ -144,10 +144,7 @@ export default function ActivityStrip() {
       aria-label="Open Logan Clampitt on GitHub. Decorative activity pattern, not live totals."
       className="block w-full min-w-0"
     >
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-dim">GitHub</p>
-        <p className="font-mono text-[10px] text-dim">pattern only</p>
-      </div>
+      <p className="mb-3 font-mono text-[10px] tracking-[0.2em] uppercase text-dim">GitHub</p>
 
       <div ref={graphRef} className="relative git-graph w-full min-w-0 overflow-hidden">
         {graphWidth > 0 && (
@@ -180,19 +177,6 @@ export default function ActivityStrip() {
           </svg>
         )}
         <span className="git-caustics" aria-hidden="true" />
-      </div>
-
-      <div className="mt-3 flex w-full flex-wrap items-center justify-between gap-3">
-        <p className="font-mono text-[10px] text-dim">
-          Stylized activity map, not live totals
-        </p>
-        <div className="flex items-center gap-1.5 font-mono text-[10px] text-dim">
-          <span>Less</span>
-          {colors.map((color) => (
-            <span key={color} className="w-2.5 h-2.5 rounded-[2px]" style={{ backgroundColor: color }} />
-          ))}
-          <span>More</span>
-        </div>
       </div>
     </a>
   )
