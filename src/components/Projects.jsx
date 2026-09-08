@@ -72,7 +72,7 @@ export default function Projects() {
   const stacked = PROJECTS.filter((p) => p.layout === 'stack')
 
   return (
-    <section id="projects" className="pb-20 md:pb-28">
+    <section id="projects" className="pt-6 md:pt-8 pb-20 md:pb-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <motion.div {...fadeUp(0)} className="flex items-end justify-between mb-8">
           <h2 className="font-display text-sm tracking-[0.22em] uppercase text-muted">Projects</h2>

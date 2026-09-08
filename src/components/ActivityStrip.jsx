@@ -1,0 +1,183 @@
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { DAYS, LEVEL_COLORS, WEEKS, buildStylizedCells } from '../lib/contributions'
+
+const EMPTY = LEVEL_COLORS[0]
+
+function prefersReducedMotion() {
+  return typeof window !== 'undefined'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+export default function ActivityStrip() {
+  const cells = useMemo(() => buildStylizedCells(), [])
+  const [innerWidth, setInnerWidth] = useState(0)
+  const [started, setStarted] = useState(() => prefersReducedMotion())
+  const cardRef = useRef(null)
+  const graphRef = useRef(null)
+
+  useLayoutEffect(() => {
+    const el = cardRef.current
+    if (!el) return undefined
+
+    const measure = () => {
+      const styles = window.getComputedStyle(el)
+      const padding = parseFloat(styles.paddingLeft) + parseFloat(styles.paddingRight)
+      const next = Math.max(0, el.clientWidth - padding)
+      setInnerWidth((current) => (Math.abs(current - next) < 0.5 ? current : next))
+    }
+
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(el)
+    window.addEventListener('resize', measure)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', measure)
+    }
+  }, [])
+
+  const gap = innerWidth > 0 && innerWidth < 540 ? 2 : 3
+  const block = innerWidth > 0
+    ? Math.max(4, (innerWidth - (WEEKS - 1) * gap) / WEEKS)
+    : 0
+  const graphWidth = block > 0 ? WEEKS * (block + gap) - gap : 0
+  const height = block > 0 ? DAYS * (block + gap) - gap : 0
+
+  useEffect(() => {
+    if (graphWidth > 0 && !started && !prefersReducedMotion()) {
+      const id = window.setTimeout(() => setStarted(true), 240)
+      return () => window.clearTimeout(id)
+    }
+    return undefined
+  }, [graphWidth, started])
+
+  useEffect(() => {
+    const root = graphRef.current
+    if (!root || !started || graphWidth <= 0) return undefined
+
+    const nodes = Array.from(root.querySelectorAll('rect[data-level]'))
+    const reduced = prefersReducedMotion()
+    let stopped = false
+    const timers = new Set()
+    const later = (fn, ms) => {
+      const id = window.setTimeout(() => {
+        timers.delete(id)
+        fn()
+      }, ms)
+      timers.add(id)
+    }
+
+    nodes.forEach((node) => {
+      node.setAttribute('fill', reduced ? LEVEL_COLORS[Number(node.dataset.level) || 0] : EMPTY)
+    })
+
+    if (!reduced) {
+      nodes.forEach((node) => {
+        const week = Number(node.dataset.week)
+        const day = Number(node.dataset.day)
+        const level = Number(node.dataset.level) || 0
+        later(() => {
+          if (stopped) return
+          node.setAttribute('fill', LEVEL_COLORS[level])
+        }, 420 + week * 28 + day * 14)
+      })
+    }
+
+    const pop = (node) => {
+      if (stopped) return
+      const level = Number(node.dataset.level) || 0
+      if (level === 0) return
+      const base = LEVEL_COLORS[level]
+      node.setAttribute('fill', '#a1a1aa')
+      if (typeof node.animate === 'function') {
+        node.animate(
+          [
+            { transform: 'scale(1)' },
+            { transform: 'scale(1.18)', offset: 0.45 },
+            { transform: 'scale(1)' },
+          ],
+          { duration: 520, easing: 'ease-out' },
+        )
+      }
+      later(() => {
+        if (!stopped) node.setAttribute('fill', base)
+      }, 260)
+    }
+
+    const tick = () => {
+      if (stopped) return
+      const active = nodes.filter((node) => Number(node.dataset.level) > 1)
+      if (active.length) pop(active[Math.floor(Math.random() * active.length)])
+      later(tick, 720 + Math.random() * 640)
+    }
+
+    if (!reduced) {
+      later(tick, 420 + WEEKS * 28 + 400)
+    }
+
+    return () => {
+      stopped = true
+      timers.forEach((id) => window.clearTimeout(id))
+      timers.clear()
+    }
+  }, [started, graphWidth])
+
+  const reducedMotion = prefersReducedMotion()
+
+  return (
+    <div
+      ref={cardRef}
+      className="w-full min-w-0 rounded-2xl border border-line bg-surface p-4 md:p-5"
+    >
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-dim">GitHub</p>
+        <p className="font-mono text-[10px] text-dim">pattern only</p>
+      </div>
+
+      <div ref={graphRef} className="git-graph w-full min-w-0">
+        {graphWidth > 0 && (
+          <svg
+            width={graphWidth}
+            height={height}
+            viewBox={`0 0 ${graphWidth} ${height}`}
+            preserveAspectRatio="none"
+            className="block w-full"
+            style={{ width: '100%', height }}
+            role="img"
+            aria-label="Stylized activity map. Decorative pattern only, not live GitHub totals."
+          >
+            {cells.map((cell) => (
+              <rect
+                key={`${cell.week}-${cell.day}`}
+                x={cell.week * (block + gap)}
+                y={cell.day * (block + gap)}
+                width={block}
+                height={block}
+                rx="2"
+                ry="2"
+                data-level={cell.level}
+                data-week={cell.week}
+                data-day={cell.day}
+                fill={started && reducedMotion ? LEVEL_COLORS[cell.level] : EMPTY}
+                className="git-cell"
+              />
+            ))}
+          </svg>
+        )}
+      </div>
+
+      <div className="mt-3 flex w-full flex-wrap items-center justify-between gap-3">
+        <p className="font-mono text-[10px] text-dim">
+          Stylized activity map, not live totals
+        </p>
+        <div className="flex items-center gap-1.5 font-mono text-[10px] text-dim">
+          <span>Less</span>
+          {LEVEL_COLORS.map((color) => (
+            <span key={color} className="w-2.5 h-2.5 rounded-[2px]" style={{ backgroundColor: color }} />
+          ))}
+          <span>More</span>
+        </div>
+      </div>
+    </div>
+  )
+}
