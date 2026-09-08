@@ -107,6 +107,7 @@ export default function ContactBar() {
                 exit={{ opacity: 0, y: 16 }}
                 transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
                 className="pointer-events-auto w-full mb-3 rounded-[28px] border border-line bg-surface p-5 md:p-8 max-h-[min(78vh,720px)] overflow-y-auto"
+                data-lenis-prevent
               >
                 <div className="grid md:grid-cols-[1.2fr_0.8fr] gap-8">
                   <div>

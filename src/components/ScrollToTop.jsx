@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { scrollToId } from '../lib/scroll'
+import { scrollToId, scrollToTop } from '../lib/scroll'
 
 export default function ScrollToTop() {
   const { pathname, hash } = useLocation()
@@ -14,7 +14,7 @@ export default function ScrollToTop() {
       return () => window.cancelAnimationFrame(frame)
     }
 
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+    scrollToTop({ immediate: true })
     return undefined
   }, [pathname, hash])
 

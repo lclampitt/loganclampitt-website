@@ -6,6 +6,7 @@ import ContactBar from './components/ContactBar'
 import IntroOverlay from './components/IntroOverlay'
 import ThemeToggle from './components/ThemeToggle'
 import DotCursor from './components/DotCursor'
+import SmoothScroll from './components/SmoothScroll'
 import { ContactProvider } from './context/ContactContext'
 import { IntroProvider } from './context/IntroContext'
 import Home from './pages/Home'
@@ -19,20 +20,22 @@ function App() {
   return (
     <ContactProvider>
       <IntroProvider>
-        <ScrollToTop />
-        <ThemeToggle />
-        <DotCursor />
-        <Navbar />
-        <AnimatePresence mode="wait">
-          <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<Home />} />
-            <Route path="/sim-racing" element={<SimRacingIndex />} />
-            <Route path="/sim-racing/:slug" element={<SimRacingDetail />} />
-            <Route path="/projects/:slug" element={<ProjectDetail />} />
-          </Routes>
-        </AnimatePresence>
-        <ContactBar />
-        <IntroOverlay />
+        <SmoothScroll>
+          <ScrollToTop />
+          <ThemeToggle />
+          <DotCursor />
+          <Navbar />
+          <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<Home />} />
+              <Route path="/sim-racing" element={<SimRacingIndex />} />
+              <Route path="/sim-racing/:slug" element={<SimRacingDetail />} />
+              <Route path="/projects/:slug" element={<ProjectDetail />} />
+            </Routes>
+          </AnimatePresence>
+          <ContactBar />
+          <IntroOverlay />
+        </SmoothScroll>
       </IntroProvider>
     </ContactProvider>
   )
