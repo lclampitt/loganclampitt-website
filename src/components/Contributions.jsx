@@ -1,65 +1,45 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { LINKS } from '../data/content'
 import { fadeUp } from '../lib/motion'
+import {
+  DAYS,
+  GITHUB_USER,
+  LEVEL_COLORS,
+  WEEKS,
+  buildStylizedCells,
+  monthLabels,
+  parseJoguber,
+} from '../lib/contributions'
 
-const WEEKS = 53
-const DAYS = 7
-const LEVEL_COLORS = ['#18181b', '#3f3110', '#6d5414', '#a37d14', '#d4a017']
-
-function seededLevel(week, day) {
-  const n = (week * 17 + day * 31 + 11) % 23
-  if (n > 18) return 4
-  if (n > 14) return 3
-  if (n > 10) return 2
-  if (n > 6) return 1
-  return 0
-}
-
-function buildMockCells() {
-  const cells = []
-  for (let week = 0; week < WEEKS; week += 1) {
-    for (let day = 0; day < DAYS; day += 1) {
-      cells.push({ week, day, level: seededLevel(week, day) })
-    }
-  }
-  return cells
-}
-
-function parseContributions(payload) {
-  const list = payload?.contributions
-  if (!Array.isArray(list) || list.length === 0) return null
-
-  const last = list.slice(-WEEKS * DAYS)
-  if (last.every((item) => !item.count && !item.level)) return null
-
-  return last.map((item, index) => ({
-    week: Math.floor(index / DAYS),
-    day: index % DAYS,
-    level: Math.max(0, Math.min(4, item.level ?? (item.count > 8 ? 4 : item.count > 4 ? 3 : item.count > 1 ? 2 : item.count > 0 ? 1 : 0))),
-  }))
-}
+const BLOCK = 11
+const GAP = 3
+const LABEL_H = 18
 
 export default function Contributions() {
-  const mockCells = useMemo(() => buildMockCells(), [])
-  const [cells, setCells] = useState(mockCells)
-  const [live, setLive] = useState(false)
+  const fallback = useMemo(() => buildStylizedCells(), [])
+  const [cells, setCells] = useState(fallback)
+  const [source, setSource] = useState('stylized')
+  const [ready, setReady] = useState(() => (
+    typeof window !== 'undefined'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  ))
+  const graphRef = useRef(null)
 
   useEffect(() => {
     let cancelled = false
 
     async function load() {
       try {
-        const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${LINKS.githubHandle}`)
+        const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${GITHUB_USER}`)
         if (!res.ok) return
-        const data = await res.json()
-        const parsed = parseContributions(data)
+        const parsed = parseJoguber(await res.json())
         if (!cancelled && parsed) {
           setCells(parsed)
-          setLive(true)
+          setSource('live')
         }
       } catch {
-        // Keep the labeled stylized map.
+        // Keep the labeled stylized map until a public calendar is available.
       }
     }
 
@@ -68,6 +48,89 @@ export default function Contributions() {
       cancelled = true
     }
   }, [])
+
+  useEffect(() => {
+    const root = graphRef.current
+    if (!root) return undefined
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return undefined
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setReady(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.25 },
+    )
+    observer.observe(root)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const root = graphRef.current
+    if (!root || !ready) return undefined
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+
+    let stopped = false
+    const timers = new Set()
+    const later = (fn, ms) => {
+      const id = window.setTimeout(() => {
+        timers.delete(id)
+        fn()
+      }, ms)
+      timers.add(id)
+    }
+
+    const allCells = () => Array.from(root.querySelectorAll('rect[data-level]'))
+    const pop = (node) => {
+      node.classList.remove('git-cell-pop')
+      node.getBoundingClientRect()
+      node.classList.add('git-cell-pop')
+      const done = () => {
+        node.classList.remove('git-cell-pop')
+        node.removeEventListener('animationend', done)
+      }
+      node.addEventListener('animationend', done)
+    }
+
+    const tick = () => {
+      if (stopped) return
+      const all = allCells()
+      if (all.length === 0) {
+        later(tick, 120)
+        return
+      }
+      const active = all.filter((node) => Number(node.dataset.level) > 0)
+      const n = 1 + Math.floor(Math.random() * 2)
+      for (let i = 0; i < n; i += 1) {
+        const pool = active.length > 0 && Math.random() < 0.75 ? active : all
+        pop(pool[Math.floor(Math.random() * pool.length)])
+      }
+      later(tick, 70 + Math.random() * 140)
+    }
+
+    const cascadeMs = WEEKS * 18 + 280
+    later(() => {
+      allCells().forEach((node) => node.classList.remove('git-cell-enter'))
+      tick()
+    }, cascadeMs)
+
+    return () => {
+      stopped = true
+      timers.forEach((id) => window.clearTimeout(id))
+      timers.clear()
+      allCells().forEach((node) => node.classList.remove('git-cell-pop'))
+    }
+  }, [ready, cells])
+
+  const labels = useMemo(() => monthLabels(cells), [cells])
+  const width = WEEKS * (BLOCK + GAP) - GAP
+  const height = LABEL_H + DAYS * (BLOCK + GAP) - GAP
+  const live = source === 'live'
 
   return (
     <section id="github" className="pb-20 md:pb-28">
@@ -85,26 +148,57 @@ export default function Contributions() {
           {...fadeUp(0.06)}
           className="rounded-3xl border border-line bg-surface p-5 md:p-7 overflow-x-auto"
         >
-          <div
-            className="grid w-max min-w-full gap-[3px]"
-            style={{
-              gridTemplateColumns: `repeat(${WEEKS}, 11px)`,
-              gridTemplateRows: `repeat(${DAYS}, 11px)`,
-              gridAutoFlow: 'column',
-            }}
-            role="img"
-            aria-label={live ? 'GitHub contribution heatmap for the last year' : 'Stylized GitHub style contribution heatmap'}
-          >
-            {cells.map((cell, index) => (
-              <span
-                key={`${cell.week}-${cell.day}-${index}`}
-                className="block w-[11px] h-[11px] rounded-[2px]"
-                style={{ backgroundColor: LEVEL_COLORS[cell.level] }}
-              />
-            ))}
+          <div ref={graphRef} className="git-graph w-max min-w-full">
+            <svg
+              width={width}
+              height={height}
+              viewBox={`0 0 ${width} ${height}`}
+              className="block overflow-visible max-w-none"
+              role="img"
+              aria-label={
+                live
+                  ? 'Animated GitHub contribution heatmap for the last year'
+                  : 'Animated stylized GitHub style contribution heatmap'
+              }
+            >
+              {labels.map((item) => (
+                <text
+                  key={`${item.label}-${item.week}`}
+                  x={item.week * (BLOCK + GAP)}
+                  y="0"
+                  fill="#71717a"
+                  fontSize="10"
+                  fontFamily="IBM Plex Mono, ui-monospace, monospace"
+                  dominantBaseline="hanging"
+                >
+                  {item.label}
+                </text>
+              ))}
+              {cells.map((cell) => (
+                <rect
+                  key={`${cell.week}-${cell.day}-${cell.date}`}
+                  x={cell.week * (BLOCK + GAP)}
+                  y={LABEL_H + cell.day * (BLOCK + GAP)}
+                  width={BLOCK}
+                  height={BLOCK}
+                  rx="2"
+                  ry="2"
+                  data-level={cell.level}
+                  data-date={cell.date}
+                  fill={LEVEL_COLORS[cell.level]}
+                  className={ready ? 'git-cell-enter' : 'git-cell-hidden'}
+                  style={{ animationDelay: ready ? `${cell.week * 18 + cell.day * 4}ms` : '0ms' }}
+                >
+                  <title>
+                    {cell.date}
+                    {live && cell.count ? ` · ${cell.count} contributions` : ''}
+                  </title>
+                </rect>
+              ))}
+            </svg>
           </div>
 
-          <div className="mt-5 flex items-center justify-between gap-4">
+          <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
             <a
               href={LINKS.github}
               target="_blank"
