@@ -14,17 +14,28 @@ const EASE = [0.22, 1, 0.36, 1]
 
 function wait(ms, signal) {
   return new Promise((resolve) => {
-    if (signal?.aborted) {
-      resolve()
-      return
-    }
-    const id = window.setTimeout(resolve, ms)
-    const onAbort = () => {
-      window.clearTimeout(id)
-      resolve()
-    }
-    signal?.addEventListener('abort', onAbort, { once: true })
+    if (signal.aborted) return
+    const id = window.setTimeout(() => {
+      if (!signal.aborted) resolve()
+    }, ms)
+    signal.addEventListener(
+      'abort',
+      () => window.clearTimeout(id),
+      { once: true },
+    )
   })
+}
+
+function typeDelay(min, max) {
+  return min + Math.random() * (max - min)
+}
+
+async function typeInto(text, onChar, minDelay, maxDelay, signal) {
+  for (let i = 0; i < text.length; i += 1) {
+    await wait(typeDelay(minDelay, maxDelay), signal)
+    if (signal.aborted) return
+    onChar(text[i], i + 1)
+  }
 }
 
 function Caret() {
@@ -34,8 +45,9 @@ function Caret() {
 function IntroSequence() {
   const { phase, skip, startMorph, finish } = useIntro()
   const blockRef = useRef(null)
-  const [logan, setLogan] = useState('')
-  const [handle, setHandle] = useState('')
+  const [loganTyped, setLoganTyped] = useState('')
+  const [handleTyped, setHandleTyped] = useState('')
+  const [caretAt, setCaretAt] = useState('logan')
   const [showCaret, setShowCaret] = useState(true)
   const [fly, setFly] = useState(null)
 
@@ -43,36 +55,55 @@ function IntroSequence() {
     const ctrl = new AbortController()
     const { signal } = ctrl
 
-    const typeChars = async (text, setter, perChar) => {
-      for (const char of text) {
-        if (signal.aborted) return
-        await wait(perChar, signal)
-        if (signal.aborted) return
-        setter((value) => value + char)
-      }
-    }
-
     const run = async () => {
       try {
         if (document.fonts?.ready) await document.fonts.ready
       } catch {
         // Fonts API can fail in private contexts. Continue anyway.
       }
-      await wait(90, signal)
       if (signal.aborted) return
 
-      await typeChars(LOGAN_TEXT, setLogan, 48)
-      if (signal.aborted) return
-      await wait(80, signal)
+      await wait(240, signal)
       if (signal.aborted) return
 
-      await typeChars(HANDLE_TEXT, setHandle, 30)
+      let logan = ''
+      await typeInto(
+        LOGAN_TEXT,
+        (char) => {
+          logan += char
+          setCaretAt('logan')
+          setLoganTyped(logan)
+        },
+        88,
+        110,
+        signal,
+      )
+      if (signal.aborted || logan !== LOGAN_TEXT) return
+
+      await wait(360, signal)
       if (signal.aborted) return
-      await wait(120, signal)
+
+      setCaretAt('handle')
+
+      let handle = ''
+      await typeInto(
+        HANDLE_TEXT,
+        (char) => {
+          handle += char
+          setCaretAt('handle')
+          setHandleTyped(handle)
+        },
+        70,
+        110,
+        signal,
+      )
+      if (signal.aborted || handle !== HANDLE_TEXT) return
+
+      await wait(280, signal)
       if (signal.aborted) return
 
       setShowCaret(false)
-      await wait(40, signal)
+      await wait(80, signal)
       if (signal.aborted) return
 
       await new Promise((resolve) => {
@@ -108,16 +139,13 @@ function IntroSequence() {
     return () => window.removeEventListener('keydown', onKey)
   }, [skip])
 
-  const typingHandle = handle.length > 0
-  const typingLogan = logan.length > 0 && !typingHandle
-
   return (
     <div className="fixed inset-0 z-[80]">
       <motion.div
         className="absolute inset-0 bg-page"
-        initial={{ opacity: 1 }}
+        initial={false}
         animate={{ opacity: phase === 'morph' ? 0 : 1 }}
-        transition={{ duration: 0.42, ease: EASE }}
+        transition={phase === 'morph' ? { duration: 0.42, ease: EASE } : { duration: 0 }}
       />
 
       <button
@@ -130,26 +158,35 @@ function IntroSequence() {
       <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center px-5">
         <motion.div
           ref={blockRef}
-          className={WORDMARK_ROW_CLASS}
+          className="relative"
           style={{ originX: 0, originY: 0 }}
           initial={false}
-          animate={fly ?? { x: 0, y: 0, scaleX: 1, scaleY: 1 }}
-          transition={{ duration: 0.52, ease: EASE }}
+          animate={fly ?? false}
+          transition={fly ? { duration: 0.52, ease: EASE } : { duration: 0 }}
           onAnimationComplete={() => {
             if (fly) finish()
           }}
         >
-          <span className={LOGAN_GLYPH_CLASS}>
-            {logan}
-            {showCaret && typingLogan ? <Caret /> : null}
-            {showCaret && logan.length === 0 ? <Caret /> : null}
-          </span>
-          {typingHandle ? (
-            <span className={HANDLE_GLYPH_CLASS}>
-              {handle}
-              {showCaret ? <Caret /> : null}
+          <div className={`${WORDMARK_ROW_CLASS} invisible`} aria-hidden="true">
+            <span className={LOGAN_GLYPH_CLASS}>{LOGAN_TEXT}</span>
+            <span className={HANDLE_GLYPH_CLASS}>{HANDLE_TEXT}</span>
+          </div>
+          <div className={`${WORDMARK_ROW_CLASS} absolute left-0 top-0`}>
+            <span className={LOGAN_GLYPH_CLASS}>
+              {loganTyped.split('').map((char, index) => (
+                <span key={`logan-${index}`}>{char}</span>
+              ))}
+              {showCaret && caretAt === 'logan' ? <Caret /> : null}
             </span>
-          ) : null}
+            {caretAt === 'handle' || handleTyped.length > 0 ? (
+              <span className={HANDLE_GLYPH_CLASS}>
+                {handleTyped.split('').map((char, index) => (
+                  <span key={`handle-${index}`}>{char}</span>
+                ))}
+                {showCaret && caretAt === 'handle' ? <Caret /> : null}
+              </span>
+            ) : null}
+          </div>
         </motion.div>
       </div>
 
