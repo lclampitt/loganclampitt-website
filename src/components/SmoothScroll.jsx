@@ -1,18 +1,41 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { ReactLenis, useLenis } from 'lenis/react'
 import { useContact } from '../context/useContact'
 import { useIntro } from '../context/useIntro'
 import { bindLenis } from '../lib/scroll'
 import 'lenis/dist/lenis.css'
 
-const OPTIONS = {
+const FLOATY = {
   autoRaf: true,
-  lerp: 0.1,
-  wheelMultiplier: 0.88,
-  anchors: true,
+  lerp: 0.08,
+  wheelMultiplier: 0.9,
   syncTouch: false,
+  anchors: true,
+  allowNestedScroll: true,
   respectReducedMotion: true,
-  autoToggle: true,
+}
+
+const NATIVE = {
+  autoRaf: true,
+  lerp: 1,
+  wheelMultiplier: 1,
+  syncTouch: false,
+  anchors: true,
+  respectReducedMotion: true,
+}
+
+function useScrollOptions() {
+  const [options, setOptions] = useState(FLOATY)
+
+  useEffect(() => {
+    const coarse = window.matchMedia('(pointer: coarse)')
+    const sync = () => setOptions(coarse.matches ? NATIVE : FLOATY)
+    sync()
+    coarse.addEventListener('change', sync)
+    return () => coarse.removeEventListener('change', sync)
+  }, [])
+
+  return options
 }
 
 function LenisBridge() {
@@ -36,8 +59,10 @@ function LenisBridge() {
 }
 
 export default function SmoothScroll({ children }) {
+  const options = useScrollOptions()
+
   return (
-    <ReactLenis root options={OPTIONS}>
+    <ReactLenis root options={options}>
       <LenisBridge />
       {children}
     </ReactLenis>

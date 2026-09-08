@@ -9,12 +9,18 @@ export function bindLenis(instance) {
   lenis = instance
 }
 
+function easeOutCubic(t) {
+  return 1 - (1 - t) ** 3
+}
+
 export function scrollToElement(el, { block = 'start' } = {}) {
   if (!el) return
   if (lenis) {
     lenis.scrollTo(el, {
       offset: 0,
       immediate: prefersReducedMotion(),
+      duration: 1.05,
+      easing: easeOutCubic,
     })
     return
   }
