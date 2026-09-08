@@ -31,7 +31,7 @@ export default function ProjectDetail() {
           ← Back to projects
         </Link>
 
-        <div className="mt-8 rounded-3xl border border-line bg-surface p-6 md:p-8">
+        <div className="mt-8 box-dotted p-6 md:p-8">
           {data.tag && (
             <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-accent mb-3">{data.tag}</p>
           )}
@@ -99,13 +99,13 @@ export default function ProjectDetail() {
         </div>
 
         {data.previewImage && (
-          <div className="mt-6 rounded-3xl overflow-hidden border border-line">
+          <div className="mt-6 overflow-hidden box-dotted">
             <img src={data.previewImage} alt={`${data.title} preview`} className="w-full h-auto" />
           </div>
         )}
 
         {data.previewUrl && (
-          <div className="mt-6 w-full h-[560px] rounded-3xl overflow-hidden border border-line bg-raised">
+          <div className="mt-6 w-full h-[560px] overflow-hidden box-dotted bg-raised">
             <iframe src={data.previewUrl} title={data.title} className="w-full h-full border-0" />
           </div>
         )}

@@ -17,7 +17,7 @@ export default function Experience() {
         <div className="flex flex-col gap-4">
           {EXPERIENCE.map((item, index) => (
             <motion.div key={item.title} {...fadeUp(index * 0.06)}>
-            <MagicHover className="rounded-3xl border border-line bg-surface">
+            <MagicHover className="box-dotted">
             <article className="p-5 md:p-6">
               <div className="flex gap-4">
                 <div

@@ -154,6 +154,31 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   box-shadow: var(--shadow-bar);
 }
 
+.box-dotted {
+  border: 1px dotted var(--color-line);
+  border-radius: 0;
+  background-color: var(--color-surface);
+}
+
+:root[data-theme="dark"] .box-dotted {
+  border-color: #3a3a3a;
+}
+
+.preview-hatch {
+  background-color: var(--color-raised);
+  background-image: repeating-linear-gradient(
+    -32deg,
+    transparent,
+    transparent 10px,
+    color-mix(in srgb, var(--color-line) 80%, transparent) 10px,
+    color-mix(in srgb, var(--color-line) 80%, transparent) 11px
+  );
+}
+
+.preview-ocean {
+  background: linear-gradient(145deg, var(--color-accent) 0%, var(--color-navy) 72%);
+}
+
 .git-graph {
   width: 100%;
   min-width: 0;
