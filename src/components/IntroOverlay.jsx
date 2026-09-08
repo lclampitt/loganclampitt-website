@@ -3,8 +3,11 @@ import { flushSync } from 'react-dom'
 import { motion } from 'framer-motion'
 import { LINKS } from '../data/content'
 import { useIntro } from '../context/useIntro'
-import { HANDLE_GLYPH_CLASS, WORDMARK_STACK_CLASS } from '../lib/wordmark'
-import CrtWordmark from './CrtWordmark'
+import {
+  HANDLE_GLYPH_CLASS,
+  LOGAN_GLYPH_CLASS,
+  WORDMARK_STACK_CLASS,
+} from '../lib/wordmark'
 
 const LOGAN_TEXT = 'LOGAN'
 const HANDLE_TEXT = `/@${LINKS.githubHandle}`
@@ -57,7 +60,10 @@ function Caret() {
 function WordmarkStack({ logan, handle, loganCaret, handleCaret, sizer }) {
   return (
     <div className={`${WORDMARK_STACK_CLASS}${sizer ? ' invisible' : ''}`} aria-hidden={sizer ? true : undefined}>
-      <CrtWordmark text={logan} caret={loganCaret} />
+      <span className={LOGAN_GLYPH_CLASS}>
+        {logan}
+        {loganCaret ? <Caret /> : null}
+      </span>
       <span className={HANDLE_GLYPH_CLASS}>
         {handle}
         {handleCaret ? <Caret /> : null}
