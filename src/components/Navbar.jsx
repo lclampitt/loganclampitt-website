@@ -23,29 +23,34 @@ export default function Navbar() {
       setScrolled(window.scrollY > 20)
 
       if (!isHome) return
-      const sections = ['hero', 'about', 'services', 'sim-racing', 'projects', 'contact']
+      // Must match Home.jsx section order for correct active highlighting.
+      // Use ~1/3 viewport offset so the section filling the screen wins,
+      // not a previous section still peeking under the navbar.
+      const sections = ['hero', 'about', 'services', 'projects', 'sim-racing', 'contact']
+      const activationOffset = Math.round(window.innerHeight * 0.33)
       for (let i = sections.length - 1; i >= 0; i--) {
         const el = document.getElementById(sections[i])
-        if (el && window.scrollY >= el.offsetTop - 100) {
+        if (el && window.scrollY >= el.offsetTop - activationOffset) {
           setActiveSection(sections[i])
           break
         }
       }
     }
     window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
     return () => window.removeEventListener('scroll', onScroll)
   }, [isHome])
 
   const handleNavClick = (e, href) => {
+    setMenuOpen(false)
     if (!isHome && href.startsWith('/#')) {
-      return // let Link handle navigation
+      return // let Link handle navigation; ScrollToTop honors the hash
     }
     if (href.startsWith('/#')) {
       e.preventDefault()
       const id = href.slice(2)
       const el = document.getElementById(id)
       if (el) el.scrollIntoView({ behavior: 'smooth' })
-      setMenuOpen(false)
     }
   }
 
@@ -64,6 +69,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           to="/"
+          onClick={() => setMenuOpen(false)}
           className="text-white font-bold text-lg tracking-tight hover:text-[#4F46E5] transition-colors duration-200"
         >
           LC<span className="text-[#4F46E5]">.</span>
