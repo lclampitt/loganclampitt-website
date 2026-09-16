@@ -283,6 +283,128 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   --project-stroke: var(--color-ink);
 }
 
+.timeline {
+  --timeline-stroke: #6b7d8a;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+:root[data-theme="dark"] .timeline {
+  --timeline-stroke: #8a9eaa;
+}
+
+.timeline-entry {
+  display: grid;
+  grid-template-columns: 128px 28px minmax(0, 1fr);
+  column-gap: 16px;
+}
+
+.timeline-when {
+  margin: 0;
+  padding-top: 5px;
+  text-align: right;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+}
+
+.timeline-rail {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.timeline-rail::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  bottom: -6px;
+  width: 1.5px;
+  background: repeating-linear-gradient(180deg, var(--timeline-stroke) 0 5px, transparent 5px 9px);
+}
+
+.timeline-entry:last-child .timeline-rail::before {
+  display: none;
+}
+
+.timeline-node {
+  position: relative;
+  z-index: 1;
+  margin-top: 6px;
+  width: 12px;
+  height: 12px;
+  background: var(--color-page);
+  border: 1.5px solid var(--timeline-stroke);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.timeline-entry.is-current .timeline-node {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.timeline-entry.is-current .timeline-node::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border: 1.5px solid var(--color-accent);
+  opacity: 0.35;
+}
+
+.timeline-body {
+  padding-bottom: 44px;
+}
+
+.timeline-entry:last-child .timeline-body {
+  padding-bottom: 0;
+}
+
+.timeline-sep {
+  padding: 0 6px;
+  color: var(--timeline-stroke);
+}
+
+.timeline-entry:hover .timeline-node {
+  transform: rotate(45deg);
+  border-color: var(--color-ink);
+}
+
+.timeline-entry.is-current:hover .timeline-node {
+  border-color: var(--color-accent);
+}
+
+.timeline-entry:hover .timeline-title {
+  text-decoration: underline dashed 1px;
+  text-underline-offset: 5px;
+}
+
+@media (max-width: 639px) {
+  .timeline-entry {
+    grid-template-columns: 20px minmax(0, 1fr);
+    column-gap: 14px;
+  }
+
+  .timeline-when {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 0 0 4px;
+    text-align: left;
+  }
+
+  .timeline-rail {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .timeline-body {
+    grid-column: 2;
+  }
+}
+
 .preview-hatch {
   background-color: var(--color-raised);
   background-image: repeating-linear-gradient(

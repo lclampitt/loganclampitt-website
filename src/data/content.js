@@ -4,9 +4,8 @@ export const LINKS = {
   linkedin: 'https://www.linkedin.com/in/loganclampitt/',
   linkedinHandle: 'loganclampitt',
   resume: '/Resume - Logan Clampitt 2026.pdf',
-  ctRealty: 'https://www.ctrealtytrust.com/',
+  ctRealty: 'https://www.whiteoakswilton.com/',
   macrovault: 'https://www.gainlytics.org/',
-  socaldiecasts: 'https://www.socaldiecasts.com/',
 }
 
 export const FORMSPREE_ID = 'mdapkror'
@@ -41,21 +40,6 @@ export const PROJECTS = [
     liveUrl: LINKS.macrovault,
     caseStudy: true,
     repoUrl: 'https://github.com/lclampitt/gainlytics-v2',
-  },
-  {
-    slug: 'socaldiecasts',
-    title: 'SoCalDiecasts',
-    previewLabel: 'SOCALDIECASTS',
-    previewImage: null,
-    status: [],
-    statusTone: 'accent',
-    meta: 'Live',
-    previewKind: 'grid',
-    desc: 'Brand forward e-commerce for a diecast collectibles business.',
-    layout: 'stack',
-    liveUrl: LINKS.socaldiecasts,
-    caseStudy: true,
-    repoUrl: 'https://github.com/lclampitt/socaldiecasts',
   },
 ]
 
@@ -92,52 +76,30 @@ export const PROJECT_DETAILS = {
     repoUrl: 'https://github.com/lclampitt/gainlytics-v2',
     previewUrl: LINKS.macrovault,
   },
-  socaldiecasts: {
-    title: 'SoCalDiecasts',
-    tag: 'E-commerce',
-    description:
-      'An e-commerce website for a Southern California diecast collectibles business. Focused on product presentation, intuitive browsing, and a smooth purchase flow, with a brand forward look.',
-    tags: ['E-commerce', 'Responsive design', 'Brand identity'],
-    whatItDoes: [
-      'Browse and filter a product catalog of diecast collectibles.',
-      'Brand aligned visual design.',
-      'Layout that works across screen sizes.',
-      'Purchase flow focused on usability and speed.',
-    ],
-    tech: ['HTML', 'CSS', 'JavaScript', 'E-commerce'],
-    externalUrl: LINKS.socaldiecasts,
-    repoUrl: 'https://github.com/lclampitt/socaldiecasts',
-    previewUrl: LINKS.socaldiecasts,
-  },
 }
 
 export const EXPERIENCE = [
   {
-    initials: 'CT',
     title: 'CT Realty Trust',
     role: 'Software Developer',
-    badge: 'Current',
+    current: true,
     dates: 'Present',
     desc: 'Software developer at a multifamily and build to rent investment firm. Contributed heavily to the public site (ctrealtytrust.com), including marketing pages and portfolio presentation.',
-    chips: ['Web', 'Frontend', 'Full site', 'Real estate'],
+    stack: ['Web', 'Frontend', 'Full site', 'Real estate'],
   },
   {
-    initials: 'LC',
     title: 'Independent / Freelance',
     role: 'Builder',
-    badge: 'Builder',
-    dates: '2023 to Present',
-    desc: 'Shipped client and personal products end to end: SoCalDiecasts storefront, portfolio systems, and full stack experiments.',
-    chips: ['React', 'JavaScript', 'Python', 'UX'],
+    dates: '2023 — Present',
+    desc: 'Shipped client and personal products end to end, from portfolio systems to full stack experiments.',
+    stack: ['React', 'JavaScript', 'Python', 'UX'],
   },
   {
-    initials: 'CS',
     title: 'BS Computer Science',
     role: 'CSU Fullerton',
-    badge: 'Grad',
-    dates: '2023 to 2025',
+    dates: '2023 — 2025',
     desc: 'Senior capstone: MacroVault. Solo designed and shipped fitness analytics with dashboards and AI insights.',
-    chips: ['Capstone', 'React', 'Python'],
+    stack: ['Capstone', 'React', 'Python'],
   },
 ]
 
