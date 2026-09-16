@@ -13,19 +13,20 @@ function easeOutCubic(t) {
   return 1 - (1 - t) ** 3
 }
 
-export function scrollToElement(el, { block = 'start' } = {}) {
+export function scrollToElement(el, { block = 'start', immediate = false } = {}) {
   if (!el) return
+  const useImmediate = immediate || prefersReducedMotion()
   if (lenis) {
     lenis.scrollTo(el, {
       offset: 0,
-      immediate: prefersReducedMotion(),
+      immediate: useImmediate,
       duration: 1.05,
       easing: easeOutCubic,
     })
     return
   }
   el.scrollIntoView({
-    behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+    behavior: useImmediate ? 'auto' : 'smooth',
     block,
   })
 }
