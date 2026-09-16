@@ -54,22 +54,25 @@ export const EXPERIENCE = [
     role: 'Software Developer',
     current: true,
     dates: 'Present',
-    desc: 'Software developer at a multifamily and build to rent investment firm. Contributed heavily to the public site (ctrealtytrust.com), including marketing pages and portfolio presentation.',
-    stack: ['Web', 'Frontend', 'Full site', 'Real estate'],
+    desc: 'Software developer at a multifamily and build to rent investment firm. Contributed heavily to the public site (whiteoakswilton.com), including marketing pages and portfolio presentation.',
+  },
+  {
+    title: 'Proprietary Trader',
+    role: 'Independent',
+    dates: '2024 — Present',
+    desc: 'Applied data analysis, probability, and risk management principles to futures trading. Tracked performance metrics, drawdowns, and rule adherence, resulting in successful funded account payouts.',
   },
   {
     title: 'Independent / Freelance',
     role: 'Builder',
     dates: '2023 — Present',
     desc: 'Shipped client and personal products end to end, from portfolio systems to full stack experiments.',
-    stack: ['React', 'JavaScript', 'Python', 'UX'],
   },
   {
     title: 'BS Computer Science',
     role: 'CSU Fullerton',
     dates: '2022 — 2025',
     desc: 'Bachelor of Science in Computer Science. Graduated fall 2025.',
-    stack: ['React', 'Python', 'Swift'],
   },
 ]
 

@@ -1,4 +1,4 @@
-import { Fragment, useRef } from 'react'
+import { useRef } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { EXPERIENCE } from '../data/content'
 import { fadeUp } from '../lib/motion'
@@ -48,14 +48,6 @@ export default function Experience() {
                   </h3>
                   <p className="mt-2 max-w-[40rem] font-mono text-[13px] leading-relaxed text-muted">
                     {item.desc}
-                  </p>
-                  <p className="mt-2.5 font-mono text-[11px] tracking-[0.04em] text-dim">
-                    {item.stack.map((tech, i) => (
-                      <Fragment key={tech}>
-                        {i > 0 && <span className="timeline-sep">/</span>}
-                        {tech}
-                      </Fragment>
-                    ))}
                   </p>
                 </div>
               </li>
