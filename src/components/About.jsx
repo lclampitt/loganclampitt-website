@@ -2,10 +2,11 @@ import { Fragment } from 'react'
 import { motion } from 'framer-motion'
 import { ABOUT_SPEC } from '../data/content'
 import { fadeUp } from '../lib/motion'
+import ActivityStrip from './ActivityStrip'
 
 export default function About() {
   return (
-    <section id="about" className="pb-24 md:pb-28">
+    <section id="about" className="pb-12 md:pb-14">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="mx-auto w-full max-w-[52rem]">
           <motion.h2
@@ -43,6 +44,10 @@ export default function About() {
               </div>
             ))}
           </motion.dl>
+
+          <motion.div {...fadeUp(0.05)} className="mt-12">
+            <ActivityStrip />
+          </motion.div>
         </div>
       </div>
     </section>

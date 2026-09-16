@@ -1,7 +1,14 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useInView } from 'framer-motion'
 import { LINKS } from '../data/content'
-import { useIntro } from '../context/useIntro'
-import { DAYS, WEEKS, buildStylizedCells, getGitPopColors, getLevelColors } from '../lib/contributions'
+import {
+  DAYS,
+  WEEKS,
+  emptyCells,
+  fetchContributionCells,
+  getGitPopColors,
+  getLevelColors,
+} from '../lib/contributions'
 
 function prefersReducedMotion() {
   return typeof window !== 'undefined'
@@ -9,14 +16,30 @@ function prefersReducedMotion() {
 }
 
 export default function ActivityStrip() {
-  const { contentReady } = useIntro()
-  const cells = useMemo(() => buildStylizedCells(), [])
-  const colors = getLevelColors()
+  const [cells, setCells] = useState(emptyCells)
+  const [total, setTotal] = useState(null)
+  const [loaded, setLoaded] = useState(false)
+  const colors = useMemo(() => getLevelColors(), [])
   const [innerWidth, setInnerWidth] = useState(0)
   const [started, setStarted] = useState(() => prefersReducedMotion())
   const cardRef = useRef(null)
   const graphRef = useRef(null)
   const pausedRef = useRef(false)
+  const inView = useInView(cardRef, { once: true, amount: 0.4 })
+
+  useEffect(() => {
+    const controller = new AbortController()
+    fetchContributionCells(LINKS.githubHandle, controller.signal)
+      .then((result) => {
+        setCells(result.cells)
+        setTotal(result.total)
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!controller.signal.aborted) setLoaded(true)
+      })
+    return () => controller.abort()
+  }, [])
 
   useLayoutEffect(() => {
     const el = cardRef.current
@@ -85,13 +108,13 @@ export default function ActivityStrip() {
   }, [])
 
   useEffect(() => {
-    if (!contentReady) return undefined
+    if (!inView || !loaded) return undefined
     if (graphWidth > 0 && !started && !prefersReducedMotion()) {
       const id = window.setTimeout(() => setStarted(true), 80)
       return () => window.clearTimeout(id)
     }
     return undefined
-  }, [contentReady, graphWidth, started])
+  }, [graphWidth, inView, loaded, started])
 
   useEffect(() => {
     const root = graphRef.current
@@ -172,7 +195,7 @@ export default function ActivityStrip() {
       timers.forEach((id) => window.clearTimeout(id))
       timers.clear()
     }
-  }, [colors, graphWidth, started])
+  }, [cells, colors, graphWidth, started])
 
   const reducedMotion = prefersReducedMotion()
 
@@ -182,10 +205,19 @@ export default function ActivityStrip() {
       href={LINKS.github}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Open Logan Clampitt on GitHub. Decorative activity pattern, not live totals."
+      aria-label={total === null
+        ? 'Open Logan Clampitt on GitHub'
+        : `Open Logan Clampitt on GitHub. ${total} contributions in the last year.`}
       className="block w-full min-w-0"
     >
-      <p className="mb-3 font-dot font-black text-[15px] tracking-[0.14em] uppercase text-dim">GitHub</p>
+      <div className="mb-3 flex items-baseline justify-between gap-4">
+        <p className="font-dot font-black text-[15px] tracking-[0.14em] uppercase text-dim">GitHub</p>
+        {total !== null && (
+          <p className="font-mono text-[11px] text-dim">
+            {total} contributions in the last year
+          </p>
+        )}
+      </div>
 
       <div ref={graphRef} className="relative git-graph w-full min-w-0 overflow-hidden">
         {graphWidth > 0 && (

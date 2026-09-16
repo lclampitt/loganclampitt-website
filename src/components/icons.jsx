@@ -51,16 +51,16 @@ export function ResumeIcon({ className = 'w-4 h-4' }) {
   )
 }
 
-export function WorkIcon({ className = 'w-4 h-4' }) {
+export function MailIcon({ className = 'w-4 h-4' }) {
   return (
     <Glyph className={className} fill="none" stroke="currentColor">
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="1.8"
-        d="M8 8V6.8A1.8 1.8 0 0 1 9.8 5h4.4A1.8 1.8 0 0 1 16 6.8V8M4.8 9.5h14.4A1.3 1.3 0 0 1 20.5 10.8v7.9A1.8 1.8 0 0 1 18.7 20.5H5.3A1.8 1.8 0 0 1 3.5 18.7v-7.9A1.3 1.3 0 0 1 4.8 9.5Z"
+        d="M4.8 5.5h14.4A1.3 1.3 0 0 1 20.5 6.8v10.4a1.3 1.3 0 0 1-1.3 1.3H4.8a1.3 1.3 0 0 1-1.3-1.3V6.8a1.3 1.3 0 0 1 1.3-1.3Z"
       />
-      <path strokeLinecap="round" strokeWidth="1.8" d="M3.8 13.2h16.4" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="m4 7 8 6 8-6" />
     </Glyph>
   )
 }

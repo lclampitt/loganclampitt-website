@@ -2,15 +2,13 @@ import { motion } from 'framer-motion'
 import { LINKS } from '../data/content'
 import { useContact } from '../context/useContact'
 import { useIntro } from '../context/useIntro'
-import { scrollToId } from '../lib/scroll'
 import {
   HANDLE_GLYPH_CLASS,
   LOGAN_GLYPH_CLASS,
   WORDMARK_STACK_CLASS,
 } from '../lib/wordmark'
-import ActivityStrip from './ActivityStrip'
 import DotPortrait from './DotPortrait'
-import { GitHubIcon, LinkedInIcon, ResumeIcon, WorkIcon } from './icons'
+import { GitHubIcon, LinkedInIcon, MailIcon, ResumeIcon } from './icons'
 
 const fade = (delay) => ({
   initial: { opacity: 0, y: 10 },
@@ -23,10 +21,6 @@ const pill = 'soft-pill'
 export default function Hero() {
   const { openContact } = useContact()
   const { contentReady, playRequested, wordmarkReady } = useIntro()
-
-  const scrollToProjects = () => {
-    scrollToId('projects')
-  }
 
   const rest = (delay, introDelay = delay) => {
     if (!contentReady) {
@@ -41,8 +35,8 @@ export default function Hero() {
 
   return (
     <>
-      <section id="hero" className="relative pt-8 md:pt-10 pb-0">
-        <div className="mx-auto max-w-6xl px-5 md:px-8 w-full relative">
+      <section id="hero" className="relative pt-8 md:pt-10 pb-10 md:pb-14">
+        <div className="mx-auto max-w-6xl px-5 md:px-8 w-full relative md:min-h-[390px]">
           <motion.div
             {...rest(0.12, 0.2)}
             transition={{ duration: 0.8, delay: playRequested ? 0.2 : 0.12, ease: [0.22, 1, 0.36, 1] }}
@@ -90,51 +84,21 @@ export default function Hero() {
 
           <motion.div {...rest(0.14, 0.18)} className="mt-6 flex flex-wrap items-center gap-2.5">
             <button type="button" onClick={openContact} className={pill}>
+              <MailIcon />
               Email me
             </button>
-            <a
-              href={LINKS.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={pill}
-            >
+            <a href={LINKS.resume} download className={pill}>
+              <ResumeIcon />
+              Resume
+            </a>
+            <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer" className={pill}>
+              <LinkedInIcon />
               LinkedIn
             </a>
-            <button type="button" onClick={scrollToProjects} className={pill}>
-              See projects
-            </button>
-          </motion.div>
-        </div>
-      </section>
-
-      <section id="proof" className="relative pt-8 pb-8 md:pb-10">
-        <div className="mx-auto max-w-6xl px-5 md:px-8 w-full">
-          <motion.div {...rest(0.2, 0.28)}>
-            <ActivityStrip />
-          </motion.div>
-
-          <motion.div {...rest(0.26, 0.38)} className="mt-6">
-            <p className="font-mono text-[13px] text-muted mb-3">
-              You can check these <span className="text-ink">links</span> if you wish to
-            </p>
-            <div className="flex flex-wrap gap-2">
-              <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className={pill}>
-                <GitHubIcon />
-                GitHub
-              </a>
-              <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer" className={pill}>
-                <LinkedInIcon />
-                LinkedIn
-              </a>
-              <a href={LINKS.resume} download className={pill}>
-                <ResumeIcon />
-                Resume
-              </a>
-              <button type="button" onClick={openContact} className={pill}>
-                <WorkIcon />
-                open to work
-              </button>
-            </div>
+            <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className={pill}>
+              <GitHubIcon />
+              GitHub
+            </a>
           </motion.div>
         </div>
       </section>
