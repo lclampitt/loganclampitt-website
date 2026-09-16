@@ -1,16 +1,21 @@
-# React + Vite
+# loganclampitt.com
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal site for Logan Clampitt. Built with Vite, React, Tailwind CSS, Framer Motion, and React Router.
 
-Currently, two official plugins are available:
+## Scripts
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm run dev
+npm run build
+npm run preview
+```
 
-## React Compiler
+## Notes
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Homepage is a single page: compact hero, projects, experience, skills, about.
+- Hero follows a content-first layout: wordmark, short bio, CTAs, a stylized GitHub style activity strip, then link pills.
+- The activity strip is decorative only. It does not fetch or display live contribution totals.
+- Sticky contact bar expands upward and posts to Formspree (`mdapkror`).
+- Project and sim racing routes stay available for deeper pages.
+- `vercel.json` rewrites keep SPA routes on Vercel. Domain is `loganclampitt.com`.
