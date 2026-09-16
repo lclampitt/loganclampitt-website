@@ -1,12 +1,8 @@
 import { Fragment } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { PROJECTS, SIM_RACING } from '../data/content'
+import { PROJECTS, SIM_RACING_STATS } from '../data/content'
 import { fadeUp } from '../lib/motion'
-
-const SERIES_BADGES = SIM_RACING
-  .filter((series) => series.logo)
-  .sort((a, b) => parseInt(a.dates[0], 10) - parseInt(b.dates[0], 10))
 
 function cardTarget(project) {
   if (project.liveUrl) {
@@ -155,11 +151,8 @@ export function SimRacingTeaser() {
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="w-full">
           <motion.div {...fadeUp(0)}>
-            <Link
-              to="/sim-racing"
-              className="group flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8"
-            >
-              <div className="min-w-0 flex-1">
+            <Link to="/sim-racing" className="sim-teaser group">
+              <div className="min-w-0">
                 <h2 className="font-dot font-black text-[17px] tracking-[0.14em] uppercase text-muted">
                   Sim racing
                 </h2>
@@ -171,18 +164,14 @@ export function SimRacingTeaser() {
                   More <span className="inline-block transition-transform group-hover:translate-x-0.5">→</span>
                 </p>
               </div>
-              <div className="flex shrink-0 items-center gap-5">
-                {SERIES_BADGES.map((series) => (
-                  <img
-                    key={series.slug}
-                    src={series.logo}
-                    alt={`${series.title} logo`}
-                    loading="lazy"
-                    decoding="async"
-                    className="series-badge series-badge--home-wide"
-                  />
+              <dl className="sim-teaser-stats">
+                {SIM_RACING_STATS.map((stat) => (
+                  <div key={stat.label} className="sim-teaser-stat">
+                    <dt className="sim-teaser-label">{stat.label}</dt>
+                    <dd className="sim-teaser-value">{stat.value}</dd>
+                  </div>
                 ))}
-              </div>
+              </dl>
             </Link>
           </motion.div>
         </div>

@@ -13,7 +13,7 @@ export default function HeroPortrait() {
           <span className="hero-portrait-corner hero-portrait-corner--br" aria-hidden="true" />
         </div>
         <figcaption className="hero-portrait-caption" aria-hidden="true">
-          <span>LC_2026.JPG</span>
+          <span>LC_2025.JPG</span>
           <span>CSUF</span>
         </figcaption>
       </figure>
