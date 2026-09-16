@@ -4,6 +4,7 @@ export const LINKS = {
   linkedin: 'https://www.linkedin.com/in/loganclampitt/',
   linkedinHandle: 'loganclampitt',
   resume: '/Resume - Logan Clampitt 2026.pdf',
+  email: 'lclampitt44@outlook.com',
   ctRealty: 'https://www.whiteoakswilton.com/',
   macrovault: 'https://www.macro-vault.com/',
 }

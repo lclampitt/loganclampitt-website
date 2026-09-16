@@ -9,7 +9,7 @@ export default function SimRacingIndex() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="min-h-screen pt-28 pb-32"
+      className="min-h-screen pt-12 md:pt-16 pb-32"
     >
       <div className="mx-auto max-w-3xl px-5 md:px-8">
         <Link to="/#projects" className="text-sm text-muted hover:text-ink transition-colors">

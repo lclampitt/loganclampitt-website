@@ -7,6 +7,7 @@ import {
   LOGAN_GLYPH_CLASS,
   WORDMARK_STACK_CLASS,
 } from '../lib/wordmark'
+import ActivityStrip from './ActivityStrip'
 import DotPortrait from './DotPortrait'
 import { GitHubIcon, LinkedInIcon, MailIcon, ResumeIcon } from './icons'
 
@@ -35,8 +36,8 @@ export default function Hero() {
 
   return (
     <>
-      <section id="hero" className="relative pt-8 md:pt-10 pb-10 md:pb-14">
-        <div className="mx-auto max-w-6xl px-5 md:px-8 w-full relative md:min-h-[390px]">
+      <section id="hero" className="relative pt-8 md:pt-10 pb-0">
+        <div className="mx-auto max-w-6xl px-5 md:px-8 w-full relative">
           <motion.div
             {...rest(0.12, 0.2)}
             transition={{ duration: 0.8, delay: playRequested ? 0.2 : 0.12, ease: [0.22, 1, 0.36, 1] }}
@@ -99,6 +100,14 @@ export default function Hero() {
               <GitHubIcon />
               GitHub
             </a>
+          </motion.div>
+        </div>
+      </section>
+
+      <section id="proof" className="relative pt-8 pb-8 md:pb-10">
+        <div className="mx-auto max-w-6xl px-5 md:px-8 w-full">
+          <motion.div {...rest(0.2, 0.28)}>
+            <ActivityStrip />
           </motion.div>
         </div>
       </section>

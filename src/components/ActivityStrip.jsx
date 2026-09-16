@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useInView } from 'framer-motion'
 import { LINKS } from '../data/content'
+import { useIntro } from '../context/useIntro'
 import {
   DAYS,
   WEEKS,
@@ -16,6 +17,7 @@ function prefersReducedMotion() {
 }
 
 export default function ActivityStrip() {
+  const { contentReady } = useIntro()
   const [cells, setCells] = useState(emptyCells)
   const [total, setTotal] = useState(null)
   const [loaded, setLoaded] = useState(false)
@@ -108,13 +110,13 @@ export default function ActivityStrip() {
   }, [])
 
   useEffect(() => {
-    if (!inView || !loaded) return undefined
+    if (!contentReady || !inView || !loaded) return undefined
     if (graphWidth > 0 && !started && !prefersReducedMotion()) {
       const id = window.setTimeout(() => setStarted(true), 80)
       return () => window.clearTimeout(id)
     }
     return undefined
-  }, [graphWidth, inView, loaded, started])
+  }, [contentReady, graphWidth, inView, loaded, started])
 
   useEffect(() => {
     const root = graphRef.current
@@ -210,7 +212,7 @@ export default function ActivityStrip() {
         : `Open Logan Clampitt on GitHub. ${total} contributions in the last year.`}
       className="block w-full min-w-0"
     >
-      <div className="mb-3 flex items-baseline justify-between gap-4">
+      <div className="mb-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <p className="font-dot font-black text-[15px] tracking-[0.14em] uppercase text-dim">GitHub</p>
         {total !== null && (
           <p className="font-mono text-[11px] text-dim">

@@ -9,7 +9,7 @@ export default function ProjectDetail() {
 
   if (!data) {
     return (
-      <main className="min-h-screen pt-28 pb-32 px-5">
+      <main className="min-h-screen pt-12 md:pt-16 pb-32 px-5">
         <div className="mx-auto max-w-3xl">
           <Link to="/#projects" className="text-sm text-muted hover:text-ink">← Back to projects</Link>
           <h1 className="font-mono font-semibold text-3xl mt-8">Project not found</h1>
@@ -24,7 +24,7 @@ export default function ProjectDetail() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
-      className="min-h-screen pt-28 pb-32"
+      className="min-h-screen pt-12 md:pt-16 pb-32"
     >
       <div className="mx-auto max-w-3xl px-5 md:px-8">
         <Link to="/#projects" className="text-sm text-muted hover:text-ink transition-colors">

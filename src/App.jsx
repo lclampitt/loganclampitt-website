@@ -1,7 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
-import Navbar from './components/Navbar'
 import ScrollToTop from './components/ScrollToTop'
 import ContactBar from './components/ContactBar'
 import IntroOverlay from './components/IntroOverlay'
@@ -24,7 +23,6 @@ function App() {
       <IntroProvider>
         <SmoothScroll>
           <ScrollToTop />
-          <Navbar />
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<Home />} />

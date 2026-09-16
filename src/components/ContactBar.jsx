@@ -1,25 +1,51 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useLocation } from 'react-router-dom'
 import { FORMSPREE_ID, LINKS } from '../data/content'
 import { useContact } from '../context/useContact'
 import { useIntro } from '../context/useIntro'
 import { ArrowDownIcon, ArrowUpIcon } from './icons'
 
-const QUICK_LINKS = [
-  { label: 'GitHub', value: LINKS.githubHandle, href: LINKS.github },
-  { label: 'LinkedIn', value: LINKS.linkedinHandle, href: LINKS.linkedin },
-  { label: 'Resume', value: 'PDF', href: LINKS.resume, download: true },
+const DETAILS = [
+  { label: 'Status', value: 'Open to roles / freelance' },
+  { label: 'Response', value: 'Usually within a day' },
+  { label: 'Time zone', value: 'Pacific (PT)' },
 ]
+
+const fieldLabel = 'mb-1.5 block font-dot font-black text-[12px] tracking-[0.1em] uppercase text-dim'
+const fieldInput =
+  'w-full border border-line bg-page px-3 py-2.5 font-mono text-sm text-ink transition-colors focus:border-ink focus:outline-none'
+
+function usePastHero() {
+  const { pathname } = useLocation()
+  const isHome = pathname === '/'
+  const [pastHero, setPastHero] = useState(false)
+
+  useEffect(() => {
+    const hero = isHome && document.getElementById('hero')
+    if (!hero) return undefined
+    const observer = new IntersectionObserver(([entry]) => setPastHero(!entry.isIntersecting), {
+      rootMargin: '-40% 0px 0px 0px',
+    })
+    observer.observe(hero)
+    return () => observer.disconnect()
+  }, [isHome])
+
+  return !isHome || pastHero
+}
 
 export default function ContactBar() {
   const { open, toggleContact, closeContact } = useContact()
   const { contentReady } = useIntro()
+  const pastHero = usePastHero()
   const panelId = useId()
   const nameRef = useRef(null)
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState(false)
   const [sending, setSending] = useState(false)
+
+  const barVisible = contentReady && (pastHero || open)
 
   useEffect(() => {
     if (!open) return undefined
@@ -64,14 +90,6 @@ export default function ContactBar() {
     }
   }
 
-  const focusForm = () => {
-    if (!open) {
-      toggleContact()
-    } else {
-      nameRef.current?.focus()
-    }
-  }
-
   return (
     <>
       <AnimatePresence>
@@ -83,18 +101,12 @@ export default function ContactBar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={closeContact}
-            className="fixed inset-0 z-40 bg-page/70"
+            className="fixed inset-0 z-40 bg-page/80"
           />
         )}
       </AnimatePresence>
 
-      <motion.div
-        className="fixed inset-x-0 bottom-0 z-50 pointer-events-none"
-        initial={false}
-        animate={{ opacity: contentReady ? 1 : 0 }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        aria-hidden={!contentReady}
-      >
+      <div className="fixed inset-x-0 bottom-0 z-50 pointer-events-none">
         <div className="mx-auto max-w-4xl px-4 pb-4 md:pb-6 flex flex-col items-center">
           <AnimatePresence>
             {open && (
@@ -106,100 +118,108 @@ export default function ContactBar() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 16 }}
                 transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-                className="pointer-events-auto w-full mb-3 rounded-[28px] border border-line bg-surface p-5 md:p-8 max-h-[min(78vh,720px)] overflow-y-auto"
+                className="contact-panel pointer-events-auto w-full mb-3 p-5 md:p-8 max-h-[min(80vh,720px)] overflow-y-auto"
                 data-lenis-prevent
               >
-                <div className="grid md:grid-cols-[1.2fr_0.8fr] gap-8">
+                <p className="font-dot font-black text-[15px] tracking-[0.14em] uppercase text-muted">Contact</p>
+                <div className="mt-4 grid gap-8 md:grid-cols-[1.25fr_0.75fr]">
                   <div>
-                    <h2 id="contact-title" className="font-mono text-2xl md:text-3xl font-semibold text-ink">
-                      Get in contact with me
+                    <h2 id="contact-title" className="font-mono text-2xl md:text-[1.75rem] font-semibold text-ink">
+                      Get in touch
                     </h2>
-                    <p className="mt-2 text-sm text-muted leading-relaxed">
-                      Roles or freelance, same inbox. Send a note and I will get back to you.
+                    <p className="mt-2 font-mono text-[13px] leading-relaxed text-muted">
+                      Roles or freelance, same inbox. Send a note and I&apos;ll get back to you.
                     </p>
 
                     {submitted ? (
-                      <p className="mt-8 text-ink">
-                        Message sent. Thanks for reaching out. I will be in touch soon.
+                      <p className="mt-8 font-mono text-sm text-ink" role="status">
+                        Message sent. Thanks for reaching out, I&apos;ll get back to you within a day.
                       </p>
                     ) : (
-                      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3">
-                        <label className="sr-only" htmlFor="contact-name">Name</label>
-                        <input
-                          id="contact-name"
-                          ref={nameRef}
-                          type="text"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          required
-                          placeholder="Name"
-                          className="w-full rounded-2xl bg-raised border border-line px-4 py-3 text-sm text-ink placeholder:text-dim"
-                        />
-                        <label className="sr-only" htmlFor="contact-email">Email</label>
-                        <input
-                          id="contact-email"
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          required
-                          placeholder="Email"
-                          className="w-full rounded-2xl bg-raised border border-line px-4 py-3 text-sm text-ink placeholder:text-dim"
-                        />
-                        <label className="sr-only" htmlFor="contact-message">Message</label>
-                        <textarea
-                          id="contact-message"
-                          name="message"
-                          value={formData.message}
-                          onChange={handleChange}
-                          required
-                          rows={5}
-                          placeholder="Message"
-                          className="w-full rounded-2xl bg-raised border border-line px-4 py-3 text-sm text-ink placeholder:text-dim resize-none"
-                        />
+                      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+                        <div>
+                          <label className={fieldLabel} htmlFor="contact-name">Name</label>
+                          <input
+                            id="contact-name"
+                            ref={nameRef}
+                            type="text"
+                            name="name"
+                            autoComplete="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                            className={fieldInput}
+                          />
+                        </div>
+                        <div>
+                          <label className={fieldLabel} htmlFor="contact-email">Email</label>
+                          <input
+                            id="contact-email"
+                            type="email"
+                            name="email"
+                            autoComplete="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                            className={fieldInput}
+                          />
+                        </div>
+                        <div>
+                          <label className={fieldLabel} htmlFor="contact-message">Message</label>
+                          <textarea
+                            id="contact-message"
+                            name="message"
+                            value={formData.message}
+                            onChange={handleChange}
+                            required
+                            rows={5}
+                            className={`${fieldInput} resize-none`}
+                          />
+                        </div>
                         <button
                           type="submit"
                           disabled={sending}
-                          className="rounded-2xl bg-ink text-page py-3 text-sm font-medium hover:bg-white transition-colors disabled:opacity-50"
+                          className="group flex items-center justify-center gap-2 bg-ink py-3 font-mono text-sm font-semibold text-page transition-colors hover:bg-navy disabled:opacity-50"
                         >
-                          {sending ? 'Sending...' : 'Send message'}
+                          {sending ? 'Sending…' : 'Send message'}
+                          {!sending && (
+                            <span aria-hidden="true" className="transition-transform group-hover:translate-x-0.5">→</span>
+                          )}
                         </button>
                         {error && (
-                          <p className="text-sm text-accent" role="alert">
-                            Something went wrong. Please try again.
+                          <p className="font-mono text-sm text-accent" role="alert">
+                            Something went wrong. Try again, or email me directly.
                           </p>
                         )}
                       </form>
                     )}
                   </div>
 
-                  <div className="md:pt-12">
-                    <ul>
-                      {QUICK_LINKS.map((item) => (
-                        <li key={item.label} className="border-t border-line first:border-t-0">
-                          <a
-                            href={item.href}
-                            {...(item.download ? { download: true } : { target: '_blank', rel: 'noopener noreferrer' })}
-                            className="flex items-center justify-between py-4 text-sm hover:text-ink text-muted transition-colors"
-                          >
-                            <span>{item.label}</span>
-                            <span className="text-ink">{item.value}</span>
-                          </a>
-                        </li>
-                      ))}
-                      <li className="border-t border-line">
-                        <button
-                          type="button"
-                          onClick={focusForm}
-                          className="w-full flex items-center justify-between py-4 text-sm text-muted hover:text-ink transition-colors"
+                  <dl className="contact-details md:pt-11">
+                    {DETAILS.map((row) => (
+                      <div key={row.label} className="contact-detail">
+                        <dt className="spec-label">
+                          <span className="spec-tick" aria-hidden="true" />
+                          {row.label}
+                        </dt>
+                        <dd className="spec-value">{row.value}</dd>
+                      </div>
+                    ))}
+                    <div className="contact-detail">
+                      <dt className="spec-label">
+                        <span className="spec-tick" aria-hidden="true" />
+                        Email
+                      </dt>
+                      <dd className="spec-value">
+                        <a
+                          href={`mailto:${LINKS.email}`}
+                          className="break-all underline decoration-dashed decoration-1 underline-offset-4 hover:text-accent"
                         >
-                          <span>Email</span>
-                          <span className="text-ink">direct</span>
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
+                          {LINKS.email}
+                        </a>
+                      </dd>
+                    </div>
+                  </dl>
                 </div>
               </motion.div>
             )}
@@ -210,20 +230,25 @@ export default function ContactBar() {
             onClick={toggleContact}
             aria-expanded={open}
             aria-controls={panelId}
-            className={`contact-bar-toggle pointer-events-auto w-full max-w-xl rounded-full border border-line bg-raised pl-6 pr-2 py-2 flex items-center justify-between gap-4 text-left shadow-bar${contentReady ? '' : ' pointer-events-none'}`}
+            tabIndex={barVisible ? 0 : -1}
+            initial={false}
+            animate={{ opacity: barVisible ? 1 : 0, y: barVisible ? 0 : 16 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className={`contact-bar-toggle w-full max-w-md border border-line bg-surface py-2 pl-5 pr-2 flex items-center justify-between gap-4 text-left shadow-bar ${barVisible ? 'pointer-events-auto' : 'pointer-events-none'}`}
           >
             <span>
-              <span className="block font-mono text-[14px] md:text-[15px] font-semibold text-ink">
-                Get in contact with me<span className="text-accent">!</span>
+              <span className="block font-mono text-[14px] font-semibold text-ink">Get in touch</span>
+              <span className="block font-mono text-[11px] text-dim mt-0.5">
+                <span className="hidden sm:inline">Roles · freelance · replies</span>
+                <span className="sm:hidden">Replies</span> within a day
               </span>
-              <span className="block text-xs text-dim mt-0.5">Roles · freelance · say hi</span>
             </span>
-            <span className="contact-bar-toggle-icon w-11 h-11 rounded-full border border-line bg-surface text-ink flex items-center justify-center shrink-0">
+            <span className="contact-bar-toggle-icon w-10 h-10 border border-line bg-page text-ink flex items-center justify-center shrink-0">
               {open ? <ArrowDownIcon className="w-4 h-4" /> : <ArrowUpIcon className="w-4 h-4" />}
             </span>
           </motion.button>
         </div>
-      </motion.div>
+      </div>
     </>
   )
 }

@@ -184,7 +184,8 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
     0 3px 8px rgba(0, 0, 0, 0.28);
 }
 
-.project-card {
+.project-card,
+.contact-panel {
   --timeline-stroke: #6b7d8a;
   --project-stroke: #6b7d8a;
   --project-stroke-w: 1.5px;
@@ -227,6 +228,16 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
 
 .project-card:hover {
   --project-stroke: var(--color-ink);
+}
+
+.contact-detail {
+  padding: 14px 0;
+  border-top: 1.5px dashed var(--color-line);
+}
+
+.contact-detail:first-child {
+  border-top: 0;
+  padding-top: 0;
 }
 
 .timeline {

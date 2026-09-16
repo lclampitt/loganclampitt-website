@@ -8,7 +8,7 @@ export default function SimRacingDetail() {
 
   if (!data) {
     return (
-      <main className="min-h-screen pt-28 pb-32 px-5">
+      <main className="min-h-screen pt-12 md:pt-16 pb-32 px-5">
         <div className="mx-auto max-w-3xl">
           <Link to="/sim-racing" className="text-sm text-muted hover:text-ink">← Back to sim racing</Link>
           <h1 className="font-mono font-semibold text-3xl mt-8">Not found</h1>
@@ -22,7 +22,7 @@ export default function SimRacingDetail() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="min-h-screen pt-28 pb-32"
+      className="min-h-screen pt-12 md:pt-16 pb-32"
     >
       <div className="mx-auto max-w-5xl px-5 md:px-8">
         <Link to="/sim-racing" className="text-sm text-muted hover:text-ink transition-colors">
