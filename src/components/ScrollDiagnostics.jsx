@@ -8,7 +8,7 @@ const TOGGLES = [
 ]
 
 const STYLE = `
-.diag-no-portrait .dot-portrait-light, .diag-no-portrait .dot-portrait-dark { display: none !important; }
+.diag-no-portrait .dot-portrait { display: none !important; }
 .diag-no-grid .git-graph { display: none !important; }
 `
 

@@ -5,7 +5,6 @@ import Projects from '../components/Projects'
 import { useIntro } from '../context/useIntro'
 
 const Experience = lazy(() => import('../components/Experience'))
-const Skills = lazy(() => import('../components/Skills'))
 const About = lazy(() => import('../components/About'))
 const Footer = lazy(() => import('../components/Footer'))
 
@@ -33,7 +32,6 @@ export default function Home() {
         <Projects />
         <Suspense fallback={null}>
           <Experience />
-          <Skills />
           <About />
           <Footer />
         </Suspense>

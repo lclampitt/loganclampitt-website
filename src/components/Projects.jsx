@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { PROJECTS } from '../data/content'
@@ -16,14 +17,31 @@ function cardTarget(project) {
   return { to: `/projects/${project.slug}`, external: false }
 }
 
+function UrlBar({ label }) {
+  return (
+    <div className="w-full border border-white/25 bg-page/90 p-2.5 preview-frame">
+      <div className="flex gap-1 mb-2" aria-hidden="true">
+        <span className="w-1.5 h-1.5 rounded-full bg-line" />
+        <span className="w-1.5 h-1.5 rounded-full bg-line" />
+        <span className="w-1.5 h-1.5 rounded-full bg-line" />
+      </div>
+      <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-navy">
+        {label}
+      </p>
+    </div>
+  )
+}
+
 function PreviewBlock({ project }) {
   if (project.previewImage) {
     return (
-      <div className="aspect-[16/9] overflow-hidden bg-raised">
+      <div className="aspect-[16/9] overflow-hidden border border-line bg-raised">
         <img
           src={project.previewImage}
-          alt=""
-          className="h-full w-full object-cover"
+          alt={`${project.title} website preview`}
+          loading="lazy"
+          decoding="async"
+          className="h-full w-full object-cover object-top"
         />
       </div>
     )
@@ -57,23 +75,14 @@ function PreviewBlock({ project }) {
 
   return (
     <div className="preview-ocean aspect-[16/9] p-3 md:p-4 flex items-end">
-      <div className="w-full border border-white/25 bg-page/90 p-2.5 preview-frame">
-        <div className="flex gap-1 mb-2" aria-hidden="true">
-          <span className="w-1.5 h-1.5 rounded-full bg-line" />
-          <span className="w-1.5 h-1.5 rounded-full bg-line" />
-          <span className="w-1.5 h-1.5 rounded-full bg-line" />
-        </div>
-        <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-navy">
-          {project.previewLabel}
-        </p>
-      </div>
+      <UrlBar label={project.previewLabel} />
     </div>
   )
 }
 
 function ProjectCard({ project }) {
   const target = cardTarget(project)
-  const className = 'project-card block h-full p-2.5 md:p-3 transition-colors'
+  const className = 'project-card group block h-full p-2.5 md:p-3 transition-colors'
   const inner = (
     <>
       <div className="overflow-hidden">
@@ -81,22 +90,37 @@ function ProjectCard({ project }) {
       </div>
       <div className="px-0.5 pt-2.5 pb-0.5">
         <div className="flex items-baseline justify-between gap-2">
-          <h3 className="font-display text-[15px] md:text-base font-semibold text-ink">
+          <h3 className="font-mono text-[15px] md:text-base font-semibold text-ink">
             {project.title}
           </h3>
-          {project.meta ? (
-            <span className="inline-flex items-center gap-1.5 shrink-0 font-mono text-[10px] md:text-[11px] text-muted">
-              <span
-                className={`w-1.5 h-1.5 rounded-full ${project.meta === 'Capstone' ? 'bg-foam' : 'bg-accent'}`}
-                aria-hidden="true"
-              />
-              {project.meta}
-            </span>
-          ) : null}
+          <span className="flex shrink-0 items-center gap-1.5 self-center text-dim transition-colors group-hover:text-ink">
+            {project.previewLabel && (
+              <span className="hidden lg:inline font-mono text-[11px] lowercase">
+                {project.previewLabel}
+              </span>
+            )}
+            <svg
+              viewBox="0 0 16 16"
+              aria-hidden="true"
+              className="h-3.5 w-3.5 transition-transform duration-200 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+            >
+              <path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
+            </svg>
+          </span>
         </div>
         <p className="mt-1.5 font-mono text-[11px] md:text-xs leading-snug text-muted">
           {project.desc}
         </p>
+        {project.stack && (
+          <p className="mt-2 font-mono text-[11px] tracking-[0.04em] text-dim">
+            {project.stack.map((tech, i) => (
+              <Fragment key={tech}>
+                {i > 0 && <span className="timeline-sep">/</span>}
+                {tech}
+              </Fragment>
+            ))}
+          </p>
+        )}
       </div>
     </>
   )
@@ -128,7 +152,7 @@ export default function Projects() {
         <div className="mx-auto w-full max-w-[52rem]">
           <motion.h2
             {...fadeUp(0)}
-            className="font-display text-sm tracking-[0.22em] uppercase text-muted mb-6"
+            className="font-dot font-black text-[17px] tracking-[0.14em] uppercase text-muted mb-6"
           >
             Projects
           </motion.h2>
@@ -145,7 +169,7 @@ export default function Projects() {
             {...fadeUp(0.2)}
             className="mt-10 pt-6 border-t border-dotted border-line flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-8"
           >
-            <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-dim shrink-0">
+            <p className="font-dot font-black text-[14px] tracking-[0.14em] uppercase text-dim shrink-0">
               Also · Sim racing
             </p>
             <p className="text-sm text-muted flex-1">

@@ -1,7 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { LINKS } from '../data/content'
 import { useIntro } from '../context/useIntro'
-import { useTheme } from '../context/useTheme'
 import { DAYS, WEEKS, buildStylizedCells, getGitPopColors, getLevelColors } from '../lib/contributions'
 
 function prefersReducedMotion() {
@@ -11,7 +10,6 @@ function prefersReducedMotion() {
 
 export default function ActivityStrip() {
   const { contentReady } = useIntro()
-  const { theme } = useTheme()
   const cells = useMemo(() => buildStylizedCells(), [])
   const colors = getLevelColors()
   const [innerWidth, setInnerWidth] = useState(0)
@@ -174,7 +172,7 @@ export default function ActivityStrip() {
       timers.forEach((id) => window.clearTimeout(id))
       timers.clear()
     }
-  }, [colors, graphWidth, started, theme])
+  }, [colors, graphWidth, started])
 
   const reducedMotion = prefersReducedMotion()
 
@@ -187,7 +185,7 @@ export default function ActivityStrip() {
       aria-label="Open Logan Clampitt on GitHub. Decorative activity pattern, not live totals."
       className="block w-full min-w-0"
     >
-      <p className="mb-3 font-mono text-[10px] tracking-[0.2em] uppercase text-dim">GitHub</p>
+      <p className="mb-3 font-dot font-black text-[15px] tracking-[0.14em] uppercase text-dim">GitHub</p>
 
       <div ref={graphRef} className="relative git-graph w-full min-w-0 overflow-hidden">
         {graphWidth > 0 && (

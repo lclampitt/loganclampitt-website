@@ -5,7 +5,7 @@ export const LINKS = {
   linkedinHandle: 'loganclampitt',
   resume: '/Resume - Logan Clampitt 2026.pdf',
   ctRealty: 'https://www.whiteoakswilton.com/',
-  macrovault: 'https://www.gainlytics.org/',
+  macrovault: 'https://www.macro-vault.com/',
 }
 
 export const FORMSPREE_ID = 'mdapkror'
@@ -13,14 +13,14 @@ export const FORMSPREE_ID = 'mdapkror'
 export const PROJECTS = [
   {
     slug: 'ct-realty-trust',
-    title: 'CT Realty Trust',
-    previewLabel: 'CTREALTYTRUST.COM',
-    previewImage: null,
+    title: 'White Oaks at Wilton',
+    previewLabel: 'WHITEOAKSWILTON.COM',
+    previewImage: '/previews/whiteoakswilton.jpg',
     status: [],
     statusTone: 'accent',
-    meta: 'Live',
     previewKind: 'ocean',
-    desc: 'Company website for a multifamily and build to rent investment firm. Contributed heavily to the public site as Software Developer, including marketing pages and portfolio presentation.',
+    desc: 'Leasing site and operator console for CT Realty Trust, with self-built analytics.',
+    stack: ['Next.js', 'TypeScript', 'FastAPI', 'Supabase'],
     layout: 'featured',
     liveUrl: LINKS.ctRealty,
     caseStudy: true,
@@ -29,13 +29,13 @@ export const PROJECTS = [
   {
     slug: 'gainlytics',
     title: 'MacroVault',
-    previewLabel: 'MACROVAULT',
-    previewImage: null,
+    previewLabel: 'MACRO-VAULT.COM',
+    previewImage: '/previews/macrovault.jpg',
     status: [],
     statusTone: 'accent',
-    meta: 'Capstone',
     previewKind: 'text-first',
     desc: 'Fitness analytics capstone with dashboards, PRs, and AI insights. Solo build.',
+    stack: ['React', 'Python', 'Chart.js'],
     layout: 'stack',
     liveUrl: LINKS.macrovault,
     caseStudy: true,
@@ -45,17 +45,19 @@ export const PROJECTS = [
 
 export const PROJECT_DETAILS = {
   'ct-realty-trust': {
-    title: 'CT Realty Trust',
-    tag: 'Work',
+    title: 'White Oaks at Wilton',
+    tag: 'Work · CT Realty Trust',
     description:
-      'Company website for a multifamily and build to rent investment firm. I contribute as Software Developer on the public site, including marketing pages and portfolio presentation. This is company work, not a solo build of the entire site.',
-    tags: ['Web', 'Frontend', 'Marketing pages', 'Portfolio presentation'],
+      'White Oaks is a white-label property management platform I built as the primary developer: a public leasing site and a separate operator console, sharing a FastAPI backend on Supabase. Rather than depend on the client\'s existing analytics warehouse, I built the full collection pipeline myself, a first-party JavaScript collector handling identity, attribution, and channel classification, feeding a Postgres store the console reads live. It integrates Rent Manager for property data and automated lead intake, and Resend for authenticated transactional email, all deployed across Vercel and Render.',
+    tags: ['Leasing site', 'Operator console', 'First-party analytics'],
     whatItDoes: [
-      'Public marketing pages for the firm.',
-      'Portfolio presentation on the public site.',
-      'Ongoing contribution as Software Developer, not sole authorship of the whole site.',
+      'Two Next.js apps backed by a FastAPI + Supabase (Postgres) service, deployed across Vercel and Render.',
+      'First-party analytics pipeline built from scratch: cookie-based identity, first/last-touch attribution, channel classification, and bot filtering.',
+      'Rent Manager integration for live unit and pricing data and automated prospect creation, with circuit-breaker and single-flight caching.',
+      'Transactional email on Resend with full domain authentication (SPF/DKIM/DMARC).',
+      'Privacy and Fair Housing-compliant data handling, audited against WCAG 2.1 AA.',
     ],
-    tech: ['Web', 'Frontend'],
+    tech: ['TypeScript', 'Next.js', 'React', 'Tailwind CSS', 'Framer Motion', 'FastAPI', 'Supabase', 'Vercel', 'Render'],
     externalUrl: LINKS.ctRealty,
     previewUrl: LINKS.ctRealty,
   },
@@ -103,18 +105,6 @@ export const EXPERIENCE = [
   },
 ]
 
-export const SKILLS = [
-  'JavaScript',
-  'React',
-  'Python',
-  'HTML/CSS',
-  'Tailwind',
-  'UI/UX',
-  'Motion',
-  'Git',
-  'Figma',
-  'C++',
-]
 
 export const SIM_RACING = [
   {
@@ -152,9 +142,15 @@ export const SIM_RACING = [
   },
 ]
 
-export const ABOUT_FACTS = [
-  { label: 'Based', value: 'SoCal' },
-  { label: 'Focus', value: 'Web / full stack' },
-  { label: 'Open to', value: 'Roles + freelance' },
-  { label: 'Also', value: 'Sim racing, 8+ years' },
+export const ABOUT_SPEC = [
+  { label: 'Based', items: ['Southern California'] },
+  { label: 'Focus', items: ['Web', 'Full stack', 'iOS'] },
+  { label: 'Open to', items: ['Roles', 'Freelance'] },
+  { label: 'Languages', items: ['TypeScript', 'JavaScript', 'Python', 'Swift'] },
+  { label: 'Frontend', items: ['React', 'Next.js', 'Tailwind', 'CSS', 'Motion'] },
+  { label: 'Backend', items: ['FastAPI', 'Supabase', 'Stripe'] },
+  { label: 'Mobile', items: ['SwiftUI', 'watchOS'] },
+  { label: 'AI', items: ['Claude Code', 'Cursor', 'Claude API', 'MCP'] },
+  { label: 'Tools', items: ['Git', 'Vercel', 'Figma'] },
+  { label: 'Other', items: ['Sim racing, 8+ years'] },
 ]

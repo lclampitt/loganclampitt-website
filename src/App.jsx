@@ -5,7 +5,6 @@ import Navbar from './components/Navbar'
 import ScrollToTop from './components/ScrollToTop'
 import ContactBar from './components/ContactBar'
 import IntroOverlay from './components/IntroOverlay'
-import ThemeToggle from './components/ThemeToggle'
 import SmoothScroll from './components/SmoothScroll'
 import { ContactProvider } from './context/ContactContext'
 import { IntroProvider } from './context/IntroContext'
@@ -25,7 +24,6 @@ function App() {
       <IntroProvider>
         <SmoothScroll>
           <ScrollToTop />
-          <ThemeToggle />
           <Navbar />
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>

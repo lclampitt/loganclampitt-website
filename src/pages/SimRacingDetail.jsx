@@ -11,7 +11,7 @@ export default function SimRacingDetail() {
       <main className="min-h-screen pt-28 pb-32 px-5">
         <div className="mx-auto max-w-3xl">
           <Link to="/sim-racing" className="text-sm text-muted hover:text-ink">← Back to sim racing</Link>
-          <h1 className="font-display text-3xl mt-8">Not found</h1>
+          <h1 className="font-mono font-semibold text-3xl mt-8">Not found</h1>
         </div>
       </main>
     )
@@ -29,7 +29,7 @@ export default function SimRacingDetail() {
           ← Back to sim racing
         </Link>
         <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-dim mt-8">{data.subtitle}</p>
-        <h1 className="font-display text-3xl md:text-5xl font-semibold text-ink mt-2">{data.title}</h1>
+        <h1 className="font-mono font-semibold text-3xl md:text-5xl font-semibold text-ink mt-2">{data.title}</h1>
         <p className="mt-6 max-w-3xl text-muted leading-relaxed">{data.description}</p>
 
         {data.videos?.length > 0 && (

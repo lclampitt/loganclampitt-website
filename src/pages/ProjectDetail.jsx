@@ -12,7 +12,7 @@ export default function ProjectDetail() {
       <main className="min-h-screen pt-28 pb-32 px-5">
         <div className="mx-auto max-w-3xl">
           <Link to="/#projects" className="text-sm text-muted hover:text-ink">← Back to projects</Link>
-          <h1 className="font-display text-3xl mt-8">Project not found</h1>
+          <h1 className="font-mono font-semibold text-3xl mt-8">Project not found</h1>
         </div>
       </main>
     )
@@ -35,7 +35,7 @@ export default function ProjectDetail() {
           {data.tag && (
             <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-accent mb-3">{data.tag}</p>
           )}
-          <h1 className="font-display text-3xl md:text-4xl font-semibold text-ink">{data.title}</h1>
+          <h1 className="font-mono font-semibold text-3xl md:text-4xl font-semibold text-ink">{data.title}</h1>
           <p className="mt-5 text-muted leading-relaxed">{data.description}</p>
 
           {data.tags && (

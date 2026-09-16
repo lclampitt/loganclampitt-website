@@ -43,12 +43,17 @@ export default function Hero() {
     <>
       <section id="hero" className="relative pt-8 md:pt-10 pb-0">
         <div className="mx-auto max-w-6xl px-5 md:px-8 w-full relative">
-          <div className="hidden md:block absolute top-[17px] right-[68px] z-10">
+          <motion.div
+            {...rest(0.12, 0.2)}
+            transition={{ duration: 0.8, delay: playRequested ? 0.2 : 0.12, ease: [0.22, 1, 0.36, 1] }}
+            className="hidden md:block absolute top-[17px] right-[68px] z-10"
+          >
             <DotPortrait />
-          </div>
+          </motion.div>
           <motion.div {...rest(0, 0.04)} className="pr-24 sm:pr-32">
-            <p className="font-script italic text-[1.35rem] md:text-[1.65rem] text-ink">
-              Hey it&apos;s me
+            <p className="font-dot font-black text-[1.75rem] md:text-[2.25rem] leading-none tracking-[0.02em] text-ink">
+              hello, world
+              <span className="greet-caret" aria-hidden="true">_</span>
             </p>
           </motion.div>
 

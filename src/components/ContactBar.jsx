@@ -111,7 +111,7 @@ export default function ContactBar() {
               >
                 <div className="grid md:grid-cols-[1.2fr_0.8fr] gap-8">
                   <div>
-                    <h2 id="contact-title" className="font-display text-2xl md:text-3xl font-semibold text-ink">
+                    <h2 id="contact-title" className="font-mono text-2xl md:text-3xl font-semibold text-ink">
                       Get in contact with me
                     </h2>
                     <p className="mt-2 text-sm text-muted leading-relaxed">
@@ -213,7 +213,7 @@ export default function ContactBar() {
             className={`contact-bar-toggle pointer-events-auto w-full max-w-xl rounded-full border border-line bg-raised pl-6 pr-2 py-2 flex items-center justify-between gap-4 text-left shadow-bar${contentReady ? '' : ' pointer-events-none'}`}
           >
             <span>
-              <span className="block font-display text-[15px] md:text-base font-medium text-ink">
+              <span className="block font-mono text-[14px] md:text-[15px] font-semibold text-ink">
                 Get in contact with me<span className="text-accent">!</span>
               </span>
               <span className="block text-xs text-dim mt-0.5">Roles · freelance · say hi</span>

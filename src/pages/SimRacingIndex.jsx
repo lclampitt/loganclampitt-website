@@ -15,7 +15,7 @@ export default function SimRacingIndex() {
         <Link to="/#projects" className="text-sm text-muted hover:text-ink transition-colors">
           ← Back to projects
         </Link>
-        <motion.h1 {...fadeUp(0)} className="font-display text-4xl font-semibold mt-8">
+        <motion.h1 {...fadeUp(0)} className="font-mono text-4xl font-semibold mt-8">
           Sim racing
         </motion.h1>
         <motion.p {...fadeUp(0.05)} className="mt-4 text-muted leading-relaxed">
@@ -30,7 +30,7 @@ export default function SimRacingIndex() {
                 className="block rounded-3xl border border-line bg-surface p-6 hover:border-ink/25 transition-colors"
               >
                 <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-dim">{item.subtitle}</p>
-                <h2 className="font-display text-xl font-semibold mt-2">{item.title}</h2>
+                <h2 className="font-mono text-xl font-semibold mt-2">{item.title}</h2>
                 <p className="text-sm text-accent mt-4">Read more →</p>
               </Link>
             </motion.div>

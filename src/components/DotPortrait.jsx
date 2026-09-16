@@ -4,13 +4,7 @@ export default function DotPortrait() {
       <iframe
         src="/dot-portrait.html"
         title="Dot portrait"
-        className="dot-portrait-light w-full h-full border-0 pointer-events-auto"
-        style={{ background: 'transparent', colorScheme: 'light' }}
-      />
-      <iframe
-        src="/dot-portrait-white.html"
-        title="Dot portrait"
-        className="dot-portrait-dark w-full h-full border-0 absolute inset-0 pointer-events-auto"
+        className="dot-portrait w-full h-full border-0 pointer-events-auto"
         style={{ background: 'transparent', colorScheme: 'light' }}
       />
     </div>
