@@ -107,38 +107,107 @@ export const EXPERIENCE = [
 ]
 
 
+export const SIM_RACING_STATS = [
+  { value: '2012', label: 'Racing since' },
+  { value: '2', label: 'College titles' },
+  { value: '3', label: 'Coca-Cola wins' },
+  { value: '$120K+', label: 'Career earnings' },
+]
+
+export const SIM_RACING_TEAMS = [
+  { name: 'Burton Kligerman eSports', years: '2019 — 2020', logo: '/logos/burton-kligerman-esports.png' },
+  { name: 'William Byron Esports', years: '2021 — 2022', logo: '/logos/william-byron-esports.png', treatment: 'silhouette' },
+  { name: 'eRacr', years: '2025', logo: '/logos/eracr.png', maxHeight: 40 },
+]
+
+export const SIM_RACING_SPONSORS = [
+  { name: 'Logitech G', logo: '/logos/logitech-g.png' },
+  { name: 'Valvoline', logo: '/logos/valvoline.png' },
+  { name: 'SteadyMD', logo: '/logos/steadymd.png' },
+  { name: 'NASCAR on NBCSN', logo: '/logos/nascar-nbcsn.png' },
+]
+
+export const SIM_RACING_PRESS = {
+  featured: {
+    outlet: 'Titan Magazine',
+    note: 'Cal State Fullerton · Fall/Winter 2024',
+    title: 'A Champion on the iRacing Circuit',
+    image: '/press/titan-trophy.jpg',
+    url: 'https://titanmag.fullerton.edu/fall-winter-2024/a-champion-on-the-iracing-circuit/',
+  },
+  articles: [
+    {
+      outlet: 'iRacing',
+      date: '2026.04',
+      title: 'Sunset Splash win to close out college',
+      url: 'https://www.iracing.com/enascar-college-iracing-series-calgarys-yeroschak-clinches-25-26-title-cal-state-fullertons-clampitt-closes-book-with-sunset-splash-win/',
+    },
+    {
+      outlet: 'iRacing',
+      date: '2025.04',
+      title: 'Claims the 2024–25 eNASCAR College title',
+      url: 'https://www.iracing.com/california-state-university-fullertons-logan-clampitt-claims-2024-25-enascar-college-iracing-series-title/',
+    },
+    {
+      outlet: 'iRacing',
+      date: '2024.10',
+      title: 'Wins in an overtime finish at Kansas',
+      url: 'https://www.iracing.com/cal-state-fullertons-logan-clampitt-claims-enascar-college-iracing-series-victory-in-ot-finish-at-kansas/',
+    },
+    {
+      outlet: 'RACER',
+      date: '2022.05',
+      title: 'Preparing to wind down his iRacing career',
+      url: 'https://racer.com/2022/05/26/clampitt-preparing-to-wind-down-iracing-career/',
+    },
+    {
+      outlet: 'RACER',
+      date: '2019.07',
+      title: 'Goes from iRacing to a real MX-5 Cup car',
+      url: 'https://racer.com/2019/07/06/get-real-logan-clampitt-goes-from-iracing-to-an-mx-5-cup-car/',
+    },
+  ],
+  more: [
+    { outlet: 'iRacing', url: 'https://www.iracing.com/tag/logan-clampitt/' },
+    { outlet: 'RACER', url: 'https://racer.com/tag/logan%20clampitt' },
+  ],
+}
+
 export const SIM_RACING = [
   {
     slug: 'enascar-college',
     title: 'ENASCAR College iRacing Series',
-    subtitle: 'Collegiate championship',
-    description:
-      'In the ENASCAR College iRacing Series, I represented California State University Fullerton against top collegiate drivers across the country. I would wind up winning two championships and earning over $30,000 in scholarship winnings.',
+    logo: '/logos/enascar-college.png',
+    dates: ['2022 — 2026'],
+    highlight: [
+      { text: 'Represented CSU Fullerton. ' },
+      { text: '2 championships', strong: true },
+      { text: ' and ' },
+      { text: '$50K+', strong: true },
+      { text: ' in earnings.' },
+    ],
     videos: [
-      { title: 'ENASCAR College iRacing Series', desc: '', embedUrl: 'https://www.youtube.com/embed/AzTAJeDYieA?start=5366' },
-      { title: 'ENASCAR College iRacing Series', desc: '', embedUrl: 'https://www.youtube.com/embed/QZLY9Q3jsjE?start=4629' },
+      { track: 'Kansas', season: '2024–25', result: 'Win', embedUrl: 'https://www.youtube.com/embed/AzTAJeDYieA?start=5366' },
+      { track: 'Homestead', season: '2024–25', result: 'Championship', embedUrl: 'https://www.youtube.com/embed/QZLY9Q3jsjE?start=4629' },
     ],
   },
   {
     slug: 'enascar-coca-cola',
     title: 'ENASCAR Coca-Cola iRacing Series',
-    subtitle: 'Premier ENASCAR series',
-    description:
-      'The ENASCAR Coca-Cola iRacing Series is the highest level of NASCAR sanctioned sim racing. I competed in the series since I was 15 years old for 8 years. Through my time in the series I was able to score 3 wins and two runner-up championship finishes.',
-    videos: [
-      { title: 'ENASCAR Coca-Cola iRacing Series', desc: '', embedUrl: 'https://www.youtube.com/embed/8W9mW6Bb33Q?start=7645' },
-      { title: 'ENASCAR Coca-Cola iRacing Series', desc: '', embedUrl: 'https://www.youtube.com/embed/e0XrzIcBf8o?start=2134' },
+    logo: '/logos/enascar-coca-cola.png',
+    dates: ['2016 — 2022', '2025'],
+    highlight: [
+      { text: 'The top level of NASCAR-sanctioned sim racing. ' },
+      { text: '3 wins', strong: true },
+      { text: ', ' },
+      { text: '2 runner-up', strong: true },
+      { text: ' championship finishes, and ' },
+      { text: '$70K+', strong: true },
+      { text: ' in earnings.' },
     ],
-  },
-  {
-    slug: 'other-experience',
-    title: 'Other experience',
-    subtitle: 'Track days and competitions',
-    description:
-      'Beyond headline series, I have spent years competing in leagues, special events, and even got to experience real world track days. These highlights feature accomplishments outside the main sim racing series.',
     videos: [
-      { title: 'On-board hot lap', desc: 'On-board hot lap in a Mazda MX-5 Cup car at the Thermal Club.', embedUrl: 'https://www.youtube.com/embed/Mtd2OrcN2wU?start=742' },
-      { title: 'Mazda Hot Lap Challenge finish', desc: 'The last lap of the Mazda Hot Lap Challenge.', embedUrl: 'https://www.youtube.com/embed/JYCm3LJToeQ?start=3302' },
+      { track: 'Atlanta', season: '2021', result: 'Win', embedUrl: 'https://www.youtube.com/embed/8W9mW6Bb33Q?start=7645' },
+      { track: 'Texas', season: '2021', result: 'Championship 4', embedUrl: 'https://www.youtube.com/embed/e0XrzIcBf8o?start=2134' },
     ],
   },
 ]

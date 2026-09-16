@@ -1,8 +1,12 @@
 import { Fragment } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { PROJECTS } from '../data/content'
+import { PROJECTS, SIM_RACING } from '../data/content'
 import { fadeUp } from '../lib/motion'
+
+const SERIES_BADGES = SIM_RACING
+  .filter((series) => series.logo)
+  .sort((a, b) => parseInt(a.dates[0], 10) - parseInt(b.dates[0], 10))
 
 function cardTarget(project) {
   if (project.liveUrl) {
@@ -165,21 +169,35 @@ export default function Projects() {
             ))}
           </div>
 
-          <motion.div
-            {...fadeUp(0.2)}
-            className="mt-10 pt-6 border-t border-dotted border-line flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-8"
-          >
-            <p className="font-dot font-black text-[14px] tracking-[0.14em] uppercase text-dim shrink-0">
-              Also · Sim racing
-            </p>
-            <p className="text-sm text-muted flex-1">
-              8+ years competing in ENASCAR series. Personality, not a second portfolio.
-            </p>
+          <motion.div {...fadeUp(0.2)} className="mt-10 pt-6 border-t border-dotted border-line">
             <Link
               to="/sim-racing"
-              className="text-sm text-accent hover:text-ink transition-colors shrink-0"
+              className="group flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8"
             >
-              More →
+              <div className="min-w-0 flex-1">
+                <p className="font-dot font-black text-[14px] tracking-[0.14em] uppercase text-dim">
+                  Sim racing
+                </p>
+                <p className="mt-2 max-w-[30rem] font-mono text-sm leading-relaxed text-muted">
+                  Racing since 2012, from the ENASCAR Coca-Cola Series to representing CSU Fullerton in
+                  the collegiate championship.
+                </p>
+                <p className="mt-3 font-mono text-sm text-accent transition-colors group-hover:text-ink">
+                  More <span className="inline-block transition-transform group-hover:translate-x-0.5">→</span>
+                </p>
+              </div>
+              <div className="flex shrink-0 items-center gap-4">
+                {SERIES_BADGES.map((series) => (
+                  <img
+                    key={series.slug}
+                    src={series.logo}
+                    alt={`${series.title} logo`}
+                    loading="lazy"
+                    decoding="async"
+                    className="series-badge series-badge--home"
+                  />
+                ))}
+              </div>
             </Link>
           </motion.div>
         </div>

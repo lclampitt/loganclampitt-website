@@ -16,28 +16,45 @@ const fieldLabel = 'mb-1.5 block font-dot font-black text-[12px] tracking-[0.1em
 const fieldInput =
   'w-full border border-line bg-page px-3 py-2.5 font-mono text-sm text-ink transition-colors focus:border-ink focus:outline-none'
 
-function usePastHero() {
+// Whether the "Get in touch" bar belongs on this page: on home only once the hero is scrolled past,
+// never on the sim racing page, always elsewhere.
+function useBarAllowed() {
   const { pathname } = useLocation()
   const isHome = pathname === '/'
+  const isSimRacing = pathname.startsWith('/sim-racing')
   const [pastHero, setPastHero] = useState(false)
 
   useEffect(() => {
-    const hero = isHome && document.getElementById('hero')
-    if (!hero) return undefined
-    const observer = new IntersectionObserver(([entry]) => setPastHero(!entry.isIntersecting), {
-      rootMargin: '-40% 0px 0px 0px',
-    })
-    observer.observe(hero)
-    return () => observer.disconnect()
+    if (!isHome) return undefined
+    let observer
+    let frame = 0
+    // Page transitions mount the home page after the previous page exits, so wait for the hero to exist
+    const attach = () => {
+      const hero = document.getElementById('hero')
+      if (!hero) {
+        frame = requestAnimationFrame(attach)
+        return
+      }
+      observer = new IntersectionObserver(([entry]) => setPastHero(!entry.isIntersecting), {
+        rootMargin: '-40% 0px 0px 0px',
+      })
+      observer.observe(hero)
+    }
+    attach()
+    return () => {
+      cancelAnimationFrame(frame)
+      observer?.disconnect()
+    }
   }, [isHome])
 
+  if (isSimRacing) return false
   return !isHome || pastHero
 }
 
 export default function ContactBar() {
   const { open, toggleContact, closeContact } = useContact()
   const { contentReady } = useIntro()
-  const pastHero = usePastHero()
+  const barAllowed = useBarAllowed()
   const panelId = useId()
   const nameRef = useRef(null)
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
@@ -45,7 +62,7 @@ export default function ContactBar() {
   const [error, setError] = useState(false)
   const [sending, setSending] = useState(false)
 
-  const barVisible = contentReady && (pastHero || open)
+  const barVisible = contentReady && (barAllowed || open)
 
   useEffect(() => {
     if (!open) return undefined
