@@ -496,3 +496,8 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
     transform: none;
   }
 }
+
+.dot-portrait-dark { opacity: 0; pointer-events: none; }
+.dot-portrait-light { opacity: 1; }
+:root[data-theme="dark"] .dot-portrait-light { opacity: 0; pointer-events: none; }
+:root[data-theme="dark"] .dot-portrait-dark { opacity: 1; pointer-events: auto; }

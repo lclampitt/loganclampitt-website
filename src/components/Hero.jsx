@@ -9,6 +9,7 @@ import {
   WORDMARK_STACK_CLASS,
 } from '../lib/wordmark'
 import ActivityStrip from './ActivityStrip'
+import DotPortrait from './DotPortrait'
 import { GitHubIcon, LinkedInIcon, ResumeIcon, WorkIcon } from './icons'
 
 const fade = (delay) => ({
@@ -41,18 +42,14 @@ export default function Hero() {
   return (
     <>
       <section id="hero" className="relative pt-8 md:pt-10 pb-0">
-        <div className="mx-auto max-w-6xl px-5 md:px-8 w-full">
-          <motion.div {...rest(0, 0.04)} className="flex items-baseline justify-between gap-4 pr-24 sm:pr-32">
+        <div className="mx-auto max-w-6xl px-5 md:px-8 w-full relative">
+          <div className="hidden md:block absolute top-[17px] right-[68px] z-10">
+            <DotPortrait />
+          </div>
+          <motion.div {...rest(0, 0.04)} className="pr-24 sm:pr-32">
             <p className="font-script italic text-[1.35rem] md:text-[1.65rem] text-ink">
               Hey it&apos;s me
             </p>
-            <button
-              type="button"
-              onClick={scrollToProjects}
-              className="font-mono text-[11px] tracking-[0.16em] uppercase text-dim hover:text-ink transition-colors"
-            >
-              scroll for work ↓
-            </button>
           </motion.div>
 
           <h1 className="mt-6 md:mt-7">
