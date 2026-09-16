@@ -8,7 +8,7 @@ import {
   WORDMARK_STACK_CLASS,
 } from '../lib/wordmark'
 import ActivityStrip from './ActivityStrip'
-import DotPortrait from './DotPortrait'
+import HeroPortrait from './HeroPortrait'
 import { GitHubIcon, LinkedInIcon, MailIcon, ResumeIcon } from './icons'
 
 const fade = (delay) => ({
@@ -43,7 +43,7 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: playRequested ? 0.2 : 0.12, ease: [0.22, 1, 0.36, 1] }}
             className="hidden md:block absolute top-[17px] right-[68px] z-10"
           >
-            <DotPortrait />
+            <HeroPortrait />
           </motion.div>
           <motion.div {...rest(0, 0.04)} className="pr-24 sm:pr-32">
             <p className="font-dot font-black text-[1.75rem] md:text-[2.25rem] leading-none tracking-[0.02em] text-ink">

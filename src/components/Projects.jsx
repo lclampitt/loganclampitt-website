@@ -45,7 +45,7 @@ function PreviewBlock({ project }) {
           alt={`${project.title} website preview`}
           loading="lazy"
           decoding="async"
-          className="h-full w-full object-cover object-top"
+          className="project-thumb h-full w-full object-cover object-top"
         />
       </div>
     )

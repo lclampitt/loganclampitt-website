@@ -45,11 +45,6 @@ export default function Experience() {
                   <h3 className="font-mono text-[17px] font-semibold leading-snug text-ink">
                     <span className="timeline-title">{item.title}</span>
                     <span className="font-medium text-muted"> · {item.role}</span>
-                    {item.current && (
-                      <span className="ml-2 align-[2px] font-mono text-[10px] font-medium tracking-[0.14em] uppercase text-accent">
-                        Current
-                      </span>
-                    )}
                   </h3>
                   <p className="mt-2 max-w-[40rem] font-mono text-[13px] leading-relaxed text-muted">
                     {item.desc}

@@ -230,6 +230,16 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   --project-stroke: var(--color-ink);
 }
 
+/* Muted like the logos; full color on hover, with no movement */
+.project-thumb {
+  filter: grayscale(0.45) contrast(1.05);
+  transition: filter 0.3s ease;
+}
+
+.project-card:hover .project-thumb {
+  filter: grayscale(0) contrast(1.05);
+}
+
 .contact-detail {
   padding: 14px 0;
   border-top: 1.5px dashed var(--color-line);
@@ -238,6 +248,80 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
 .contact-detail:first-child {
   border-top: 0;
   padding-top: 0;
+}
+
+/* Hero photo: dashed frame like the project cards, with a faint dot grid and corner ticks */
+.hero-portrait-frame {
+  margin: 0;
+  padding: 8px 8px 7px;
+  pointer-events: auto;
+}
+
+.hero-portrait-media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 560 / 650;
+  background: var(--color-line);
+}
+
+.hero-portrait-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.45) contrast(1.05);
+  transition: filter 0.3s ease, transform 0.4s ease;
+}
+
+.hero-portrait-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(250, 247, 242, 0.14) 0.7px, transparent 1px);
+  background-size: 4px 4px;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.hero-portrait-corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: var(--color-page);
+  border-style: solid;
+  opacity: 0.9;
+  z-index: 1;
+}
+
+.hero-portrait-corner--tl {
+  top: 8px;
+  left: 8px;
+  border-width: 1.5px 0 0 1.5px;
+}
+
+.hero-portrait-corner--br {
+  right: 8px;
+  bottom: 8px;
+  border-width: 0 1.5px 1.5px 0;
+}
+
+.hero-portrait-caption {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 7px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--color-dim);
+}
+
+.hero-portrait-frame:hover .hero-portrait-img {
+  filter: grayscale(0) contrast(1.05);
+  transform: scale(1.02);
+}
+
+.hero-portrait-frame:hover .hero-portrait-media::after {
+  opacity: 0.4;
 }
 
 .muted-logo {
