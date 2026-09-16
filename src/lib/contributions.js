@@ -2,7 +2,7 @@ export const WEEKS = 53
 export const DAYS = 7
 
 const CONTRIBUTIONS_API = 'https://github-contributions-api.jogruber.de/v4'
-const LIGHT_FALLBACK = ['#e8e2d8', '#a9d0d6', '#5fa8b1', '#1f6f7a', '#0e3a52']
+const LIGHT_FALLBACK = ['#e8e2d8', '#f5bd88', '#f7a867', '#ff7900', '#c95c00']
 
 function readVar(name, fallback) {
   if (typeof window === 'undefined') return fallback
@@ -16,8 +16,8 @@ export function getLevelColors() {
 
 export function getGitPopColors() {
   return {
-    low: readVar('--git-pop-low', '#8fd6e0'),
-    high: readVar('--git-pop-high', '#0e3a52'),
+    low: readVar('--git-pop-low', '#ffb877'),
+    high: readVar('--git-pop-high', '#ff9433'),
   }
 }
 

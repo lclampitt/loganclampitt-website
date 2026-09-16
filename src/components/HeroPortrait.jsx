@@ -1,6 +1,6 @@
 export default function HeroPortrait() {
   return (
-    <div className="hero-portrait absolute top-0 right-0 w-[230px] md:w-[260px] pointer-events-none">
+    <div className="hero-portrait absolute top-0 right-0 w-[210px] md:w-[230px] pointer-events-none">
       <figure className="project-card hero-portrait-frame">
         <div className="hero-portrait-media">
           <img

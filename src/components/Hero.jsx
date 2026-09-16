@@ -41,7 +41,7 @@ export default function Hero() {
           <motion.div
             {...rest(0.12, 0.2)}
             transition={{ duration: 0.8, delay: playRequested ? 0.2 : 0.12, ease: [0.22, 1, 0.36, 1] }}
-            className="hidden md:block absolute top-[17px] right-[68px] z-10"
+            className="hidden md:block absolute top-[17px] right-[108px] z-10"
           >
             <HeroPortrait />
           </motion.div>
@@ -67,9 +67,7 @@ export default function Hero() {
             {...rest(0.08, 0.1)}
             className="mt-5 max-w-2xl font-mono text-[13px] md:text-sm leading-relaxed text-muted"
           >
-            <span className="text-ink font-medium">Software Developer</span>
-            {' '}
-            at CT Realty Trust. I build websites and apps that look and feel good to use,
+            I build websites and apps that look and feel good to use,
             {' '}
             <span className="text-ink font-medium">full stack</span>
             {' '}
@@ -80,7 +78,7 @@ export default function Hero() {
             and
             {' '}
             <span className="text-ink font-medium">freelance</span>
-            . Quietly into sim racing on the side.
+            .
           </motion.p>
 
           <motion.div {...rest(0.14, 0.18)} className="mt-6 flex flex-wrap items-center gap-2.5">

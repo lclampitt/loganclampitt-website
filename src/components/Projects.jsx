@@ -84,15 +84,15 @@ function PreviewBlock({ project }) {
   )
 }
 
-function ProjectCard({ project }) {
+function ProjectCard({ project, wide = false }) {
   const target = cardTarget(project)
-  const className = 'project-card group block h-full p-2.5 md:p-3 transition-colors'
+  const className = `project-card${wide ? ' project-card--wide' : ''} group block h-full p-2.5 md:p-3 transition-colors`
   const inner = (
     <>
       <div className="overflow-hidden">
         <PreviewBlock project={project} />
       </div>
-      <div className="px-0.5 pt-2.5 pb-0.5">
+      <div className="project-card-body px-0.5 pt-2.5 pb-0.5">
         <div className="flex items-baseline justify-between gap-2">
           <h3 className="font-mono text-[15px] md:text-base font-semibold text-ink">
             {project.title}
@@ -149,36 +149,21 @@ function ProjectCard({ project }) {
   )
 }
 
-export default function Projects() {
+export function SimRacingTeaser() {
   return (
-    <section id="projects" className="pt-6 md:pt-8 pb-20 md:pb-28">
+    <section id="sim-racing-teaser" className="pt-9 md:pt-[52px] pb-[68px] md:pb-[92px]">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
-        <div className="mx-auto w-full max-w-[52rem]">
-          <motion.h2
-            {...fadeUp(0)}
-            className="font-dot font-black text-[17px] tracking-[0.14em] uppercase text-muted mb-6"
-          >
-            Projects
-          </motion.h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {PROJECTS.map((project, index) => (
-              <motion.div key={project.slug} {...fadeUp(0.05 + index * 0.06)}>
-                <ProjectCard project={project} />
-              </motion.div>
-            ))}
-          </div>
-
-          <motion.div {...fadeUp(0.2)} className="mt-10 pt-6 border-t border-dotted border-line">
+        <div className="w-full">
+          <motion.div {...fadeUp(0)}>
             <Link
               to="/sim-racing"
               className="group flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8"
             >
               <div className="min-w-0 flex-1">
-                <p className="font-dot font-black text-[14px] tracking-[0.14em] uppercase text-dim">
+                <h2 className="font-dot font-black text-[17px] tracking-[0.14em] uppercase text-muted">
                   Sim racing
-                </p>
-                <p className="mt-2 max-w-[30rem] font-mono text-sm leading-relaxed text-muted">
+                </h2>
+                <p className="mt-2 max-w-[36rem] font-mono text-sm leading-relaxed text-muted">
                   Racing since 2012, from the ENASCAR Coca-Cola Series to representing CSU Fullerton in
                   the collegiate championship.
                 </p>
@@ -186,7 +171,7 @@ export default function Projects() {
                   More <span className="inline-block transition-transform group-hover:translate-x-0.5">→</span>
                 </p>
               </div>
-              <div className="flex shrink-0 items-center gap-4">
+              <div className="flex shrink-0 items-center gap-5">
                 {SERIES_BADGES.map((series) => (
                   <img
                     key={series.slug}
@@ -194,12 +179,37 @@ export default function Projects() {
                     alt={`${series.title} logo`}
                     loading="lazy"
                     decoding="async"
-                    className="series-badge series-badge--home"
+                    className="series-badge series-badge--home-wide"
                   />
                 ))}
               </div>
             </Link>
           </motion.div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+export default function Projects() {
+  return (
+    <section id="projects" className="pb-20 md:pb-28">
+      <div className="mx-auto max-w-6xl px-5 md:px-8">
+        <div className="w-full">
+          <motion.h2
+            {...fadeUp(0)}
+            className="font-dot font-black text-[17px] tracking-[0.14em] uppercase text-muted mb-6"
+          >
+            Projects
+          </motion.h2>
+
+          <div className={`grid grid-cols-1 gap-3${PROJECTS.length > 1 ? ' sm:grid-cols-2' : ''}`}>
+            {PROJECTS.map((project, index) => (
+              <motion.div key={project.slug} {...fadeUp(0.05 + index * 0.06)}>
+                <ProjectCard project={project} wide={PROJECTS.length === 1} />
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

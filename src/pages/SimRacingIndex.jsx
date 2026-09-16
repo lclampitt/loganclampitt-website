@@ -148,8 +148,6 @@ function LogoRow({ id, title, items, delay, className }) {
             <div className="sim-logo-frame">
               <MutedLogo item={item} className="sim-logo-img" />
             </div>
-            <p className="sim-logo-name">{item.name}</p>
-            {item.years && <p className="sim-logo-years">{item.years}</p>}
           </li>
         ))}
       </ul>

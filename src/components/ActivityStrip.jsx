@@ -64,11 +64,15 @@ export default function ActivityStrip() {
     }
   }, [])
 
-  const gap = innerWidth > 0 && innerWidth < 540 ? 2 : 3
+  const compact = innerWidth > 0 && innerWidth < 540
+  const visibleWeeks = compact ? 26 : WEEKS
+  const startWeek = WEEKS - visibleWeeks
+  const gap = compact ? 2 : 3
   const block = innerWidth > 0
-    ? Math.max(4, (innerWidth - (WEEKS - 1) * gap) / WEEKS)
+    ? Math.max(4, (innerWidth - (visibleWeeks - 1) * gap) / visibleWeeks)
     : 0
-  const graphWidth = block > 0 ? WEEKS * (block + gap) - gap : 0
+  const graphWidth = block > 0 ? visibleWeeks * (block + gap) - gap : 0
+  const visibleCells = startWeek > 0 ? cells.filter((cell) => cell.week >= startWeek) : cells
   const height = block > 0 ? DAYS * (block + gap) - gap : 0
 
   useEffect(() => {
@@ -197,7 +201,7 @@ export default function ActivityStrip() {
       timers.forEach((id) => window.clearTimeout(id))
       timers.clear()
     }
-  }, [cells, colors, graphWidth, started])
+  }, [cells, colors, graphWidth, started, startWeek])
 
   const reducedMotion = prefersReducedMotion()
 
@@ -213,10 +217,10 @@ export default function ActivityStrip() {
       className="block w-full min-w-0"
     >
       <div className="mb-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <p className="font-dot font-black text-[15px] tracking-[0.14em] uppercase text-dim">GitHub</p>
+        <p className="font-dot font-black text-[17px] tracking-[0.14em] uppercase text-muted">GitHub</p>
         {total !== null && (
           <p className="font-mono text-[11px] text-dim">
-            {total} contributions in the last year
+            {total} contributions in the last year{compact ? ' · last 6 months shown' : ''}
           </p>
         )}
       </div>
@@ -233,17 +237,17 @@ export default function ActivityStrip() {
             role="img"
             aria-hidden="true"
           >
-            {cells.map((cell) => (
+            {visibleCells.map((cell) => (
               <rect
                 key={`${cell.week}-${cell.day}`}
-                x={cell.week * (block + gap)}
+                x={(cell.week - startWeek) * (block + gap)}
                 y={cell.day * (block + gap)}
                 width={block}
                 height={block}
                 rx="2"
                 ry="2"
                 data-level={cell.level}
-                data-week={cell.week}
+                data-week={cell.week - startWeek}
                 data-day={cell.day}
                 fill={started && reducedMotion ? colors[cell.level] : colors[0]}
                 className="git-cell"

@@ -15,7 +15,7 @@ export default function Experience() {
   return (
     <section id="experience" className="pb-20 md:pb-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
-        <div className="mx-auto w-full max-w-[52rem]">
+        <div className="w-full">
           <motion.h2
             {...fadeUp(0)}
             className="font-dot font-black text-[17px] tracking-[0.14em] uppercase text-muted mb-8"

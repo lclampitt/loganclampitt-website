@@ -6,7 +6,6 @@ export const LINKS = {
   resume: '/Resume - Logan Clampitt 2026.pdf',
   email: 'lclampitt44@outlook.com',
   ctRealty: 'https://www.whiteoakswilton.com/',
-  macrovault: 'https://www.macro-vault.com/',
 }
 
 export const FORMSPREE_ID = 'mdapkror'
@@ -27,21 +26,6 @@ export const PROJECTS = [
     caseStudy: true,
     repoUrl: null,
   },
-  {
-    slug: 'gainlytics',
-    title: 'MacroVault',
-    previewLabel: 'MACRO-VAULT.COM',
-    previewImage: '/previews/macrovault.jpg',
-    status: [],
-    statusTone: 'accent',
-    previewKind: 'text-first',
-    desc: 'Fitness analytics capstone with dashboards, PRs, and AI insights. Solo build.',
-    stack: ['React', 'Python', 'Chart.js'],
-    layout: 'stack',
-    liveUrl: LINKS.macrovault,
-    caseStudy: true,
-    repoUrl: 'https://github.com/lclampitt/gainlytics-v2',
-  },
 ]
 
 export const PROJECT_DETAILS = {
@@ -61,23 +45,6 @@ export const PROJECT_DETAILS = {
     tech: ['TypeScript', 'Next.js', 'React', 'Tailwind CSS', 'Framer Motion', 'FastAPI', 'Supabase', 'Vercel', 'Render'],
     externalUrl: LINKS.ctRealty,
     previewUrl: LINKS.ctRealty,
-  },
-  gainlytics: {
-    title: 'MacroVault',
-    tag: 'Capstone',
-    description:
-      'MacroVault is a full stack fitness analytics platform I built to track body metrics, training, and nutrition with clean dashboards and AI insights. It is designed to be simple, fast, and useful for everyday lifters. This was my senior capstone, and I worked on it solo.',
-    tags: ['Dashboards and tracking', 'Workouts and PRs', 'AI insights'],
-    whatItDoes: [
-      'Log workouts, sets, and PRs with a streamlined UI.',
-      'Track bodyweight and body fat over time using charts.',
-      'Use AI to analyze trends and suggest goals and targets.',
-      'Dark theme laid out for desktop and mobile.',
-    ],
-    tech: ['React', 'Python', 'Chart.js', 'REST API', 'CSS'],
-    externalUrl: LINKS.macrovault,
-    repoUrl: 'https://github.com/lclampitt/gainlytics-v2',
-    previewUrl: LINKS.macrovault,
   },
 }
 
@@ -100,9 +67,9 @@ export const EXPERIENCE = [
   {
     title: 'BS Computer Science',
     role: 'CSU Fullerton',
-    dates: '2023 — 2025',
-    desc: 'Senior capstone: MacroVault. Solo designed and shipped fitness analytics with dashboards and AI insights.',
-    stack: ['Capstone', 'React', 'Python'],
+    dates: '2022 — 2025',
+    desc: 'Bachelor of Science in Computer Science. Graduated fall 2025.',
+    stack: ['React', 'Python', 'Swift'],
   },
 ]
 
@@ -213,14 +180,11 @@ export const SIM_RACING = [
 ]
 
 export const ABOUT_SPEC = [
-  { label: 'Based', items: ['Southern California'] },
   { label: 'Focus', items: ['Web', 'Full stack', 'iOS'] },
-  { label: 'Open to', items: ['Roles', 'Freelance'] },
   { label: 'Languages', items: ['TypeScript', 'JavaScript', 'Python', 'Swift'] },
   { label: 'Frontend', items: ['React', 'Next.js', 'Tailwind', 'CSS', 'Motion'] },
   { label: 'Backend', items: ['FastAPI', 'Supabase', 'Stripe'] },
   { label: 'Mobile', items: ['SwiftUI', 'watchOS'] },
   { label: 'AI', items: ['Claude Code', 'Cursor', 'Claude API', 'MCP'] },
   { label: 'Tools', items: ['Git', 'Vercel', 'Figma'] },
-  { label: 'Other', items: ['Sim racing, 8+ years'] },
 ]

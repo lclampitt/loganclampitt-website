@@ -124,7 +124,7 @@ export default function ContactBar() {
       </AnimatePresence>
 
       <div className="fixed inset-x-0 bottom-0 z-50 pointer-events-none">
-        <div className="mx-auto max-w-4xl px-4 pb-4 md:pb-6 flex flex-col items-center">
+        <div className="ml-auto flex max-w-4xl flex-col items-end px-4 pb-4 md:px-6 md:pb-6">
           <AnimatePresence>
             {open && (
               <motion.div
@@ -251,14 +251,11 @@ export default function ContactBar() {
             initial={false}
             animate={{ opacity: barVisible ? 1 : 0, y: barVisible ? 0 : 16 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className={`contact-bar-toggle w-full max-w-md border border-line bg-surface py-2 pl-5 pr-2 flex items-center justify-between gap-4 text-left shadow-bar ${barVisible ? 'pointer-events-auto' : 'pointer-events-none'}`}
+            className={`contact-bar-toggle border border-line bg-surface py-2 pl-4 pr-2 flex items-center justify-between gap-4 text-left shadow-bar ${barVisible ? 'pointer-events-auto' : 'pointer-events-none'}`}
           >
             <span>
               <span className="block font-mono text-[14px] font-semibold text-ink">Get in touch</span>
-              <span className="block font-mono text-[11px] text-dim mt-0.5">
-                <span className="hidden sm:inline">Roles · freelance · replies</span>
-                <span className="sm:hidden">Replies</span> within a day
-              </span>
+              <span className="block font-mono text-[11px] text-dim mt-0.5">Replies within a day</span>
             </span>
             <span className="contact-bar-toggle-icon w-10 h-10 border border-line bg-page text-ink flex items-center justify-center shrink-0">
               {open ? <ArrowDownIcon className="w-4 h-4" /> : <ArrowUpIcon className="w-4 h-4" />}

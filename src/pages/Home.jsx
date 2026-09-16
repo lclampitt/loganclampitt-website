@@ -1,11 +1,11 @@
 import { lazy, Suspense } from 'react'
 import { motion } from 'framer-motion'
+import About from '../components/About'
 import Hero from '../components/Hero'
-import Projects from '../components/Projects'
+import Experience from '../components/Experience'
+import Projects, { SimRacingTeaser } from '../components/Projects'
 import { useIntro } from '../context/useIntro'
 
-const Experience = lazy(() => import('../components/Experience'))
-const About = lazy(() => import('../components/About'))
 const Footer = lazy(() => import('../components/Footer'))
 
 export default function Home() {
@@ -29,10 +29,11 @@ export default function Home() {
           ease: [0.22, 1, 0.36, 1],
         }}
       >
+        <SimRacingTeaser />
+        <About />
+        <Experience />
         <Projects />
         <Suspense fallback={null}>
-          <Experience />
-          <About />
           <Footer />
         </Suspense>
       </motion.div>
