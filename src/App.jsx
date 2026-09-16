@@ -5,6 +5,7 @@ import ScrollToTop from './components/ScrollToTop'
 import ContactBar from './components/ContactBar'
 import IntroOverlay from './components/IntroOverlay'
 import ThemeToggle from './components/ThemeToggle'
+import DripFrame from './components/DripFrame'
 import SmoothScroll from './components/SmoothScroll'
 import { ContactProvider } from './context/ContactContext'
 import { IntroProvider } from './context/IntroContext'
@@ -21,6 +22,7 @@ function App() {
       <IntroProvider>
         <SmoothScroll>
           <ScrollToTop />
+          <DripFrame />
           <ThemeToggle />
           <Navbar />
           <AnimatePresence mode="wait">

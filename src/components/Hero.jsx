@@ -40,7 +40,7 @@ export default function Hero() {
 
   return (
     <>
-      <section id="hero" className="relative pt-8 md:pt-10 pb-0">
+      <section id="hero" className="relative pb-0">
         <div className="mx-auto max-w-6xl px-5 md:px-8 w-full">
           <motion.div {...rest(0, 0.04)} className="flex items-baseline justify-between gap-4 pr-24 sm:pr-32">
             <p className="font-script italic text-[1.35rem] md:text-[1.65rem] text-ink">
