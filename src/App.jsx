@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import Navbar from './components/Navbar'
@@ -12,6 +13,9 @@ import Home from './pages/Home'
 import SimRacingDetail from './pages/SimRacingDetail'
 import SimRacingIndex from './pages/SimRacingIndex'
 import ProjectDetail from './pages/ProjectDetail'
+
+const ScrollDiagnostics = lazy(() => import('./components/ScrollDiagnostics'))
+const showDiagnostics = new URLSearchParams(window.location.search).has('diag')
 
 function App() {
   const location = useLocation()
@@ -33,6 +37,11 @@ function App() {
           </AnimatePresence>
           <ContactBar />
           <IntroOverlay />
+          {showDiagnostics && (
+            <Suspense fallback={null}>
+              <ScrollDiagnostics />
+            </Suspense>
+          )}
         </SmoothScroll>
       </IntroProvider>
     </ContactProvider>

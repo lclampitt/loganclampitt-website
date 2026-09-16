@@ -1,41 +1,30 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { ReactLenis, useLenis } from 'lenis/react'
 import { useContact } from '../context/useContact'
 import { useIntro } from '../context/useIntro'
 import { bindLenis } from '../lib/scroll'
 import 'lenis/dist/lenis.css'
 
-const FLOATY = {
+const MOUSE_LERP = 0.1
+const TRACKPAD_LERP = 0.22
+
+const OPTIONS = {
   autoRaf: true,
-  lerp: 0.08,
-  wheelMultiplier: 0.9,
+  lerp: MOUSE_LERP,
+  wheelMultiplier: 1,
+  smoothWheel: true,
   syncTouch: false,
   anchors: true,
   allowNestedScroll: true,
   respectReducedMotion: true,
-}
-
-const NATIVE = {
-  autoRaf: true,
-  lerp: 1,
-  wheelMultiplier: 1,
-  syncTouch: false,
-  anchors: true,
-  respectReducedMotion: true,
-}
-
-function useScrollOptions() {
-  const [options, setOptions] = useState(FLOATY)
-
-  useEffect(() => {
-    const coarse = window.matchMedia('(pointer: coarse)')
-    const sync = () => setOptions(coarse.matches ? NATIVE : FLOATY)
-    sync()
-    coarse.addEventListener('change', sync)
-    return () => coarse.removeEventListener('change', sync)
-  }, [])
-
-  return options
+  // Lenis calls this as options.virtualScroll(), so `this` is the live options object.
+  virtualScroll(data) {
+    if (data.event.type === 'wheel') {
+      const small = Math.abs(data.deltaY) < 50 && Math.abs(data.deltaX) < 50
+      this.lerp = small ? TRACKPAD_LERP : MOUSE_LERP
+    }
+    return true
+  },
 }
 
 function LenisBridge() {
@@ -59,10 +48,8 @@ function LenisBridge() {
 }
 
 export default function SmoothScroll({ children }) {
-  const options = useScrollOptions()
-
   return (
-    <ReactLenis root options={options}>
+    <ReactLenis root options={OPTIONS}>
       <LenisBridge />
       {children}
     </ReactLenis>

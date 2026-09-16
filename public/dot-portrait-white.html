@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dot Portrait</title>
 <style>
-  html, body { margin: 0; height: 100%; background: #121212; }
+  html, body { margin: 0; height: 100%; background: transparent; }
   body { display: grid; place-items: center; overflow: hidden; }
   canvas { display: block; cursor: default; touch-action: none; }
 </style>
@@ -69,6 +69,7 @@ function buildMask(cols, rows) {
 function build() {
   const fit = Math.min(window.innerWidth / IW, window.innerHeight / IH);  // fill the frame, keep photo proportions
   W = Math.floor(IW * fit); H = Math.floor(IH * fit);
+  if (!W || !H) return;
   const dpr = window.devicePixelRatio || 1;
   canvas.width = W * dpr; canvas.height = H * dpr;
   canvas.style.width = W + "px"; canvas.style.height = H + "px";
@@ -105,6 +106,7 @@ function build() {
 function step() {
   let moving = false;
   const R2 = REPEL_R * REPEL_R;
+  const released = mouse.x < -1000;
   for (const d of dots) {
     const dx = d.x - mouse.x, dy = d.y - mouse.y;
     const dist2 = dx * dx + dy * dy;
@@ -120,7 +122,7 @@ function step() {
     d.vx *= DAMPING; d.vy *= DAMPING;
     d.x += d.vx; d.y += d.vy;
     if (Math.abs(d.vx) > 0.01 || Math.abs(d.vy) > 0.01 ||
-        Math.abs(d.x - d.hx) > 0.05 || Math.abs(d.y - d.hy) > 0.05) moving = true;
+        (released && (Math.abs(d.x - d.hx) > 0.05 || Math.abs(d.y - d.hy) > 0.05))) moving = true;
   }
   return moving;
 }
@@ -139,8 +141,7 @@ function draw() {
 function loop() {
   const moving = step();
   draw();
-  const mouseInside = mouse.x > -REPEL_R && mouse.x < W + REPEL_R && mouse.y > -REPEL_R && mouse.y < H + REPEL_R;
-  if (moving || mouseInside) requestAnimationFrame(loop);
+  if (moving) requestAnimationFrame(loop);
   else running = false;
 }
 function kick() { if (!running) { running = true; requestAnimationFrame(loop); } }
@@ -156,6 +157,11 @@ window.addEventListener("pointerleave", () => { mouse.x = mouse.y = -9999; kick(
 document.addEventListener("pointerout", e => { if (!e.relatedTarget) { mouse.x = mouse.y = -9999; kick(); } });
 window.addEventListener("pointerup", e => { if (e.pointerType === "touch") { mouse.x = mouse.y = -9999; kick(); } });
 
+window.addEventListener("wheel", e => {
+  if (e.ctrlKey || parent === window) return;
+  e.preventDefault();
+  parent.dispatchEvent(new parent.WheelEvent("wheel", { deltaX: e.deltaX, deltaY: e.deltaY, deltaMode: e.deltaMode, bubbles: true, cancelable: true }));
+}, { passive: false });
 let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(build, 150); });
 img.onload = () => {
   IW = img.naturalWidth; IH = img.naturalHeight;

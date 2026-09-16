@@ -18,6 +18,7 @@ export default function ActivityStrip() {
   const [started, setStarted] = useState(() => prefersReducedMotion())
   const cardRef = useRef(null)
   const graphRef = useRef(null)
+  const pausedRef = useRef(false)
 
   useLayoutEffect(() => {
     const el = cardRef.current
@@ -46,6 +47,44 @@ export default function ActivityStrip() {
     : 0
   const graphWidth = block > 0 ? WEEKS * (block + gap) - gap : 0
   const height = block > 0 ? DAYS * (block + gap) - gap : 0
+
+  useEffect(() => {
+    const el = graphRef.current
+    if (!el) return undefined
+
+    let inView = true
+    let scrolling = false
+    let scrollTimer = 0
+    const sync = () => {
+      pausedRef.current = !inView || scrolling
+      el.toggleAttribute('data-paused', pausedRef.current)
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting
+      sync()
+    })
+    observer.observe(el)
+
+    const onScroll = () => {
+      if (!scrolling) {
+        scrolling = true
+        sync()
+      }
+      window.clearTimeout(scrollTimer)
+      scrollTimer = window.setTimeout(() => {
+        scrolling = false
+        sync()
+      }, 150)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('scroll', onScroll)
+      window.clearTimeout(scrollTimer)
+    }
+  }, [])
 
   useEffect(() => {
     if (!contentReady) return undefined
@@ -113,6 +152,10 @@ export default function ActivityStrip() {
 
     const tick = () => {
       if (stopped) return
+      if (pausedRef.current) {
+        later(tick, 250)
+        return
+      }
       const active = nodes.filter((node) => Number(node.dataset.level) > 0)
       const pool = active.length ? active : nodes
       const n = 2 + Math.floor(Math.random() * 2)

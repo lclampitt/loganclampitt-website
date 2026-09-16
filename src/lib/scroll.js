@@ -9,6 +9,10 @@ export function bindLenis(instance) {
   lenis = instance
 }
 
+export function getLenis() {
+  return lenis
+}
+
 function easeOutCubic(t) {
   return 1 - (1 - t) ** 3
 }

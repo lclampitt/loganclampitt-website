@@ -348,6 +348,11 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   animation: git-caustics-shimmer 7.5s ease-in-out infinite alternate;
 }
 
+.git-graph[data-paused] .git-caustics,
+.git-graph[data-paused] .git-caustics::after {
+  animation-play-state: paused;
+}
+
 :root[data-theme="dark"] .git-caustics {
   mix-blend-mode: screen;
   opacity: 0.3;
