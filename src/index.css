@@ -39,16 +39,6 @@
   --pill-border: rgba(255, 255, 255, 0.18);
   --pill-highlight: rgba(255, 255, 255, 0.22);
   --pill-shadow: 0 5px 10px rgba(11, 28, 44, 0.14), 0 1px 2px rgba(11, 28, 44, 0.08);
-  --drip-h: clamp(2.6rem, 12vw, 3.65rem);
-  --drip-top-frac: 0.343;
-  --drip-bot-frac: 0.307;
-  --drip-color: #000000;
-}
-
-@media (min-width: 640px) {
-  :root {
-    --drip-h: clamp(3.35rem, 6.5vw + 1.1rem, 5.5rem);
-  }
 }
 
 :root[data-theme="dark"] {
@@ -80,7 +70,6 @@
   --pill-border: rgba(11, 28, 44, 0.16);
   --pill-highlight: rgba(255, 255, 255, 0.62);
   --pill-shadow: 0 5px 14px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.35);
-  --drip-color: #faf7f2;
 }
 
 * {
@@ -384,61 +373,11 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   }
 }
 
-.drip-frame {
-  position: fixed;
-  inset: 0;
-  z-index: 35;
-  pointer-events: none;
-  overflow: hidden;
-  opacity: 0;
-  transition: opacity 0.45s ease;
-  user-select: none;
-}
-
-.drip-frame--on {
-  opacity: 1;
-}
-
-.drip-frame__band {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: var(--drip-h);
-  pointer-events: none;
-  background-color: var(--drip-color);
-  -webkit-mask-image: url("/drip-frame.png");
-  mask-image: url("/drip-frame.png");
-  -webkit-mask-mode: alpha;
-  mask-mode: alpha;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-}
-
-.drip-frame__band--top {
-  top: 0;
-  -webkit-mask-position: top center;
-  mask-position: top center;
-  -webkit-mask-size: 100% calc(var(--drip-h) / var(--drip-top-frac));
-  mask-size: 100% calc(var(--drip-h) / var(--drip-top-frac));
-}
-
-.drip-frame__band--bottom {
-  bottom: 0;
-  -webkit-mask-position: bottom center;
-  mask-position: bottom center;
-  -webkit-mask-size: 100% calc(var(--drip-h) / var(--drip-bot-frac));
-  mask-size: 100% calc(var(--drip-h) / var(--drip-bot-frac));
-}
-
 #hero,
 #proof,
 #projects,
 #about {
   scroll-margin-top: 12px;
-}
-
-#hero {
-  padding-top: calc(var(--drip-h) * 0.58 + 0.9rem);
 }
 
 .git-graph[data-phase='idle'] .git-cell {
@@ -528,10 +467,6 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-  }
-
-  .drip-frame {
-    transition: none;
   }
 
   .git-graph .git-cell {
