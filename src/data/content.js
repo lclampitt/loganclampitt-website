@@ -3,7 +3,7 @@ export const LINKS = {
   githubHandle: 'lclampitt',
   linkedin: 'https://www.linkedin.com/in/loganclampitt/',
   linkedinHandle: 'loganclampitt',
-  resume: '/Resume - Logan Clampitt 2026.pdf',
+  resume: '/Logan-Clampitt-Resume.pdf',
   email: 'lclampitt44@outlook.com',
   ctRealty: 'https://www.whiteoakswilton.com/',
 }
