@@ -1285,6 +1285,11 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   scroll-margin-top: 12px;
 }
 
+/* Last hash target needs room below so scroll-into-view can reach the top. */
+#projects {
+  min-height: calc(100svh - 12px);
+}
+
 .git-graph[data-phase='idle'] .git-cell {
   opacity: 0;
 }
