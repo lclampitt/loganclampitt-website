@@ -28,6 +28,7 @@ function App() {
               <Route path="/sim-racing" element={<SimRacingIndex />} />
               <Route path="/sim-racing/:slug" element={<Navigate to="/sim-racing" replace />} />
               <Route path="/projects/:slug" element={<ProjectDetail />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </AnimatePresence>
           <ContactBar />
