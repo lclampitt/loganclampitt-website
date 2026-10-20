@@ -2,7 +2,7 @@
 // hairline border; never a coloured side border, never a status pill.
 // Status is a plain word. Numbers are tabular.
 
-import { fmtNumber } from './format'
+import { fmtDateTime, fmtNumber, pageLabel } from './format'
 
 export function Head({ title, sub, children }) {
   return (
@@ -101,6 +101,40 @@ export function Failed({ error, onRetry }) {
         </button>
       )}
     </div>
+  )
+}
+
+const PLAIN_EMAIL = /^[A-Za-z0-9._+'-]{1,64}@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*$/
+
+// Contact form messages, newest first: who, how to reach them, when, and
+// what they wrote, exactly as sent (plain text, line breaks kept).
+export function MessageList({ messages }) {
+  return (
+    <ul className="flex flex-col divide-y divide-cs-line">
+      {messages.map((m) => (
+        <li key={`${m.received_at}|${m.email}`} className="py-3 first:pt-0 last:pb-0">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5">
+            <p className="text-[13px]">
+              <span className="font-semibold text-cs-ink">{m.name}</span>
+              {/* A link only for a plain address, so a stored value can never
+                  add a Bcc or subject to the reply. Anything else is shown as text. */}
+              {PLAIN_EMAIL.test(m.email) ? (
+                <a href={`mailto:${m.email}`} className="ml-2 text-cs-link hover:underline">
+                  {m.email}
+                </a>
+              ) : (
+                <span className="ml-2 text-cs-ink-2">{m.email}</span>
+              )}
+            </p>
+            <p className="text-[12px] tabular-nums text-cs-ink-2">
+              {fmtDateTime(m.received_at)}
+              {m.page && <span>, sent from {pageLabel(m.page)}</span>}
+            </p>
+          </div>
+          <p className="mt-1.5 whitespace-pre-wrap break-words text-[13px] leading-relaxed text-cs-ink">{m.message}</p>
+        </li>
+      ))}
+    </ul>
   )
 }
 

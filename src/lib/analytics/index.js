@@ -61,6 +61,21 @@ export function track(name, props = {}) {
   }
 }
 
+// This visit's ids, for linking a contact message to it, or null when
+// tracking is off for this browser (Global Privacy Control, excluded):
+// the message is then kept without a link to any visit.
+export function visitIds() {
+  try {
+    if (trackingOff()) return null
+    startIdentity()
+    const { visitor_id: visitorId, identity_source: source } = identityFields()
+    if (source !== 'persistent') return null
+    return { visitor_id: visitorId, session_id: sessionFor(Date.now()) }
+  } catch {
+    return null
+  }
+}
+
 // Paths that only redirect (App.jsx sends /sim-racing/:slug to
 // /sim-racing); the page they land on is the one that counts.
 const REDIRECTS = /^\/sim-racing\/[^/]+/

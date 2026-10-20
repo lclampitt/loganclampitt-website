@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import BusiestTimes from './BusiestTimes'
 import { SERIOUS_LABELS, channelLabel, envNote, fmtNumber, pageLabel, plural, projectTitle } from './format'
-import { Bars, Card, Choice, Empty, Failed, Head, Loading } from './ui'
+import { Bars, Card, Choice, Empty, Failed, Figure, Head, Loading } from './ui'
 import { useView } from './useView'
 
 const RANGES = [
@@ -12,6 +12,36 @@ const RANGES = [
 const RANGE_LABELS = { all: 'all time', 30: 'last 30 days', 7: 'last 7 days' }
 
 const maxOf = (rows, key) => Math.max(0, ...rows.map((r) => r[key] ?? 0))
+
+// The five counts Logan watches most (owner request 2026-10-20). "Email
+// me" counts only the hero button, not the contact bar.
+const CLICKS = [
+  { key: 'github', label: 'GitHub clicks' },
+  { key: 'linkedin', label: 'LinkedIn clicks' },
+  { key: 'resume', label: 'Resume downloads' },
+  { key: 'email_me', label: 'Email me clicks' },
+  { key: 'sim_racing', label: 'Sim racing visits' },
+]
+
+function ClickBoxes({ clicks }) {
+  return (
+    <div>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+        {CLICKS.map(({ key, label }) => {
+          const c = clicks?.[key]
+          return (
+            <Card key={key}>
+              <Figure label={label} value={c?.count ?? null} note={c ? plural(c.visitors, 'person', 'people') : null} />
+            </Card>
+          )
+        })}
+      </div>
+      {/* Contact opens before 2026-10-20 did not record which button, so
+          they cannot count toward Email me. */}
+      <p className="mt-2 text-[12px] text-cs-ink-2">Email me counts the hero button only, since Oct 20, 2026.</p>
+    </div>
+  )
+}
 
 function Serious({ serious, visitors }) {
   const counts = Object.fromEntries(serious.by_event.map((e) => [e.event_name, e]))
@@ -76,6 +106,8 @@ export default function Behaviour() {
               <span className="text-cs-ink-2"> Leaves out {plural(b.excluded_crawlers, 'crawler')}.</span>
             )}
           </p>
+
+          <ClickBoxes clicks={b.clicks} />
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <Serious serious={b.serious} visitors={b.visitors} />

@@ -10,7 +10,10 @@ export const EVENT_SCHEMA = {
     slug: { type: 'string', required: true, max: 80, pattern: /^[a-z0-9-]+$/ },
   },
   Resume_Downloaded: {},
-  Contact_Opened: {},
+  // Which control opened it: the hero's "Email me" button or the bar.
+  Contact_Opened: {
+    from: { type: 'string', oneOf: ['email_me', 'contact_bar'] },
+  },
   // That it was sent, nothing about what was in it.
   Contact_Sent: {},
   Outbound_Link_Clicked: {

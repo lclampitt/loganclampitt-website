@@ -19,7 +19,8 @@ or send anything to its services.
    browser. Never read or write a `.env` file (the hooks block it).
 3. **Visitors' privacy.** No cookies for visitors, no IP stored, city and
    region at most, nothing tracked when the browser sends Global Privacy
-   Control or is excluded. No contact form text in analytics.
+   Control or is excluded. Contact messages (name, email, message) live
+   only in `contact_messages`, never in `events`, and are never logged.
 4. **Database.** Supabase, its own project. Every table has RLS on with no
    policies, and only `api/` (service role) reads or writes. Migrations in
    `supabase/migrations/` are append only; never edit one on `main`. Ask

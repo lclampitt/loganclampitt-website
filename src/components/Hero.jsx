@@ -82,7 +82,7 @@ export default function Hero() {
           </motion.p>
 
           <motion.div {...rest(0.14, 0.18)} className="mt-6 flex flex-wrap items-center gap-2.5">
-            <button type="button" onClick={openContact} className={pill}>
+            <button type="button" onClick={() => openContact('email_me')} className={pill}>
               <MailIcon />
               Email me
             </button>

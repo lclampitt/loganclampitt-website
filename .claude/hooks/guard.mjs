@@ -34,6 +34,7 @@
 
 import { execSync } from "node:child_process";
 import { readFileSync } from "node:fs";
+import { resolve as resolvePath } from "node:path";
 
 function readPayload() {
   let raw = "";
@@ -51,10 +52,13 @@ function readPayload() {
   }
   // Different Claude Code versions name the field differently; try each.
   const input = data.tool_input ?? data.inputs ?? data.input ?? data;
-  if (typeof input?.command === "string") return { command: input.command, sqlOnly: false };
+  // The session's working folder: where the command runs. The hook itself
+  // may start in another checkout (a worktree's parent repo is on main).
+  const cwd = typeof data.cwd === "string" ? data.cwd : undefined;
+  if (typeof input?.command === "string") return { command: input.command, sqlOnly: false, cwd };
   // An MCP execute_sql call: only the SQL rules apply.
-  if (typeof input?.query === "string") return { command: input.query, sqlOnly: true };
-  return { command: JSON.stringify(data), sqlOnly: false };
+  if (typeof input?.query === "string") return { command: input.query, sqlOnly: true, cwd };
+  return { command: JSON.stringify(data), sqlOnly: false, cwd };
 }
 
 function block(message) {
@@ -62,7 +66,7 @@ function block(message) {
   process.exit(2);
 }
 
-const { command, sqlOnly } = readPayload();
+const { command, sqlOnly, cwd } = readPayload();
 if (!command) process.exit(0);
 
 const segments = command.split(/&&|\|\||[;|\n]/).map((s) => s.trim()).filter(Boolean);
@@ -183,29 +187,48 @@ for (const segment of segments) {
 }
 
 // ── Rule 1: nothing lands on main except through a PR ───────────────
-let branch = null;
-function currentBranch() {
-  if (branch !== null) return branch;
+// The branch is read in the folder the git command really runs in: the
+// session's folder, moved by a `cd <dir>` earlier in the chain, or a
+// `git -C <dir>`. Reading it in the hook's own folder was wrong for
+// worktrees (2026-10-20): the parent checkout sits on main while the
+// worktree is on a feature branch, so every commit was blocked.
+const branches = new Map();
+function branchIn(dir) {
+  const key = dir ?? "";
+  if (branches.has(key)) return branches.get(key);
+  let name = "";
   try {
-    branch = execSync("git rev-parse --abbrev-ref HEAD", {
+    name = execSync("git rev-parse --abbrev-ref HEAD", {
+      cwd: dir,
       encoding: "utf8",
       stdio: ["ignore", "pipe", "ignore"],
     }).trim();
   } catch {
-    branch = ""; // not a git repo, or git missing: nothing to guard
+    name = ""; // not a git repo, or git missing: nothing to guard
   }
-  return branch;
+  branches.set(key, name);
+  return name;
 }
 const isMain = (name) => name === "main" || name === "master";
+const unquote = (s) => s.replace(/^["']|["']$/g, "");
 
 // Track a `git checkout main && git commit` chain: the branch the later
 // segment runs on is the one switched to, not the one read up front.
 let switchedTo = null;
+let dir = cwd;
 for (const segment of segments) {
+  const cd = segment.match(/^(?:cd|Set-Location|pushd)\s+(?:\/d\s+)?("[^"]+"|'[^']+'|\S+)\s*$/i);
+  if (cd) {
+    dir = resolvePath(dir ?? process.cwd(), unquote(cd[1]));
+    switchedTo = null;
+    continue;
+  }
   const call = gitCall(segment);
   if (!call) continue;
   const { sub, rest } = call;
   const args = ` ${rest} `;
+  const dashC = segment.match(/\bgit\s+(?:[^|;&]*?\s)?-C\s+("[^"]+"|'[^']+'|\S+)/);
+  const where = dashC ? resolvePath(dir ?? process.cwd(), unquote(dashC[1])) : dir;
 
   if (sub === "checkout" || sub === "switch") {
     const created = args.match(/\s-[bcB]\s+(\S+)/);
@@ -222,7 +245,7 @@ for (const segment of segments) {
     block("this push targets main. Push a branch and open a PR; merging the PR with gh is the sanctioned path.");
   }
   if (/^(commit|merge|rebase|push|cherry-pick|am|revert)$/.test(sub)) {
-    const on = switchedTo ?? currentBranch();
+    const on = switchedTo ?? branchIn(where);
     if (isMain(on)) {
       block(`you are on '${on}'. Direct commit/push/merge/rebase to ${on} is not allowed. Make a branch and open a PR (merging the PR with gh is the sanctioned path).`);
     }

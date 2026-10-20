@@ -74,6 +74,10 @@ readable.
   localStorage.
 - No contact form text, name or email in `events` (Contact_Sent records
   that it happened, nothing more).
+- Contact messages live only in `contact_messages` (RLS on, no grants),
+  written only by `api/contact.js`, never logged, and shown only in the
+  console. Under Global Privacy Control a message is kept but never
+  linked to a visit.
 - The privacy note still describes what is collected. Flag a new stored
   field it does not cover.
 

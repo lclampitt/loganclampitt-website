@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router-dom'
 import {
   cameFrom, channelLabel, envNote, eventLabel, fmtDateTime, fmtNumber, fmtTime, isSerious, machineLabel, pageLabel, placeLabel, plural,
 } from './format'
-import { Card, Failed, Head, Loading } from './ui'
+import { Card, Failed, Head, Loading, MessageList } from './ui'
 import { useView } from './useView'
 
 // Events arrive oldest first; group them into visits, newest visit first.
@@ -100,6 +100,7 @@ export default function Visitor() {
       <Head
         title={`Visitor ${n}`}
         sub={[
+          d?.messages?.[0] ? `Wrote as ${d.messages[0].name}, ${d.messages[0].email}.` : null,
           v?.crawler ? 'Marked as a crawler. Not counted as a person.' : 'Everything this site saw them do.',
           envNote(view.env),
         ]
@@ -121,6 +122,12 @@ export default function Visitor() {
               <Counter label="Last seen" value={fmtDateTime(v.last_seen)} />
             </dl>
           </Card>
+
+          {d.messages?.length > 0 && (
+            <Card title={`Messages, ${d.messages.length}`} aside="Newest first, Pacific time">
+              <MessageList messages={d.messages} />
+            </Card>
+          )}
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             <Card title="Came from">
