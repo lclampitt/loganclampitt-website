@@ -38,7 +38,7 @@ export default function SignIn({ linkError }) {
       (failure?.status === 429
         ? 'Too many tries. Wait a few minutes.'
         : failure?.status === 404 || failure?.status === 405
-          ? 'Sign in runs on Vercel deployments, not the local dev server.'
+          ? 'Sign in could not be reached on this server.'
           : failure?.status === 403
             ? "Open the console from this site's own address."
             : 'The link could not be sent. Try again.')

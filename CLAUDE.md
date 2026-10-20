@@ -31,8 +31,8 @@ or send anything to its services.
 
 - `src/data/content.js` holds the site's copy and links. `src/pages/` are
   the routes, `src/components/` the UI.
-- `api/` holds Vercel functions. `npm run dev` does not run them; use
-  `vercel dev` or a preview deployment.
+- `api/` holds Vercel functions. `npm run dev` serves them too (the
+  `local-api` plugin in `vite.config.js`), reading Logan's `.env.local`.
 - `vercel.json` sends every path except `/assets` and `/api` to
   `index.html`.
 

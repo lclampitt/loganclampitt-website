@@ -35,10 +35,11 @@ right?" but "why is this broken?"
 
 ## Traps worth checking first
 
-- **`npm run dev` does not run `api/`.** Vite serves only the front end, so
-  a request to `/api/*` locally returns the SPA's `index.html` (or 404),
-  not the function. Functions run under `vercel dev` or on a preview
-  deployment.
+- **Locally, `api/` needs `.env.local`.** `npm run dev` serves `api/`
+  through the same handlers (the `local-api` plugin in `vite.config.js`),
+  but without Logan's `.env.local` every route answers 503
+  `not_configured`. That is setup, not a bug. Local data is labelled
+  `development` and never mixes with production.
 - **A rewrite swallowing a path.** `vercel.json` sends everything except
   `/assets` and `/api` to `index.html`. An HTML response where JSON was
   expected is usually this.

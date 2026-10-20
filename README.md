@@ -28,7 +28,8 @@ First party, no cookies, no third parties. The note visitors see is `/privacy`.
 - `shared/events.js` is the event vocabulary both sides use.
 - `api/events.js` caps the body (64 KB) and batch (50), validates every event, adds place, device and bot flag from the request, and inserts into Supabase with the service role key. The IP and user agent are never stored.
 - `supabase/migrations/` holds the schema: an `events` table with RLS on and no API access, and a `bot_visitors` view.
-- `npm test` runs the ingest tests. `npm run dev` does not run `api/`; use a Vercel preview to see events land.
+- `npm test` runs the api tests.
+- `npm run dev` serves `api/` as well, through the same handlers Vercel runs. It needs a `.env.local` with the values named in `.env.example`; without it the api answers 503 not configured. Local data is labelled `development`, and the local console shows only that.
 - `node scripts/update-datacenter-ranges.mjs` refreshes the cloud address list used to spot crawlers. Re-run every month or two.
 
 ## Console
