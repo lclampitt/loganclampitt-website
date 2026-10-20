@@ -5,9 +5,11 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  // .claude/worktrees holds other sessions' checkouts, with their own dist/
+  globalIgnores(['**/dist', '.claude/worktrees']),
   {
     files: ['**/*.{js,jsx}'],
+    ignores: ['api/**'],
     extends: [
       js.configs.recommended,
       reactHooks.configs.flat.recommended,
@@ -24,6 +26,16 @@ export default defineConfig([
     },
     rules: {
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]|^motion$' }],
+    },
+  },
+  {
+    // Node code: the Claude Code hooks and the api/ functions
+    files: ['**/*.mjs', 'api/**/*.js'],
+    extends: [js.configs.recommended],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      globals: globals.node,
+      sourceType: 'module',
     },
   },
 ])
