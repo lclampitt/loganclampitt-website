@@ -132,6 +132,7 @@ function ProjectCard({ project, wide = false }) {
         target="_blank"
         rel="noopener noreferrer"
         className={className}
+        data-project={project.slug}
       >
         {inner}
       </a>
@@ -139,7 +140,7 @@ function ProjectCard({ project, wide = false }) {
   }
 
   return (
-    <Link to={target.to} className={className}>
+    <Link to={target.to} className={className} data-project={project.slug}>
       {inner}
     </Link>
   )

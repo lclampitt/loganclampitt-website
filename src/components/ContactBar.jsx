@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom'
 import { FORMSPREE_ID, LINKS } from '../data/content'
 import { useContact } from '../context/useContact'
 import { useIntro } from '../context/useIntro'
+import { track } from '../lib/analytics'
 import { ArrowDownIcon, ArrowUpIcon } from './icons'
 
 const DETAILS = [
@@ -97,6 +98,7 @@ export default function ContactBar() {
       })
       if (res.ok) {
         setSubmitted(true)
+        track('Contact_Sent') // that it was sent, never what it said
       } else {
         setError(true)
       }

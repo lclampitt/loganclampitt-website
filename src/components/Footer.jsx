@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 export default function Footer() {
   return (
     <footer className="pb-32">
@@ -11,6 +13,10 @@ export default function Footer() {
             © {new Date().getFullYear()} Logan Clampitt
             <br />
             loganclampitt.com
+            <br />
+            <Link to="/privacy" className="underline decoration-dashed decoration-1 underline-offset-4 hover:text-ink">
+              Privacy
+            </Link>
           </p>
         </div>
       </div>
