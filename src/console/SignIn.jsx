@@ -26,13 +26,22 @@ export default function SignIn({ linkError }) {
   let message = null
   if (state === 'sent') message = 'If that address is allowed, a link is on its way. Open it on this device.'
   if (state === 'link_error') message = LINK_ERRORS[linkError] ?? LINK_ERRORS.access_denied
+  // Say which thing failed, so a setup gap is never mistaken for a typo.
+  const FAILURES = {
+    not_configured: 'Sign in is not set up on this deployment yet.',
+    no_user: 'Supabase has no user for this address yet.',
+    email_limit: "Supabase's email limit was reached. Try again later.",
+  }
   if (state === 'failed') {
     message =
-      failure?.code === 'not_configured'
-        ? 'Sign in is not set up on this deployment yet.'
-        : failure?.status === 429
-          ? 'Too many tries. Wait a few minutes.'
-          : 'The link could not be sent. Try again.'
+      FAILURES[failure?.code] ??
+      (failure?.status === 429
+        ? 'Too many tries. Wait a few minutes.'
+        : failure?.status === 404 || failure?.status === 405
+          ? 'Sign in runs on Vercel deployments, not the local dev server.'
+          : failure?.status === 403
+            ? "Open the console from this site's own address."
+            : 'The link could not be sent. Try again.')
   }
 
   return (

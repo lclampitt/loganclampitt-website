@@ -81,11 +81,14 @@ export async function POST(request) {
     } catch {
       return json(502, { error: 'send_failed' })
     }
-    // Honest with Logan: if Supabase could not send it, say so rather than
-    // leave him waiting for an email that is not coming.
+    // Honest with Logan: if Supabase could not send it, say why rather than
+    // leave him waiting for an email that is not coming. 422 is Supabase
+    // refusing to create a user (sign in never does): the console user
+    // has not been added under Authentication → Users yet.
     if (!res.ok) {
       console.error(`console auth: magic link failed with ${res.status}`)
-      return json(502, { error: 'send_failed', status: res.status })
+      const reason = res.status === 422 ? 'no_user' : res.status === 429 ? 'email_limit' : 'send_failed'
+      return json(502, { error: reason, status: res.status })
     }
     return json(202, { sent: true })
   }

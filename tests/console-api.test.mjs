@@ -130,3 +130,12 @@ test('a bad offset is refused rather than read as the first page', async () => {
   assert.equal((await read('view=visitors&offset=abc', 'good-token')).status, 400)
   assert.equal((await read('view=visitors', 'good-token')).status, 200)
 })
+
+test('a missing Supabase user is named, not a generic failure', async () => {
+  const real = globalThis.fetch
+  globalThis.fetch = async (url, init) =>
+    String(url).includes('/auth/v1/otp') ? new Response('{"error_code":"otp_disabled"}', { status: 422 }) : real(url, init)
+  const res = await login('logan@example.com')
+  assert.equal(res.status, 502)
+  assert.equal((await res.json()).error, 'no_user')
+})
