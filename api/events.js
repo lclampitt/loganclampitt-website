@@ -17,7 +17,7 @@ import { readCapped } from './_lib/body.js'
 import { connectingIp } from './_lib/datacenter.js'
 import { Refusal, buildRows } from './_lib/ingest.js'
 import { createLimiter } from './_lib/limit.js'
-import { json, serviceHeaders, supabaseConfig } from './_lib/supabase.js'
+import { json, notConfigured, serviceHeaders, supabaseConfig } from './_lib/supabase.js'
 
 // A busy real visitor sends a batch every few seconds at most.
 const overLimit = createLimiter({ max: 30, windowMs: 60_000 })
@@ -65,7 +65,7 @@ export async function POST(request) {
   if (rows.length === 0) return json(202, { received: 0, stored: 0 })
 
   const config = supabaseConfig()
-  if (!config) return json(503, { error: 'not_configured' })
+  if (!config) return notConfigured()
 
   let res
   try {

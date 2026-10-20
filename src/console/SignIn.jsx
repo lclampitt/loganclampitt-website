@@ -1,78 +1,81 @@
 import { useState } from 'react'
-import { sendLink } from './session'
+import { signIn } from './session'
 
-const LINK_ERRORS = {
-  otp_expired: 'That link has expired. Send a new one.',
-  access_denied: 'That link did not work. Send a new one.',
+// Say which thing failed, so a setup gap is never mistaken for a typo.
+function failureMessage(err) {
+  if (err?.code === 'wrong_credentials') return 'That email and password do not match.'
+  if (err?.code === 'not_configured') return 'Sign in is not set up on this deployment yet.'
+  if (err?.status === 429) return 'Too many tries. Wait a few minutes.'
+  if (err?.code === 'network') return 'Could not reach the server. Check your connection.'
+  if (err?.status === 404 || err?.status === 405) return 'Sign in could not be reached on this server.'
+  if (err?.status === 403) return "Open the console from this site's own address."
+  return 'Sign in failed on the server. Try again.'
 }
 
-export default function SignIn({ linkError }) {
+const field = 'rounded-[8px] border border-cs-line-strong px-3 py-2 text-[14px] focus:border-cs-link focus:outline-none'
+const label = 'text-[12px] font-medium text-cs-ink-2'
+
+export default function SignIn({ onSignedIn }) {
   const [email, setEmail] = useState('')
-  const [state, setState] = useState(linkError ? 'link_error' : 'idle')
+  const [password, setPassword] = useState('')
+  const [busy, setBusy] = useState(false)
   const [failure, setFailure] = useState(null)
 
   const submit = async (event) => {
     event.preventDefault()
-    setState('sending')
+    setBusy(true)
+    setFailure(null)
     try {
-      await sendLink(email)
-      setState('sent')
+      await signIn(email, password)
+      setPassword('')
+      onSignedIn()
     } catch (err) {
       setFailure(err)
-      setState('failed')
+      setBusy(false)
     }
-  }
-
-  let message = null
-  if (state === 'sent') message = 'If that address is allowed, a link is on its way. Open it on this device.'
-  if (state === 'link_error') message = LINK_ERRORS[linkError] ?? LINK_ERRORS.access_denied
-  // Say which thing failed, so a setup gap is never mistaken for a typo.
-  const FAILURES = {
-    not_configured: 'Sign in is not set up on this deployment yet.',
-    no_user: 'Supabase has no user for this address yet.',
-    email_limit: "Supabase's email limit was reached. Try again later.",
-  }
-  if (state === 'failed') {
-    message =
-      FAILURES[failure?.code] ??
-      (failure?.status === 429
-        ? 'Too many tries. Wait a few minutes.'
-        : failure?.status === 404 || failure?.status === 405
-          ? 'Sign in could not be reached on this server.'
-          : failure?.status === 403
-            ? "Open the console from this site's own address."
-            : 'The link could not be sent. Try again.')
   }
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-cs-canvas px-4 font-console text-cs-ink">
       <div className="w-full max-w-sm rounded-[10px] border border-cs-line bg-cs-surface p-6">
         <h1 className="text-[20px] font-bold tracking-[-0.02em]">Console</h1>
-        <p className="mt-1 text-[13px] text-cs-ink-2">Sign in with a link sent to your email.</p>
+        <p className="mt-1 text-[13px] text-cs-ink-2">Sign in to see who visits the site.</p>
         <form onSubmit={submit} className="mt-5 flex flex-col gap-3">
-          <label htmlFor="console-email" className="text-[12px] font-medium text-cs-ink-2">
+          <label htmlFor="console-email" className={label}>
             Email
           </label>
           <input
             id="console-email"
             type="email"
             required
-            autoComplete="email"
+            autoComplete="username"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="rounded-[8px] border border-cs-line-strong px-3 py-2 text-[14px] focus:border-cs-link focus:outline-none"
+            className={field}
+          />
+          <label htmlFor="console-password" className={`${label} mt-1`}>
+            Password
+          </label>
+          <input
+            id="console-password"
+            type="password"
+            required
+            autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={field}
           />
           <button
             type="submit"
-            disabled={state === 'sending'}
-            className="rounded-[8px] bg-cs-navy px-3 py-2 text-[14px] font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+            disabled={busy}
+            className="mt-2 rounded-[8px] bg-cs-navy px-3 py-2 text-[14px] font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
           >
-            {state === 'sending' ? 'Sending…' : 'Send sign in link'}
+            {busy ? 'Signing in…' : 'Sign in'}
           </button>
         </form>
-        {message && (
-          <p className={`mt-4 text-[13px] ${state === 'sent' ? 'text-cs-ink' : 'text-cs-bad'}`} role="status">
-            {message}
+        {failure && (
+          <p className="mt-4 text-[13px] text-cs-bad" role="alert">
+            {failureMessage(failure)}
           </p>
         )}
       </div>

@@ -62,8 +62,9 @@ readable.
 - Every handler verifies the bearer token with Supabase Auth and compares
   the email to `CONSOLE_EMAIL` before any query. Flag a handler that
   reads data first, or trusts an email sent by the client.
-- Sign in sends a magic link only to `CONSOLE_EMAIL`; Supabase sign ups
-  stay off.
+- Sign in is email and password, accepted only for `CONSOLE_EMAIL` and
+  rate limited; a wrong email and a wrong password get the same answer.
+  The password is never logged or stored. Supabase sign ups stay off.
 - 401 carries no data and no hint of which check failed.
 
 **Privacy.**

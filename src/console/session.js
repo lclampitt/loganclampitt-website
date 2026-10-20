@@ -1,17 +1,13 @@
 // The console's sign in, in the browser. Holds only the session Supabase
-// issued after the magic link was opened; every read is checked again on
-// the server (api/_lib/console-auth.js). No Supabase key lives here.
+// issued for Logan's email and password; every read is checked again on
+// the server (api/_lib/console-auth.js). No Supabase key lives here, and
+// the password is sent once, to our own api, and never stored.
 
 import { setExcluded } from '../lib/analytics'
 import { readJson, removeStore, writeStore } from '../lib/analytics/storage'
 
 const KEY = 'lc_console'
 export const SIGNED_OUT_EVENT = 'lc-console-signed-out'
-
-// A session that just arrived by link is not trusted until the server has
-// accepted it once. Only then is this browser marked as Logan's, so a
-// crafted link cannot quietly switch off tracking for a visitor.
-let excludeOnFirstRead = false
 
 export class ConsoleError extends Error {
   constructor(status, code) {
@@ -32,39 +28,26 @@ function signedOut() {
   window.dispatchEvent(new Event(SIGNED_OUT_EVENT))
 }
 
-// The magic link lands on /console#access_token=…&refresh_token=… (or
-// #error=…). Take the session, then wipe it from the address bar so it is
-// not left in history.
-export function takeSessionFromUrl() {
-  const hash = window.location.hash.slice(1)
-  if (!hash) return {}
-  const p = new URLSearchParams(hash)
-  const clear = () => window.history.replaceState(null, '', window.location.pathname + window.location.search)
-  if (p.get('error') || p.get('error_code')) {
-    clear()
-    return { error: p.get('error_code') || p.get('error') }
-  }
-  const access = p.get('access_token')
-  const refresh = p.get('refresh_token')
-  if (!access || !refresh) return {}
-  const expiresAt = Number(p.get('expires_at')) || Math.floor(Date.now() / 1000) + (Number(p.get('expires_in')) || 3600)
-  saveSession({ access_token: access, refresh_token: refresh, expires_at: expiresAt })
-  excludeOnFirstRead = true
-  clear()
-  return { signedIn: true }
-}
-
 async function post(body, token) {
   const headers = { 'content-type': 'application/json' }
   if (token) headers.authorization = `Bearer ${token}`
   return fetch('/api/console/auth', { method: 'POST', headers, body: JSON.stringify(body) })
 }
 
-export async function sendLink(email) {
-  const res = await post({ action: 'login', email })
-  if (res.ok) return
-  const body = await res.json().catch(() => ({}))
-  throw new ConsoleError(res.status, body.error)
+// Sign in. The server checked the email and password with Supabase before
+// answering, so this browser is now known to be Logan's: his own visits
+// to the site stop counting from here on.
+export async function signIn(email, password) {
+  let res
+  try {
+    res = await post({ action: 'login', email, password })
+  } catch {
+    throw new ConsoleError(0, 'network')
+  }
+  const body = await res.json().catch(() => null)
+  if (!res.ok || !body?.access_token) throw new ConsoleError(res.status, body?.error)
+  saveSession(body)
+  setExcluded(true)
 }
 
 export async function signOut() {
@@ -141,9 +124,5 @@ export async function readView(params) {
   }
   const body = await res.json().catch(() => null)
   if (!res.ok || !body) throw new ConsoleError(res.status, body?.error)
-  if (excludeOnFirstRead) {
-    excludeOnFirstRead = false
-    setExcluded(true)
-  }
   return body
 }

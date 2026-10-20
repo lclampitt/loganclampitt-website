@@ -1,14 +1,14 @@
-// Who may read the console: one person, Logan, signed in with a Supabase
-// magic link. Every api/console/* handler calls requireConsole first and
+// Who may read the console: one person, Logan, signed in to Supabase Auth
+// with his email and password. Every api/console/* handler calls requireConsole first and
 // reads nothing until it says yes.
 //
 //   CONSOLE_EMAIL  the one address allowed in (server env, never VITE_)
 //
-// The browser holds only the session Supabase issued after the link was
-// opened. It is checked here, against Supabase Auth, on every request; an
-// email the browser claims is never trusted.
+// The browser holds only the session Supabase issued at sign in. It is
+// checked here, against Supabase Auth, on every request; an email the
+// browser claims is never trusted.
 
-import { json, supabaseConfig } from './supabase.js'
+import { json, notConfigured, supabaseConfig } from './supabase.js'
 
 export const consoleEmail = () => process.env.CONSOLE_EMAIL?.trim().toLowerCase() || null
 
@@ -56,7 +56,7 @@ export async function userForToken(config, token) {
 export async function requireConsole(request) {
   const config = supabaseConfig()
   const allowed = consoleEmail()
-  if (!config || !allowed) return json(503, { error: 'not_configured' })
+  if (!config || !allowed) return notConfigured({ console: true })
 
   const header = request.headers.get('authorization') ?? ''
   const token = header.startsWith('Bearer ') ? header.slice(7).trim() : ''

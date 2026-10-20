@@ -4,6 +4,7 @@ import { POST as auth } from '../api/console/auth.js'
 import { GET as data } from '../api/console/data.js'
 
 const SITE = 'https://loganclampitt.com'
+const PASSWORD = 'correct horse battery staple'
 const realFetch = globalThis.fetch
 const realEnv = { ...process.env }
 let calls
@@ -28,7 +29,12 @@ beforeEach(() => {
       const token = init.headers.authorization.replace('Bearer ', '')
       return users[token] ? new Response(JSON.stringify(users[token])) : new Response('{}', { status: 401 })
     }
-    if (u.includes('/auth/v1/otp')) return new Response('{}', { status: 200 })
+    if (u.includes('grant_type=password')) {
+      const body = JSON.parse(init.body)
+      return body.password === PASSWORD
+        ? new Response(JSON.stringify({ access_token: 'a', refresh_token: 'r', expires_in: 3600, user: { email: body.email } }))
+        : new Response('{"error":"invalid_grant"}', { status: 400 })
+    }
     if (u.includes('/rest/v1/rpc/')) return new Response(JSON.stringify(rpcResult))
     return new Response('{}', { status: 404 })
   }
@@ -40,14 +46,15 @@ afterEach(() => {
 
 const read = (query, token) =>
   data(new Request(`${SITE}/api/console/data?${query}`, { headers: token ? { authorization: `Bearer ${token}` } : {} }))
-const login = (email, headers = {}) =>
+const post = (body, headers = {}) =>
   auth(
     new Request(`${SITE}/api/console/auth`, {
       method: 'POST',
       headers: { host: 'loganclampitt.com', origin: SITE, 'x-real-ip': `198.51.100.${Math.floor(Math.random() * 200)}`, ...headers },
-      body: JSON.stringify({ action: 'login', email }),
+      body: JSON.stringify(body),
     }),
   )
+const login = (email, password, headers) => post({ action: 'login', email, password }, headers)
 
 test('no token, a bad token or someone else is refused before any read', async () => {
   assert.equal((await read('view=overview&days=7')).status, 401)
@@ -59,8 +66,7 @@ test('no token, a bad token or someone else is refused before any read', async (
 test("Logan's session reads production data through the SQL function", async () => {
   const res = await read('view=overview&days=7', 'good-token')
   assert.equal(res.status, 200)
-  const body = await res.json()
-  assert.equal(body.env, 'production')
+  assert.equal((await res.json()).env, 'production')
   const rpc = calls.find((c) => c.url.includes('/rest/v1/rpc/console_overview'))
   assert.deepEqual(JSON.parse(rpc.init.body), { p_env: 'production', p_days: 7 })
 })
@@ -76,29 +82,55 @@ test('bad parameters and a missing visitor are honest errors', async () => {
   assert.equal((await read('view=overview&days=9', 'good-token')).status, 400)
   assert.equal((await read('view=nope', 'good-token')).status, 400)
   assert.equal((await read('view=visitor&n=abc', 'good-token')).status, 400)
+  assert.equal((await read('view=visitors&offset=abc', 'good-token')).status, 400)
   rpcResult = null
   assert.equal((await read('view=visitor&n=5', 'good-token')).status, 404)
 })
 
-test('says not configured when the console email is not set', async () => {
+test('not configured names what is missing, never a value', async () => {
   delete process.env.CONSOLE_EMAIL
-  assert.equal((await read('view=overview&days=7', 'good-token')).status, 503)
+  delete process.env.SUPABASE_SERVICE_ROLE_KEY
+  const res = await read('view=overview&days=7', 'good-token')
+  assert.equal(res.status, 503)
+  assert.deepEqual(await res.json(), { error: 'not_configured', missing: ['SUPABASE_SERVICE_ROLE_KEY', 'CONSOLE_EMAIL'] })
 })
 
-test('a magic link goes only to the console email, and the answer does not tell', async () => {
-  const wrong = await login('someone@else.com')
-  assert.equal(wrong.status, 202)
-  assert.equal(calls.some((c) => c.url.includes('/auth/v1/otp')), false)
+test('the Supabase URL may come from the integration name', async () => {
+  delete process.env.SUPABASE_URL
+  process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://example.supabase.co'
+  assert.equal((await read('view=overview&days=7', 'good-token')).status, 200)
+})
 
-  const right = await login(' LOGAN@example.com ')
-  assert.equal(right.status, 202)
-  const otp = calls.find((c) => c.url.includes('/auth/v1/otp'))
-  assert.match(otp.url, /redirect_to=https%3A%2F%2Floganclampitt\.com%2Fconsole/)
-  assert.deepEqual(JSON.parse(otp.init.body), { email: 'logan@example.com', create_user: false })
+test('the right email and password sign in; the session comes back', async () => {
+  const res = await login(' LOGAN@example.com ', PASSWORD)
+  assert.equal(res.status, 200)
+  const body = await res.json()
+  assert.equal(body.access_token, 'a')
+  assert.equal(body.refresh_token, 'r')
+  const grant = calls.find((c) => c.url.includes('grant_type=password'))
+  assert.deepEqual(JSON.parse(grant.init.body), { email: 'logan@example.com', password: PASSWORD })
+})
+
+test('a wrong password and a wrong email get the same answer', async () => {
+  const wrongPassword = await login('logan@example.com', 'nope')
+  const wrongEmail = await login('someone@else.com', PASSWORD)
+  assert.equal(wrongPassword.status, 401)
+  assert.equal(wrongEmail.status, 401)
+  assert.deepEqual(await wrongPassword.json(), await wrongEmail.json())
+  // someone else's address never reaches Supabase at all
+  assert.equal(calls.filter((c) => c.url.includes('grant_type=password')).length, 1)
+  assert.equal((await login('logan@example.com', '')).status, 401)
+})
+
+test('one address guessing passwords is slowed down', async () => {
+  const statuses = []
+  for (let i = 0; i < 12; i++) statuses.push((await login('logan@example.com', 'guess', { 'x-real-ip': '203.0.113.50' })).status)
+  assert.equal(statuses[0], 401)
+  assert.equal(statuses.at(-1), 429)
 })
 
 test('sign in refuses another origin', async () => {
-  assert.equal((await login('logan@example.com', { origin: 'https://evil.example' })).status, 403)
+  assert.equal((await login('logan@example.com', PASSWORD, { origin: 'https://evil.example' })).status, 403)
 })
 
 test('a Supabase Auth outage is a 502, not a sign out', async () => {
@@ -106,36 +138,17 @@ test('a Supabase Auth outage is a 502, not a sign out', async () => {
   globalThis.fetch = async (url, init) =>
     String(url).endsWith('/auth/v1/user') ? new Response('upstream', { status: 503 }) : real(url, init)
   assert.equal((await read('view=overview&days=7', 'outage-token')).status, 502)
+  globalThis.fetch = async (url, init) =>
+    String(url).includes('grant_type=password') ? new Response('upstream', { status: 500 }) : real(url, init)
+  assert.equal((await login('logan@example.com', PASSWORD)).status, 502)
 })
 
 test('a refresh refused by Supabase signs out; a Supabase failure does not', async () => {
-  const refresh = () =>
-    auth(
-      new Request(`${SITE}/api/console/auth`, {
-        method: 'POST',
-        headers: { host: 'loganclampitt.com', origin: SITE, 'x-real-ip': '192.0.2.77' },
-        body: JSON.stringify({ action: 'refresh', refresh_token: 'r1' }),
-      }),
-    )
   const real = globalThis.fetch
   globalThis.fetch = async (url, init) =>
     String(url).includes('grant_type=refresh_token') ? new Response('{}', { status: 400 }) : real(url, init)
-  assert.equal((await refresh()).status, 401)
+  assert.equal((await post({ action: 'refresh', refresh_token: 'r1' }, { 'x-real-ip': '192.0.2.77' })).status, 401)
   globalThis.fetch = async (url, init) =>
     String(url).includes('grant_type=refresh_token') ? new Response('{}', { status: 500 }) : real(url, init)
-  assert.equal((await refresh()).status, 502)
-})
-
-test('a bad offset is refused rather than read as the first page', async () => {
-  assert.equal((await read('view=visitors&offset=abc', 'good-token')).status, 400)
-  assert.equal((await read('view=visitors', 'good-token')).status, 200)
-})
-
-test('a missing Supabase user is named, not a generic failure', async () => {
-  const real = globalThis.fetch
-  globalThis.fetch = async (url, init) =>
-    String(url).includes('/auth/v1/otp') ? new Response('{"error_code":"otp_disabled"}', { status: 422 }) : real(url, init)
-  const res = await login('logan@example.com')
-  assert.equal(res.status, 502)
-  assert.equal((await res.json()).error, 'no_user')
+  assert.equal((await post({ action: 'refresh', refresh_token: 'r1' }, { 'x-real-ip': '192.0.2.77' })).status, 502)
 })

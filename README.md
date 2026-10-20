@@ -36,7 +36,7 @@ First party, no cookies, no third parties. The note visitors see is `/privacy`.
 
 `/console` is private: Overview, Visitors (with each visitor's journey) and Behaviour (with Busiest times by hour and by day). It is a separate lazy bundle and skips the site's chrome.
 
-- Sign in is a Supabase magic link sent only to `CONSOLE_EMAIL`, through `api/console/auth.js`. The browser never holds a Supabase key, only the session Supabase issues after the link is opened.
+- Sign in is email and password, for `CONSOLE_EMAIL` only, checked by Supabase Auth through `api/console/auth.js`. The user is made by hand in Supabase (Authentication → Users), with sign ups off. The browser never holds a Supabase key, only the session Supabase issues at sign in.
 - Every read goes through `api/console/data.js`, which checks that session with Supabase Auth before calling the SQL functions in `supabase/migrations/0002_console.sql`.
 - Production shows production data; a preview shows only its own preview data.
 - Signing in marks that browser as excluded, so Logan's own visits stop counting.

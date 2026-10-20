@@ -9,24 +9,13 @@ import Overview from './Overview'
 import SignIn from './SignIn'
 import Visitor from './Visitor'
 import Visitors from './Visitors'
-import { SIGNED_OUT_EVENT, readSession, signOut, takeSessionFromUrl } from './session'
+import { SIGNED_OUT_EVENT, readSession, signOut } from './session'
 
 const NAV = [
   { to: '/console', label: 'Overview', end: true },
   { to: '/console/visitors', label: 'Visitors' },
   { to: '/console/behaviour', label: 'Behaviour' },
 ]
-
-// Read once, when this lazy module first loads: the magic link's hash is
-// consumed here, outside React, so StrictMode's double render cannot read
-// it twice and lose a link error. Signing in marks this browser as
-// Logan's (his own visits stop counting); session.js does that once the
-// server accepts the session, not on the strength of a link alone.
-const FROM_LINK = takeSessionFromUrl()
-
-function firstState() {
-  return { signedIn: Boolean(readSession()), linkError: FROM_LINK.error ?? null }
-}
 
 function useNoIndex() {
   useEffect(() => {
@@ -44,16 +33,16 @@ function useNoIndex() {
 }
 
 export default function ConsoleApp() {
-  const [auth, setAuth] = useState(firstState)
+  const [signedIn, setSignedIn] = useState(() => Boolean(readSession()))
   useNoIndex()
 
   useEffect(() => {
-    const onSignedOut = () => setAuth({ signedIn: false, linkError: null })
+    const onSignedOut = () => setSignedIn(false)
     window.addEventListener(SIGNED_OUT_EVENT, onSignedOut)
     return () => window.removeEventListener(SIGNED_OUT_EVENT, onSignedOut)
   }, [])
 
-  if (!auth.signedIn) return <SignIn linkError={auth.linkError} />
+  if (!signedIn) return <SignIn onSignedIn={() => setSignedIn(true)} />
 
   const navClass = ({ isActive }) =>
     `rounded-[7px] px-2.5 py-1.5 text-[13px] font-medium transition-colors ${
