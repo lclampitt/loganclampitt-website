@@ -3,12 +3,8 @@
 // Caps the body before doing any work, validates every event against the
 // shared vocabulary, then inserts with the Supabase service role key. The
 // key is read from the server environment only (never a VITE_ variable,
-// which would ship it to every browser).
-//
-// Environment (set in Vercel by Logan):
-//   SUPABASE_URL               https://<ref>.supabase.co
-//   SUPABASE_SERVICE_ROLE_KEY  the secret key (sb_secret_… or the legacy service_role JWT);
-//                              SUPABASE_SECRET_KEY is read if that is missing
+// which would ship it to every browser). See api/_lib/supabase.js for the
+// variable names.
 //
 // Responses: 202 stored (duplicates are ignored, so a retry is safe; also
 // 202 with nothing stored under Global Privacy Control), 400/413/422
@@ -17,36 +13,14 @@
 // said no (worth a retry).
 
 import { MAX_BODY_BYTES } from '../shared/events.js'
+import { readCapped } from './_lib/body.js'
 import { connectingIp } from './_lib/datacenter.js'
 import { Refusal, buildRows } from './_lib/ingest.js'
-import { overLimit } from './_lib/limit.js'
+import { createLimiter } from './_lib/limit.js'
+import { json, serviceHeaders, supabaseConfig } from './_lib/supabase.js'
 
-const json = (status, body) =>
-  new Response(JSON.stringify(body), {
-    status,
-    headers: { 'content-type': 'application/json', 'cache-control': 'no-store' },
-  })
-
-// Read at most `max` bytes; anything longer is refused without reading on.
-async function readCapped(request, max) {
-  const declared = Number(request.headers.get('content-length'))
-  if (declared > max) return null
-  if (!request.body) return ''
-  const reader = request.body.getReader()
-  const chunks = []
-  let size = 0
-  for (;;) {
-    const { done, value } = await reader.read()
-    if (done) break
-    size += value.byteLength
-    if (size > max) {
-      await reader.cancel()
-      return null
-    }
-    chunks.push(value)
-  }
-  return new TextDecoder().decode(Buffer.concat(chunks))
-}
+// A busy real visitor sends a batch every few seconds at most.
+const overLimit = createLimiter({ max: 30, windowMs: 60_000 })
 
 // Same origin only: the site's own pages post here, nobody else's.
 // Browsers send Origin on every POST, beacons included; the
@@ -62,14 +36,6 @@ function sameOrigin(request) {
   } catch {
     return false
   }
-}
-
-// New secret keys (sb_secret_…) go in the apikey header only; the legacy
-// service_role JWT also goes in Authorization.
-function supabaseHeaders(key) {
-  const headers = { apikey: key, 'content-type': 'application/json' }
-  if (key.startsWith('eyJ')) headers.authorization = `Bearer ${key}`
-  return headers
 }
 
 export async function POST(request) {
@@ -98,16 +64,14 @@ export async function POST(request) {
   }
   if (rows.length === 0) return json(202, { received: 0, stored: 0 })
 
-  const url = process.env.SUPABASE_URL
-  // The Supabase integration for Vercel may name it either way.
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY
-  if (!url || !key) return json(503, { error: 'not_configured' })
+  const config = supabaseConfig()
+  if (!config) return json(503, { error: 'not_configured' })
 
   let res
   try {
-    res = await fetch(`${url.replace(/\/$/, '')}/rest/v1/events?on_conflict=event_id&select=event_id`, {
+    res = await fetch(`${config.url}/rest/v1/events?on_conflict=event_id&select=event_id`, {
       method: 'POST',
-      headers: { ...supabaseHeaders(key), prefer: 'resolution=ignore-duplicates,return=representation' },
+      headers: { ...serviceHeaders(config.key), prefer: 'resolution=ignore-duplicates,return=representation' },
       body: JSON.stringify(rows),
     })
   } catch {

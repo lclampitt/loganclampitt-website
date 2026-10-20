@@ -4,6 +4,25 @@
 @source "./**/*.{js,jsx}";
 
 @theme {
+  /* The private /console: slate, white and navy, after pixel-lord's
+     console design language. Prefixed cs- so the site's tokens and the
+     console's never mix. --color-cs-ink-3 fails contrast for text: use it
+     for rules, dots and empty tracks only. */
+  --font-console: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --color-cs-canvas: #f4f6f9;
+  --color-cs-surface: #ffffff;
+  --color-cs-hover: #eaeef3;
+  --color-cs-ink: #0f172a;
+  --color-cs-ink-2: #536072;
+  --color-cs-ink-3: #94a3b8;
+  --color-cs-line: rgba(15, 23, 42, 0.1);
+  --color-cs-line-strong: rgba(15, 23, 42, 0.18);
+  --color-cs-navy: #1e3a5f;
+  --color-cs-link: #1e4e8c;
+  --color-cs-chart: #1e4e8c;
+  --color-cs-chart-deep: #183f72;
+  --color-cs-bad: #b91c1c;
+
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "IBM Plex Mono", ui-monospace, monospace;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
@@ -1413,3 +1432,29 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   }
 }
 
+
+/* Console bars rise once on load, columns bottom to top, rows left to
+   right, on the house curve. The resting state is the final state, so
+   reduced motion simply skips the animation. */
+@keyframes cs-rise {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+@keyframes cs-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.cs-rise {
+  transform-origin: bottom;
+  animation: cs-rise 1200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.cs-grow {
+  transform-origin: left;
+  animation: cs-grow 1200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs-rise,
+  .cs-grow {
+    animation: none;
+  }
+}

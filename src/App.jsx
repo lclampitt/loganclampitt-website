@@ -13,11 +13,21 @@ import SimRacingIndex from './pages/SimRacingIndex'
 import ProjectDetail from './pages/ProjectDetail'
 
 const Privacy = lazy(() => import('./pages/Privacy'))
+// The private console is its own bundle and skips the site's chrome.
+const ConsoleApp = lazy(() => import('./console/ConsoleApp'))
 const ScrollDiagnostics = lazy(() => import('./components/ScrollDiagnostics'))
 const showDiagnostics = new URLSearchParams(window.location.search).has('diag')
 
 function App() {
   const location = useLocation()
+
+  if (location.pathname === '/console' || location.pathname.startsWith('/console/')) {
+    return (
+      <Suspense fallback={null}>
+        <ConsoleApp />
+      </Suspense>
+    )
+  }
 
   return (
     <ContactProvider>
