@@ -5,6 +5,7 @@ import { FORMSPREE_ID, LINKS } from '../data/content'
 import { useContact } from '../context/useContact'
 import { useIntro } from '../context/useIntro'
 import { track } from '../lib/analytics'
+import { keepCopy, newMessageId } from '../lib/contact'
 import { ArrowDownIcon, ArrowUpIcon } from './icons'
 
 const DETAILS = [
@@ -58,6 +59,7 @@ export default function ContactBar() {
   const barAllowed = useBarAllowed()
   const panelId = useId()
   const nameRef = useRef(null)
+  const honeypotRef = useRef(null)
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState(false)
@@ -90,15 +92,21 @@ export default function ContactBar() {
     event.preventDefault()
     setSending(true)
     setError(false)
+    // Hidden from people; bots fill it. Formspree drops a filled _gotcha,
+    // and api/contact.js drops a filled `website`.
+    const trap = honeypotRef.current?.value ?? ''
     try {
       const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, _gotcha: trap }),
       })
       if (res.ok) {
         setSubmitted(true)
-        track('Contact_Sent') // that it was sent, never what it said
+        // The console's copy is kept only once the message really went out,
+        // and exactly as it was sent.
+        keepCopy(newMessageId(), { ...formData, website: trap })
+        track('Contact_Sent') // the event says only that it was sent; the copy is in contact_messages
       } else {
         setError(true)
       }
@@ -156,6 +164,11 @@ export default function ContactBar() {
                       </p>
                     ) : (
                       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+                        {/* Honeypot: never shown, so never reached by keyboard or screen readers. */}
+                        <div aria-hidden="true" className="hidden">
+                          <label htmlFor="contact-website">Website</label>
+                          <input id="contact-website" ref={honeypotRef} type="text" name="website" tabIndex={-1} autoComplete="off" defaultValue="" />
+                        </div>
                         <div>
                           <label className={fieldLabel} htmlFor="contact-name">Name</label>
                           <input
@@ -163,6 +176,7 @@ export default function ContactBar() {
                             ref={nameRef}
                             type="text"
                             name="name"
+                            maxLength={200}
                             autoComplete="name"
                             value={formData.name}
                             onChange={handleChange}
@@ -176,6 +190,7 @@ export default function ContactBar() {
                             id="contact-email"
                             type="email"
                             name="email"
+                            maxLength={320}
                             autoComplete="email"
                             value={formData.email}
                             onChange={handleChange}
@@ -188,6 +203,7 @@ export default function ContactBar() {
                           <textarea
                             id="contact-message"
                             name="message"
+                            maxLength={5000}
                             value={formData.message}
                             onChange={handleChange}
                             required

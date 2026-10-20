@@ -7,11 +7,15 @@ const backLink = 'font-mono text-[13px] text-muted hover:text-ink transition-col
 const label = 'mb-4 font-dot font-black text-[14px] tracking-[0.14em] uppercase text-muted'
 const item = 'flex items-start gap-3 font-mono text-[13px] leading-relaxed text-muted'
 
-// What the site keeps and never keeps. Must match api/events.js and the
-// events table: a new stored field means a new line here.
+// What the site keeps and never keeps. Must match api/events.js,
+// api/contact.js and their tables: a new stored field means a new line
+// here. Contact messages are kept since 2026-10-20 (owner request), so
+// the old "never what it said" promise was replaced, not left standing.
 const KEPT = [
   'Pages viewed, and which project, resume or link was opened.',
-  'That the contact form was opened or sent. Never what it said.',
+  'That the contact form was opened or sent, and from which button.',
+  'If you send a message: your name, email and message, linked to your visit.',
+  'Messages also go through Formspree, which emails them to me.',
   'A random id stored in this browser, so a return visit counts once.',
   'When each visit happened, and where it came from, such as LinkedIn.',
   'City, region and country, from the network.',
@@ -21,8 +25,8 @@ const KEPT = [
 const NEVER = [
   'Your IP address.',
   'Cookies. None are set.',
-  'What you write in the contact form. Formspree delivers it to me.',
-  'Anything shared with advertisers or other third parties.',
+  'Anything shared with advertisers or analytics companies.',
+  'A link from your message to your visit, when counting is off for you.',
 ]
 
 function List({ items }) {

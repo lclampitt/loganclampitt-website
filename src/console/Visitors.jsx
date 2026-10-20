@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { cameFrom, channelLabel, envNote, fmtDateTime, fmtNumber, machineLabel, placeLabel, plural } from './format'
 import { readView } from './session'
-import { Card, Empty, Failed, Head, Loading } from './ui'
+import { Card, Empty, Failed, Head, Loading, MessageList } from './ui'
 import { useView } from './useView'
 
 // What a visitor did that counts as looking seriously, in plain words.
@@ -19,10 +19,22 @@ function Row({ row }) {
   const returned = row.lt_channel && (row.lt_channel !== row.ft_channel || row.lt_source !== row.ft_source)
   return (
     <tr className="border-t border-cs-line hover:bg-cs-canvas">
-      <td className={`${td} whitespace-nowrap`}>
-        <Link to={`/console/visitors/${row.n}`} className="font-medium text-cs-link hover:underline">
+      <td className={td}>
+        <Link to={`/console/visitors/${row.n}`} className="whitespace-nowrap font-medium text-cs-link hover:underline">
           Visitor {row.n}
         </Link>
+        {/* Anyone who wrote through the contact form, by the name they gave. */}
+        {row.name && (
+          <span className="mt-0.5 block max-w-[220px]">
+            <span className="block truncate font-medium text-cs-ink" title={row.name}>
+              {row.name}
+            </span>
+            <span className="block truncate text-[12px] text-cs-ink-2" title={row.email}>
+              {row.email}
+            </span>
+            {row.messages > 1 && <span className="block text-[12px] text-cs-ink-2">{plural(row.messages, 'message')}</span>}
+          </span>
+        )}
       </td>
       <td className={`${td} whitespace-nowrap tabular-nums`}>{fmtDateTime(row.last_seen)}</td>
       <td className={`${td} whitespace-nowrap tabular-nums text-cs-ink-2`}>{fmtDateTime(row.first_seen)}</td>
@@ -127,6 +139,22 @@ export default function Visitors() {
             )}
             {moreFailed && <span className="text-cs-bad">Could not load more.</span>}
           </div>
+        </Card>
+      )}
+      {first.status === 'ready' && first.data.unlinked?.length > 0 && (
+        <Card
+          title="Messages not tied to a visitor"
+          aside={plural(first.data.unlinked_messages, 'message')}
+          footnote={[
+            'Untracked browsers, crawlers, or ids with no visits.',
+            first.data.unlinked_messages > first.data.unlinked.length
+              ? `Showing the newest ${fmtNumber(first.data.unlinked.length)}.`
+              : null,
+          ]
+            .filter(Boolean)
+            .join(' ')}
+        >
+          <MessageList messages={first.data.unlinked} />
         </Card>
       )}
       <p className="text-[12px] text-cs-ink-2">

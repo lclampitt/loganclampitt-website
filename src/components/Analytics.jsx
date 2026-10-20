@@ -46,7 +46,7 @@ function onLinkClick(event) {
 // events that are about the app's state rather than a link.
 export default function Analytics() {
   const { pathname } = useLocation()
-  const { open } = useContact()
+  const { open, openedFrom } = useContact()
   const wasOpen = useRef(open)
 
   useEffect(() => {
@@ -54,9 +54,11 @@ export default function Analytics() {
   }, [pathname])
 
   useEffect(() => {
-    if (open && !wasOpen.current) track('Contact_Opened')
+    if (open && !wasOpen.current) {
+      track('Contact_Opened', openedFrom === 'email_me' || openedFrom === 'contact_bar' ? { from: openedFrom } : {})
+    }
     wasOpen.current = open
-  }, [open])
+  }, [open, openedFrom])
 
   useEffect(() => {
     document.addEventListener('click', onLinkClick, true)
