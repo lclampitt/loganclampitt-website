@@ -72,8 +72,8 @@ no dashes or hyphenated compounds, sentence case, plain words.
 - Verify visible changes in the browser: `preview_start` with the `site`
   config, then `read_page` and `read_console_messages`, at desktop and
   phone width. Never ask a human to check by hand. Note: `npm run dev`
-  does not run `api/`, so console data needs `vercel dev` or a preview
-  deployment.
+  serves `api/` too, but only with Logan's `.env.local`; without it the
+  console says it is not set up, which is expected.
 - The Stop hook runs lint and build; fix what they flag.
 - Stage explicit paths, never `git add -A`.
 

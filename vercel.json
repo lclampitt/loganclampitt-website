@@ -1,5 +1,15 @@
 {
   "rewrites": [
     { "source": "/((?!assets/|api/).*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/console(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    }
   ]
 }

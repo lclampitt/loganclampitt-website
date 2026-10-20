@@ -9,7 +9,7 @@ export default defineConfig([
   globalIgnores(['**/dist', '.claude/worktrees']),
   {
     files: ['**/*.{js,jsx}'],
-    ignores: ['api/**'],
+    ignores: ['api/**', 'vite.config.js'],
     extends: [
       js.configs.recommended,
       reactHooks.configs.flat.recommended,
@@ -29,8 +29,8 @@ export default defineConfig([
     },
   },
   {
-    // Node code: the Claude Code hooks and the api/ functions
-    files: ['**/*.mjs', 'api/**/*.js'],
+    // Node code: the Claude Code hooks, the api/ functions, the Vite config
+    files: ['**/*.mjs', 'api/**/*.js', 'vite.config.js'],
     extends: [js.configs.recommended],
     languageOptions: {
       ecmaVersion: 'latest',
