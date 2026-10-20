@@ -7,7 +7,8 @@
 //
 // Environment (set in Vercel by Logan):
 //   SUPABASE_URL               https://<ref>.supabase.co
-//   SUPABASE_SERVICE_ROLE_KEY  the secret key (sb_secret_… or the legacy service_role JWT)
+//   SUPABASE_SERVICE_ROLE_KEY  the secret key (sb_secret_… or the legacy service_role JWT);
+//                              SUPABASE_SECRET_KEY is read if that is missing
 //
 // Responses: 202 stored (duplicates are ignored, so a retry is safe; also
 // 202 with nothing stored under Global Privacy Control), 400/413/422
@@ -98,7 +99,8 @@ export async function POST(request) {
   if (rows.length === 0) return json(202, { received: 0, stored: 0 })
 
   const url = process.env.SUPABASE_URL
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  // The Supabase integration for Vercel may name it either way.
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY
   if (!url || !key) return json(503, { error: 'not_configured' })
 
   let res
