@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Secrets never enter git. The example file carries variable names only.
+.env*
+!.env.example
+
+# Claude Code: per machine settings and session worktrees
+.claude/settings.local.json
+.claude/worktrees/
