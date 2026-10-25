@@ -1247,6 +1247,50 @@ button.contact-bar-toggle:focus-visible .contact-bar-toggle-icon {
   transform-box: fill-box;
 }
 
+/* hovered day: a ring that slides between cells, plus its read-out */
+.git-cell-ring {
+  position: absolute;
+  z-index: 11;
+  border: 1.5px solid var(--color-ink);
+  border-radius: 3px;
+  pointer-events: none;
+  transition: left 0.12s ease, top 0.12s ease, opacity 0.12s ease;
+}
+
+.git-tip {
+  position: absolute;
+  z-index: 12;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 5px 9px;
+  white-space: nowrap;
+  pointer-events: none;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  box-shadow: 0 4px 14px rgba(11, 28, 44, 0.1);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-muted);
+}
+
+.git-tip b {
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.git-tip i {
+  font-style: normal;
+  color: var(--color-dim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .git-cell-ring {
+    transition: none;
+  }
+}
+
 .git-caustics {
   pointer-events: none;
   position: absolute;

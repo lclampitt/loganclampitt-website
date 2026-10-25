@@ -11,6 +11,9 @@ import {
   getLevelColors,
 } from '../lib/contributions'
 
+const dayFormat = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })
+const formatDay = (date) => dayFormat.format(new Date(`${date}T00:00:00Z`))
+
 function prefersReducedMotion() {
   return typeof window !== 'undefined'
     && window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -24,6 +27,7 @@ export default function ActivityStrip() {
   const colors = useMemo(() => getLevelColors(), [])
   const [innerWidth, setInnerWidth] = useState(0)
   const [started, setStarted] = useState(() => prefersReducedMotion())
+  const [active, setActive] = useState(null)
   const cardRef = useRef(null)
   const graphRef = useRef(null)
   const pausedRef = useRef(false)
@@ -205,6 +209,18 @@ export default function ActivityStrip() {
 
   const reducedMotion = prefersReducedMotion()
 
+  // hovered cell, found by position so one listener covers the whole grid
+  const onPointerMove = (event) => {
+    const el = graphRef.current
+    if (!el || graphWidth <= 0) return
+    const box = el.getBoundingClientRect()
+    const week = Math.floor(((event.clientX - box.left) / box.width) * visibleWeeks)
+    const day = Math.floor(((event.clientY - box.top) / box.height) * DAYS)
+    if (week < 0 || week >= visibleWeeks || day < 0 || day >= DAYS) return setActive(null)
+    const cell = visibleCells.find((c) => c.week - startWeek === week && c.day === day)
+    setActive(cell?.date ? { ...cell, week } : null)
+  }
+
   return (
     <a
       ref={cardRef}
@@ -225,7 +241,7 @@ export default function ActivityStrip() {
         )}
       </div>
 
-      <div ref={graphRef} className="relative git-graph w-full min-w-0 overflow-hidden">
+      <div ref={graphRef} className="relative git-graph w-full min-w-0">
         {graphWidth > 0 && (
           <svg
             width={graphWidth}
@@ -256,7 +272,46 @@ export default function ActivityStrip() {
           </svg>
         )}
         <span className="git-caustics" aria-hidden="true" />
+
+        {graphWidth > 0 && (
+          <>
+            {/* one overlay reads the pointer for the whole grid, like a scrubber */}
+            <div
+              className="absolute inset-0 z-10"
+              onPointerMove={onPointerMove}
+              onPointerLeave={() => setActive(null)}
+            />
+            <span
+              aria-hidden="true"
+              className="git-cell-ring"
+              style={{
+                left: `${((active?.week ?? 0) / visibleWeeks) * 100}%`,
+                width: `${(1 / visibleWeeks) * 100}%`,
+                top: (active?.day ?? 0) * (block + gap) - 1,
+                height: block + 2,
+                opacity: active ? 1 : 0,
+              }}
+            />
+            {active && (
+              <span
+                aria-hidden="true"
+                className="git-tip"
+                style={{
+                  left: `clamp(118px, ${((active.week + 0.5) / visibleWeeks) * 100}%, calc(100% - 118px))`,
+                  bottom: height - active.day * (block + gap) + 9,
+                }}
+              >
+                <b>{active.count}</b> {active.count === 1 ? 'contribution' : 'contributions'}
+                <i>· {formatDay(active.date)}</i>
+              </span>
+            )}
+          </>
+        )}
       </div>
+
+      <p className="sr-only" role="status" aria-live="polite">
+        {active ? `${formatDay(active.date)}: ${active.count} contributions` : ''}
+      </p>
     </a>
   )
 }
