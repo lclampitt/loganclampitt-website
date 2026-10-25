@@ -298,7 +298,10 @@ export default function ActivityStrip() {
                 className="git-tip"
                 style={{
                   left: `clamp(118px, ${((active.week + 0.5) / visibleWeeks) * 100}%, calc(100% - 118px))`,
-                  bottom: height - active.day * (block + gap) + 9,
+                  // top rows flip the tip under the cell so it stays inside the grid
+                  ...(active.day >= 3
+                    ? { bottom: height - active.day * (block + gap) + 8 }
+                    : { top: (active.day + 1) * (block + gap) + 8 }),
                 }}
               >
                 <b>{active.count}</b> {active.count === 1 ? 'contribution' : 'contributions'}
